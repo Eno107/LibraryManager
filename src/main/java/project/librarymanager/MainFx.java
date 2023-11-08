@@ -28,7 +28,7 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 	
 	//entry buttons
 	Button bttLibrarian = new Button("Librarian");
-	Button bttManager = new Button("Manager");
+
 	Button bttAdministrator = new Button("Administrator");
 	
 	//shared
@@ -120,7 +120,7 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 
 	public static void main(String[] args) throws IOException  {
 		
-//		BillNumber.setInitialStock();
+		BillNumber.setInitialStock();
 		Manager.InstantiateLibrarians();
 		Administrator.InstantiateManagers();
 		Administrator.InstantiateAdmins();

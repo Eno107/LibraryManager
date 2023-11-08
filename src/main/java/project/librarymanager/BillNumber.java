@@ -15,10 +15,10 @@ public abstract class BillNumber {
 		
 		FileOutputStream out = new FileOutputStream("Books.txt");
 		ObjectOutputStream objout = new ObjectOutputStream(out);
-		
-		for (int i=0;i<arr.size();i++) {
-			objout.writeObject(arr.get(i));
-		}
+
+        for (Book book : arr) {
+            objout.writeObject(book);
+        }
 		
 		out.close();
 		objout.close();
@@ -37,10 +37,9 @@ public abstract class BillNumber {
 	        }
 		    
 		}
-		catch(IOException i) {}
-		catch(ClassNotFoundException c) {}
+		catch(IOException | ClassNotFoundException ignored) {}
 
-		return stockBooks;
+        return stockBooks;
 	}
 	
 	public static void setInitialStock() throws IOException {
@@ -87,27 +86,26 @@ public abstract class BillNumber {
 		
 		try {
 			FileInputStream fis = new FileInputStream("Books.txt");
-		    ObjectInputStream objis = new ObjectInputStream(fis);
+		    ObjectInputStream obis = new ObjectInputStream(fis);
 		    
 		    while(true){
-	            System.out.println( (Book) objis.readObject() );
+	            System.out.println( (Book) obis.readObject() );
 	        }
 		    
 		}
-		catch(IOException i) {}
-		catch(ClassNotFoundException c) {}
+		catch(IOException | ClassNotFoundException ignored) {}
 
-	}
+    }
 	
 	public static ArrayList<String> getCategories() {
 		
 		ArrayList<String> ans = new ArrayList<>();
 		
 		ArrayList<Book> books = BillNumber.getStockBooks();
-		
-		for (int i=0;i<books.size();i++) {
-			ans.add( books.get(i).getCategory() );
-		}
+
+        for (Book book : books) {
+            ans.add(book.getCategory());
+        }
 		
 		
 		return removeDuplicates(ans);
@@ -134,12 +132,12 @@ public abstract class BillNumber {
 		
 		ArrayList<Book> ans = new ArrayList<>();
 		ArrayList<Book> stockbooks = BillNumber.getStockBooks();
-		
-		for (int i=0; i<stockbooks.size(); i++) {
-			if (stockbooks.get(i).getCategory().equals(category)) {
-				ans.add(stockbooks.get(i));
-			}
-		}
+
+        for (Book stockbook : stockbooks) {
+            if (stockbook.getCategory().equals(category)) {
+                ans.add(stockbook);
+            }
+        }
 		
 		return ans;
 		
@@ -156,21 +154,21 @@ public abstract class BillNumber {
 		
 		String ans="Currently in Stock:\n";
 	    ArrayList<Book> stockbooks = BillNumber.getStockBooks();
-	    
-	    for (int i=0;i<stockbooks.size();i++) {
-	    	ans = ans.concat(stockbooks.get(i)+"\n");
-	    }
+
+        for (Book stockbook : stockbooks) {
+            ans = ans.concat(stockbook + "\n");
+        }
 	    
 	    return ans;
 	}
 	
     public static boolean partOfCateogriesChecker(ArrayList<String> categoriesStock,String category) {
-		
-		
-		for (int i=0;i<categoriesStock.size();i++) {
-			if (categoriesStock.get(i).equals(category))
-				return true;
-		}
+
+
+        for (String s : categoriesStock) {
+            if (s.equals(category))
+                return true;
+        }
 		return false;
 	}
     
@@ -178,19 +176,19 @@ public abstract class BillNumber {
     	
     	ArrayList<Book> stockbooks = arr;
     	ArrayList<Date> dates;
-  
-    	for (int i=0;i<stockbooks.size();i++) {
-    		
-    		dates = stockbooks.get(i).getDates();
-    		if (dates.isEmpty()) {
-        		System.out.println("empty");
-        		continue;
-        	}
-    		for (int j=0;j<dates.size();j++) {
-    			System.out.println(dates.get(j));
-    		}
-    		
-    	}
+
+        for (Book stockbook : stockbooks) {
+
+            dates = stockbook.getDates();
+            if (dates.isEmpty()) {
+                System.out.println("empty");
+                continue;
+            }
+            for (Date date : dates) {
+                System.out.println(date);
+            }
+
+        }
     }
     
     public static String getBooksSoldTotal() {
@@ -198,10 +196,10 @@ public abstract class BillNumber {
     	String ans = "For Books Sold in Total We Have\n\n";
     	
         ArrayList<Book> array = BillNumber.getStockBooks();
-    	
-    	for (int i=0;i<array.size();i++) {
-    		ans = ans.concat(array.get(i).getSoldDatesQuantitiesTotal());
-    	}
+
+        for (Book book : array) {
+            ans = ans.concat(book.getSoldDatesQuantitiesTotal());
+        }
     	return ans;
     }
     
@@ -210,10 +208,10 @@ public abstract class BillNumber {
         String ans = "For Books Bought in Total We Have\n\n";
     	
         ArrayList<Book> array = BillNumber.getStockBooks();
-    	
-    	for (int i=0;i<array.size();i++) {
-    		ans = ans.concat(array.get(i).getBoughtDatesQuantitiesTotal());
-    	}
+
+        for (Book book : array) {
+            ans = ans.concat(book.getBoughtDatesQuantitiesTotal());
+        }
     	return ans;
     	
     }
@@ -223,10 +221,10 @@ public abstract class BillNumber {
     	String ans = "For Books Sold Today We Have:\n\n";
     	
     	ArrayList<Book> array = BillNumber.getStockBooks();
-    	
-    	for (int i=0;i<array.size();i++) {
-    		ans = ans.concat(array.get(i).getSoldDatesQuantitiesDay());
-    	}
+
+        for (Book book : array) {
+            ans = ans.concat(book.getSoldDatesQuantitiesDay());
+        }
     	return ans;
     }
     
@@ -235,9 +233,9 @@ public abstract class BillNumber {
     	String ans = "For Books Sold In A Month We Have\n\n";
     	
     	ArrayList<Book> arr = BillNumber.getStockBooks();
-    	for (int i=0;i<arr.size();i++) {
-    		ans = ans.concat(arr.get(i).getSoldDatesQuantitiesMonth());
-    	}
+     for (Book book : arr) {
+         ans = ans.concat(book.getSoldDatesQuantitiesMonth());
+     }
     	return ans;
     }
  
@@ -246,9 +244,9 @@ public abstract class BillNumber {
  	String ans = "For Books Sold In A Year We Have\n\n";
  	
  	ArrayList<Book> arr = BillNumber.getStockBooks();
- 	for (int i=0;i<arr.size();i++) {
- 		ans = ans.concat(arr.get(i).getSoldDatesQuantitiesYear());
- 	}
+      for (Book book : arr) {
+          ans = ans.concat(book.getSoldDatesQuantitiesYear());
+      }
  	return ans;
  }
   
@@ -258,10 +256,10 @@ public abstract class BillNumber {
 	  String ans = "For Books Bought Today We Have\n\n";
   	
   	ArrayList<Book> array = BillNumber.getStockBooks();
-  	
-  	for (int i=0;i<array.size();i++) {
-  		ans = ans.concat(array.get(i).getBoughtDatesQuantitiesDay());
-  	}
+
+      for (Book book : array) {
+          ans = ans.concat(book.getBoughtDatesQuantitiesDay());
+      }
   	return ans;
 	  
   }
@@ -271,10 +269,10 @@ public static String getBooksBoughtMonth() {
 	  String ans = "For Books Bought In A Month We Have\n\n";
   	
   	ArrayList<Book> array = BillNumber.getStockBooks();
-  	
-  	for (int i=0;i<array.size();i++) {
-  		ans = ans.concat(array.get(i).getBoughtDatesQuantitiesMonth());
-  	}
+
+    for (Book book : array) {
+        ans = ans.concat(book.getBoughtDatesQuantitiesMonth());
+    }
   	return ans;
 	  
   }
@@ -284,10 +282,10 @@ public static String getBooksBoughtYear() {
 	  String ans = "For Books Bought In A Year We Have\n\n";
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
-	
-	for (int i=0;i<array.size();i++) {
-		ans = ans.concat(array.get(i).getBoughtDatesQuantitiesYear());
-	}
+
+    for (Book book : array) {
+        ans = ans.concat(book.getBoughtDatesQuantitiesYear());
+    }
 	return ans;
 	  
 }
@@ -296,10 +294,10 @@ public static int getIntBooksSoldDay() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	int ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksSoldDay();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksSoldDay();
+    }
 	return ans;
 	
 }
@@ -308,10 +306,10 @@ public static int getIntBooksSoldMonth() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	int ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksSoldMonth();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksSoldMonth();
+    }
 	return ans;
 }
 
@@ -319,10 +317,10 @@ public static int getIntBooksSoldYear() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	int ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksSoldYear();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksSoldYear();
+    }
 	return ans;
 	
 }
@@ -331,10 +329,10 @@ public static double getIncomeDay() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	double ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksSoldDay()*array.get(i).getSellingPrice();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksSoldDay() * book.getSellingPrice();
+    }
 	
 	return ans;
 	
@@ -344,10 +342,10 @@ public static double getIncomeMonth() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	double ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksSoldMonth()*array.get(i).getSellingPrice();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksSoldMonth() * book.getSellingPrice();
+    }
 	
 	return ans;
 	
@@ -357,10 +355,10 @@ public static double getIncomeYear() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	double ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksSoldYear()*array.get(i).getSellingPrice();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksSoldYear() * book.getSellingPrice();
+    }
 	
 	return ans;
 	
@@ -370,10 +368,10 @@ public static int getTotalBoughtBooksDay() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	int ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksBoughtDay();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksBoughtDay();
+    }
 	return ans;
 	
 }
@@ -382,10 +380,10 @@ public static int getTotalBoughtBooksMonth() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	int ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksBoughtMonth();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksBoughtMonth();
+    }
 	return ans;
 }
 
@@ -393,10 +391,10 @@ public static int getTotalBoughtBooksYear() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	int ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksBoughtYear();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksBoughtYear();
+    }
 	return ans;
 	
 }
@@ -405,10 +403,10 @@ public static double getCostDay() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	double ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksBoughtDay()*array.get(i).getOriginalPrice();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksBoughtDay() * book.getOriginalPrice();
+    }
 	
 	return ans;
 	
@@ -418,10 +416,10 @@ public static double getCostMonth() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	double ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksBoughtMonth()*array.get(i).getOriginalPrice();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksBoughtMonth() * book.getOriginalPrice();
+    }
 	
 	return ans;
 	
@@ -430,10 +428,10 @@ public static double getCostYear() {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	double ans = 0;
-	
-	for (int i=0;i<array.size();i++) {
-		ans+=array.get(i).getTotalBooksBoughtYear()*array.get(i).getOriginalPrice();
-	}
+
+    for (Book book : array) {
+        ans += book.getTotalBooksBoughtYear() * book.getOriginalPrice();
+    }
 	
 	return ans;
 	
@@ -442,11 +440,11 @@ public static double getCostYear() {
 public static boolean isPartOfBooks(String ISBN) {
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
-	
-	for (int i=0;i<array.size();i++) {
-		if (array.get(i).getISBN().equals(ISBN))
-			return true;
-	}
+
+    for (Book book : array) {
+        if (book.getISBN().equals(ISBN))
+            return true;
+    }
 	return false;
 }
 
@@ -454,10 +452,10 @@ public static ArrayList<String> getISBNName(){
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	ArrayList<String> ans = new ArrayList<>();
-	
-	for (int i=0;i<array.size();i++) {
-		ans.add( array.get(i).getISBN()+" - "+array.get(i).getTitle() );
-	}
+
+    for (Book book : array) {
+        ans.add(book.getISBN() + " - " + book.getTitle());
+    }
 	
 	return ans;
 }
@@ -466,10 +464,10 @@ public static ArrayList<String> getAllTitles(){
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	ArrayList<String> ans = new ArrayList<>();
-	
-	for (int i=0;i<array.size();i++) {
-		ans.add( array.get(i).getTitle() );
-	}
+
+    for (Book book : array) {
+        ans.add(book.getTitle());
+    }
 	
 	return ans;
 	
@@ -479,10 +477,10 @@ public static ArrayList<Integer> getAllStock(){
 	
 	ArrayList<Book> array = BillNumber.getStockBooks();
 	ArrayList<Integer> ans = new ArrayList<>();
-	
-	for (int i=0;i<array.size();i++) {
-		ans.add( array.get(i).getStock() );
-	}
+
+    for (Book book : array) {
+        ans.add(book.getStock());
+    }
 	
 	return ans;
 	
@@ -513,7 +511,7 @@ public static void removeDuplicatesSoldTitles(ArrayList<String> titles, ArrayLis
 			titles.remove(n);
 		}
 	}
-	catch(IndexOutOfBoundsException e) {}
+	catch(IndexOutOfBoundsException ignored) {}
 	
 }
     
