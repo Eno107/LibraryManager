@@ -167,7 +167,6 @@ public class Librarian extends BillNumber {
 		for (int i=0;i<this.datesSold.size();i++) {
 			
 			if ( datesSold.get(i).getYear()==today.getYear() && datesSold.get(i).getMonth()==today.getMonth() && datesSold.get(i).getDay() == today.getDay()) {
-				System.out.println("here");
 				ans+=moneyMadeDates.get(i);
 			}
 				

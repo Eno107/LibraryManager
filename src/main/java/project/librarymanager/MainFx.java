@@ -120,7 +120,7 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 
 	public static void main(String[] args) throws IOException  {
 		
-		BillNumber.setInitialStock();
+//		BillNumber.setInitialStock();
 		Manager.InstantiateLibrarians();
 		Administrator.InstantiateManagers();
 		Administrator.InstantiateAdmins();
@@ -559,7 +559,6 @@ public BorderPane mainPage() {
         public void handle(ActionEvent event) {
         	Stage stage = new Stage();
         	Scene scene = new Scene(selectLibrarianPage(lib));
-        	stage.getIcons().add(new Image("src/bookIcon.png"));
         	stage.setWidth(465);
         	stage.setHeight(465);
         	stage.setScene(scene);
@@ -870,7 +869,6 @@ public BorderPane mainPage() {
         public void handle(ActionEvent event) {
         	Stage stage = new Stage();
         	Scene scene = new Scene(categoryStock(text));
-        	stage.getIcons().add(new Image("src/bookIcon.png"));
         	stage.setWidth(465);
         	stage.setHeight(465);
         	stage.setScene(scene);
@@ -963,7 +961,6 @@ public BorderPane mainPage() {
         public void handle(ActionEvent event) {
         	Stage stage = new Stage();
         	Scene scene = new Scene(stockBookPage(book));
-        	stage.getIcons().add(new Image("src/bookIcon.png"));
         	stage.setWidth(465);
         	stage.setHeight(465);
         	stage.setScene(scene);
@@ -1325,7 +1322,6 @@ public BorderPane mainPage() {
         public void handle(ActionEvent event) {
         	Stage stage = new Stage();
         	Scene scene = new Scene(editLibrarianPage(lib));
-        	stage.getIcons().add(new Image("src/bookIcon.png"));
         	stage.setWidth(465);
         	stage.setHeight(465);
         	stage.setScene(scene);
@@ -1721,7 +1717,6 @@ public BorderPane mainPage() {
         public void handle(ActionEvent event) {
         	Stage stage = new Stage();
         	Scene scene = new Scene( editManagerPage(mag) );
-        	stage.getIcons().add(new Image("src/bookIcon.png"));
         	stage.setWidth(465);
         	stage.setHeight(465);
         	stage.setScene(scene);
@@ -2396,13 +2391,7 @@ public BorderPane mainPage() {
 				password.clear();
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
+
 		if (e.getSource()==bttBack) {
 			username.clear();
 			password.clear();
