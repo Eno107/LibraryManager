@@ -10,8 +10,8 @@ public class Librarian extends BillNumber {
 	private int numberOfBills=0;
 	private int booksSold=0;
 	private double moneyMade=0;
-	private ArrayList<Date> datesSold;
-	private ArrayList<Double> moneyMadeDates;
+	private final ArrayList<Date> datesSold;
+	private final ArrayList<Double> moneyMadeDates;
 	private String username;
 	private String password;
 	private String name;
@@ -42,41 +42,40 @@ public class Librarian extends BillNumber {
 	public void checkOutBooks(ArrayList<Book> books,ArrayList<Integer> quantities) throws IOException {
 
 		PrintWriter writer = new PrintWriter("Bill"+(++BillNumber.billNumber)+".txt");
-		ArrayList<Book> stockbooks = BillNumber.getStockBooks();
+		ArrayList<Book> storybooks = BillNumber.getStockBooks();
 		double totalPrice = 0;
 		
 		removeDuplicatesSoldBooks(books,quantities);
 		
 		for (int i=0;i<books.size();i++) {
-			for (int j=0;j<stockbooks.size();j++) {
-				
-				if (books.get(i).getISBN().equals(stockbooks.get(j).getISBN()))
-				{					
-					writer.write("Title: \""+stockbooks.get(j).getTitle()+"\", Quantities: "+quantities.get(i)+", OriginalPrice "+
-					stockbooks.get(j).getSellingPrice() +", Price: "+stockbooks.get(j).getSellingPrice()*quantities.get(i)+"\n");
-					
-					stockbooks.get(j).addDate(new Date());
-					stockbooks.get(j).addQuantity( quantities.get(i) );
-					
-					totalPrice+=stockbooks.get(j).getSellingPrice()*quantities.get(i);
-					
-					BillNumber.totalBooksSold+=quantities.get(i); 
-					BillNumber.totalIncome += totalPrice;
-					booksSold += quantities.get(i);
-					
-				}
-				
-			}
+            for (Book stockbook : storybooks) {
+
+                if (books.get(i).getISBN().equals(stockbook.getISBN())) {
+                    writer.write("Title: \"" + stockbook.getTitle() + "\", Quantities: " + quantities.get(i) + ", OriginalPrice " +
+                            stockbook.getSellingPrice() + ", Price: " + stockbook.getSellingPrice() * quantities.get(i) + "\n");
+
+                    stockbook.addDate(new Date());
+                    stockbook.addQuantity(quantities.get(i));
+
+                    totalPrice += stockbook.getSellingPrice() * quantities.get(i);
+
+                    BillNumber.totalBooksSold += quantities.get(i);
+                    BillNumber.totalIncome += totalPrice;
+                    booksSold += quantities.get(i);
+
+                }
+
+            }
 		}
 		
 		
-		BillNumber.updateBooks(stockbooks);
+		BillNumber.updateBooks(storybooks);
 		moneyMade+=totalPrice;
 		numberOfBills+=1;
 		datesSold.add(new Date());
 		moneyMadeDates.add(moneyMade);
 		
-		writer.write("\nTotal price: "+totalPrice+" Date: "+(new Date()).toString());
+		writer.write("\nTotal price: "+totalPrice+" Date: "+ (new Date()));
 		writer.close();
 		
 	}
@@ -112,7 +111,7 @@ public class Librarian extends BillNumber {
 				books.remove(n);
 			}
 		}
-		catch(IndexOutOfBoundsException e) {}
+		catch(IndexOutOfBoundsException ignored) {}
 		
 	}
 	
@@ -120,24 +119,24 @@ public class Librarian extends BillNumber {
 	
 	public static boolean BookPresent(String ISBN) {
 		
-		ArrayList<Book> stockbooks = BillNumber.getStockBooks();
-		
-		for (int i=0;i<stockbooks.size();i++) {
-			if (stockbooks.get(i).getISBN().equals(ISBN))
-				return true;
-		}
+		ArrayList<Book> storybooks = BillNumber.getStockBooks();
+
+        for (Book stockbook : storybooks) {
+            if (stockbook.getISBN().equals(ISBN))
+                return true;
+        }
 		return false;
 	}
 	
 	public static boolean EnoughStock(String ISBN, int quantity) {
 		
-		ArrayList<Book> stockbooks = BillNumber.getStockBooks();
-		
-		for (int i=0;i<stockbooks.size();i++) {
-			if (stockbooks.get(i).getISBN().equals(ISBN))
-				if (stockbooks.get(i).getStock() - quantity >= 0)
-					return true;
-		}
+		ArrayList<Book> storybooks = BillNumber.getStockBooks();
+
+        for (Book stockbook : storybooks) {
+            if (stockbook.getISBN().equals(ISBN))
+                if (stockbook.getStock() - quantity >= 0)
+                    return true;
+        }
 		
 		return false;
 		
@@ -147,20 +146,20 @@ public class Librarian extends BillNumber {
 	
 	public static ArrayList<Date> addBookDates(Book book,ArrayList<Date> dates) {
 		ArrayList<Date> ans = new ArrayList<>();
-		
-		for (int i=0;i<dates.size();i++) {
-			ans.add(dates.get(i));
-		}
+
+        for (Date date : dates) {
+            ans.add(date);
+        }
 		
 		return ans;
 	}
 	
 	public double moneyMadeInDay() {
-		
+
 		if (this.datesSold==null) {
 			return 0;
 		}
-		
+
 		double ans=0;
 		Date today = new Date();
 		
@@ -222,11 +221,11 @@ public class Librarian extends BillNumber {
 	}
 	
 	public static boolean checkPhone(String phone) {
-		return phone.matches("\\(912\\)\\s\\d{3}\\-\\d{4}");
+		return phone.matches("\\(912\\)\\s\\d{3}-\\d{4}");
 	}
 	
 	public static boolean checkEmail(String email) {
-		return email.matches("[a-zA-Z]{1,}\\@[a-zA-z]{1,}\\.com");
+		return email.matches("[a-zA-Z]+@[a-zA-z]+\\.com");
 	}
 	
 	public static boolean checkSalary(String salary) {
@@ -234,7 +233,7 @@ public class Librarian extends BillNumber {
 	}
 	
 	public static boolean checkName(String name) {
-		return name.matches("[a-zA-Z]{1,}");
+		return name.matches("[a-zA-Z]+");
 	}
 	
 	public static boolean checkUsername(String username) {

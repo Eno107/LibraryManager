@@ -4,26 +4,21 @@ import java.util.ArrayList;
 
 public class Administrator extends Manager {
 	
-	private static ArrayList<Manager> managers = new ArrayList<>();
-    private static ArrayList<Administrator> admins = new ArrayList<>();
+	private static final ArrayList<Manager> managers = new ArrayList<>();
+    private static final ArrayList<Administrator> admins = new ArrayList<>();
 	
-	private static String[] usernames = {
+	private static final String[] usernames = {
 			"J0sh",
 			"1"
 	};
 
-	private static String[] passwords = {
+	private static final String[] passwords = {
 			"&zsX6QVZ",
 			"3"
 	};
-	
-	private String username;
-	private String password;
-	
+
 	Administrator(String username,String password){
 		super(username,password);
-		this.username=username;
-		this.password=password;
 	}
 	
 	Administrator(String username,String password,String name,double salary,String phone,String email){
@@ -52,7 +47,7 @@ public class Administrator extends Manager {
 	
     public static void InstantiateManagers() {
  		
-		Manager mag = new Manager("Calv1n","PQ532Ayba","Calvin",900,"(912) 561-2628","calvl@manager.com") ;
+		Manager mag = new Manager("Calv1n","PQ532Abba","Calvin",900,"(912) 561-2628","calvl@manager.com") ;
 		managers.add(mag);
 		
 	    mag = new Manager("Lui54","y@.3FYrn","Lui",900,"(912) 218-2594","lu@manager.com") ;
@@ -80,21 +75,21 @@ public class Administrator extends Manager {
 	
 	
     public static boolean partOfManager(Manager mag) {
-    	
-    	for (int i=0;i<managers.size();i++) 
-    		if (managers.get(i).getUsername().equals(mag.getUsername()))
-    			return true;
+
+        for (Manager manager : managers)
+            if (manager.getUsername().equals(mag.getUsername()))
+                return true;
     		
     	return false;
     	
     }
     
     public static Manager reEnter(Manager mag) {
-    	
-    	for (int i=0;i<managers.size();i++) {
-    		if (managers.get(i).getUsername().equals(mag.getUsername()))
-    			return managers.get(i);
-    	}
+
+        for (Manager manager : managers) {
+            if (manager.getUsername().equals(mag.getUsername()))
+                return manager;
+        }
     	
     	return null;
     	
@@ -116,21 +111,21 @@ public class Administrator extends Manager {
     }
     
     public static boolean ManagerChecker(Manager mag) {
-    	for (int i=0;i<managers.size();i++) {
-    		if (managers.get(i).getUsername().equals(mag.getUsername()) && managers.get(i).getPassword().equals(mag.getPassword()))
-    			return true;
-    	}
+        for (Manager manager : managers) {
+            if (manager.getUsername().equals(mag.getUsername()) && manager.getPassword().equals(mag.getPassword()))
+                return true;
+        }
     	return false;
     	
     	
     }
     
     public static Manager getBackManager(Manager mag) {
-    	
-    	for (int i=0;i<managers.size();i++){
-    		if (managers.get(i).getUsername().equals(mag.getUsername()))
-    			return managers.get(i);
-    	}
+
+        for (Manager manager : managers) {
+            if (manager.getUsername().equals(mag.getUsername()))
+                return manager;
+        }
     	return null;
     }
     
@@ -148,18 +143,18 @@ public class Administrator extends Manager {
     }
     
    public static void updateManagers(Manager mag) {
-    	
-    	for (int i=0;i<managers.size();i++){
-    		if (managers.get(i).getUsername().equals(mag.getUsername())) {
-    			managers.get(i).setEmail( mag.getEmail() );
-    			managers.get(i).setPhone( mag.getPhone() );
-    			managers.get(i).setSalary( mag.getSalary() );
-    			managers.get(i).setPassword( mag.getPassword() );
-    			managers.get(i).setUsername( mag.getUsername() );
-    			return;
-    		}
-    			
-    	}
+
+       for (Manager manager : managers) {
+           if (manager.getUsername().equals(mag.getUsername())) {
+               manager.setEmail(mag.getEmail());
+               manager.setPhone(mag.getPhone());
+               manager.setSalary(mag.getSalary());
+               manager.setPassword(mag.getPassword());
+               manager.setUsername(mag.getUsername());
+               return;
+           }
+
+       }
     
     	
     }
