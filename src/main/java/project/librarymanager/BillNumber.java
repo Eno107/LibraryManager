@@ -33,10 +33,14 @@ public abstract class BillNumber {
 		try {
 			FileInputStream fis = new FileInputStream("Books.txt");
 		    ObjectInputStream objis = new ObjectInputStream(fis);
-		    
-		    while(true){
-	            stockBooks.add( (Book) objis.readObject() );
-	        }
+
+			while (true) {
+				try {
+					stockBooks.add((Book) objis.readObject());
+				} catch (EOFException e) {
+					break;
+				}
+			}
 		    
 		}
 		catch(IOException | ClassNotFoundException ignored) {}
@@ -92,7 +96,13 @@ public abstract class BillNumber {
 		    ObjectInputStream obis = new ObjectInputStream(fis);
 		    
 		    while(true){
-	            System.out.println( (Book) obis.readObject() );
+				try{
+					System.out.println( (Book) obis.readObject() );
+				}
+				catch (EOFException e) {
+					break;
+				}
+
 	        }
 		    
 		}
@@ -112,9 +122,10 @@ public abstract class BillNumber {
 		
 		
 		return removeDuplicates(ans);
-		
+
 	}
-	
+
+     //    UNIT 1
 	public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
     {
   
@@ -164,7 +175,8 @@ public abstract class BillNumber {
 	    
 	    return ans;
 	}
-	
+
+	// UNIT 2
     public static boolean partOfCateogriesChecker(ArrayList<String> categoriesStock,String category) {
 
 
@@ -174,7 +186,8 @@ public abstract class BillNumber {
         }
 		return false;
 	}
-    
+
+	// UNIT 3
     public static void printBookDates(ArrayList<Book> arr) {
     	
     	ArrayList<Book> stockbooks = arr;
@@ -488,6 +501,8 @@ public static ArrayList<Integer> getAllStock(){
 	return ans;
 	
 }
+
+    // UNIT 4
 	public static void removeDuplicatesSoldTitles(ArrayList<String> titles, ArrayList<Integer> quantities) {
 		Map<String, Integer> titleQuantities = new LinkedHashMap<>();
 

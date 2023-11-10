@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Librarian extends BillNumber {
 	
@@ -84,37 +86,35 @@ public class Librarian extends BillNumber {
 	
 	
 	public void removeDuplicatesSoldBooks(ArrayList<Book> books, ArrayList<Integer> quantities) {
-		
-		if (books.isEmpty() || quantities.isEmpty())
+
+		if (books.isEmpty() || quantities.isEmpty()) {
 			return;
-		
-		for (int k=0;k<2;k++) {
-			
-			for (int i=0;i<books.size();i++) {
-				for (int j=i+1;j<books.size();j++) {
-					if (books.get(i).getISBN().equals(books.get(j).getISBN())){
-						quantities.set(i, quantities.get(i) + quantities.get(j));
-						books.remove(j);
-						quantities.remove(j);
-					}
-				}
-		    }
-			
 		}
-		
-		int n=books.size()-1;
-		try {
-			if (  books.get(n).getISBN().equals( books.get(n-1).getISBN() ) ) {
-				
-				quantities.set(n-1,  quantities.get(n)+quantities.get(n-1) );
-				quantities.remove(n);
-				books.remove(n);
+
+		Map<String, Integer> bookQuantities = new HashMap<>();
+
+		for (int i = 0; i < books.size(); i++) {
+			String currentISBN = books.get(i).getISBN();
+			int currentQuantity = quantities.get(i);
+
+			if (bookQuantities.containsKey(currentISBN)) {
+				int updatedQuantity = bookQuantities.get(currentISBN) + currentQuantity;
+				bookQuantities.put(currentISBN, updatedQuantity);
+			} else {
+				bookQuantities.put(currentISBN, currentQuantity);
 			}
 		}
-		catch(IndexOutOfBoundsException ignored) {}
-		
+
+		books.clear();
+		quantities.clear();
+
+		for (Map.Entry<String, Integer> entry : bookQuantities.entrySet()) {
+			// Assuming there is a Book constructor that accepts ISBN
+			books.add(new Book(entry.getKey()));
+			quantities.add(entry.getValue());
+		}
 	}
-	
+
 	
 	
 	public static boolean BookPresent(String ISBN) {
@@ -142,16 +142,10 @@ public class Librarian extends BillNumber {
 		
 		
 	}
-	
-	
-	public static ArrayList<Date> addBookDates(Book book,ArrayList<Date> dates) {
-		ArrayList<Date> ans = new ArrayList<>();
 
-        for (Date date : dates) {
-            ans.add(date);
-        }
-		
-		return ans;
+
+	public static ArrayList<Date> addBookDates(Book book, ArrayList<Date> dates) {
+		return new ArrayList<>(dates);
 	}
 	
 	public double moneyMadeInDay() {
