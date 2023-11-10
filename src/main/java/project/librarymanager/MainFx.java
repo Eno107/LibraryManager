@@ -897,24 +897,23 @@ public BorderPane mainPage() {
      	grid.setHgap(5);
      	grid.setVgap(5);
      	int j=0;
-     	int k=0;
+     	int k=-1;
 		
-     	if (books.isEmpty()) {}
-     	else {
+     	if (!books.isEmpty()) {
      		for (int i=0;i<books.size();i++) {
         		if (i%5==0) {
-        			k=0;
+        			k=-1;
         			j++;
         		}
         		Button button = createButton2(books.get(i));
         		
-    			grid.add(button,k++,j);
+    			grid.add(button,++k,j);
     			
         	}
      	}
 		
-		grid.add(bttNewBook, k++, j);
-		grid.setAlignment(Pos.CENTER);
+		grid.add(bttNewBook, ++k, j);
+        grid.setAlignment(Pos.CENTER);
     	border.setCenter(grid);
     	
     	bttNewBook.setOnAction(event -> {
@@ -1160,7 +1159,9 @@ public BorderPane mainPage() {
     		    stockbooks.add(book);
     		    try {
 					BillNumber.updateBooks(stockbooks);
-				} catch (IOException ignored) {}
+				} catch (IOException e) {
+					System.err.println("An error occurred while updating books: " + e.getMessage());
+				}
     		    
     		    bookISBN.clear();
     		    title.clear();
