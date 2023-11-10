@@ -16,7 +16,7 @@ public class Manager extends Librarian {
 	
      public static void InstantiateLibrarians() {
 		
-		Librarian lib = new Librarian("Alfie123","SSU6umwt","Alfie",500,"(912) 921-2728","aflie@librarian.com") ;
+		Librarian lib = new Librarian("Alfie123","SSU6aldo","Alfie",500,"(912) 921-2728","aflie@librarian.com") ;
 		librarians.add(lib);
 		
 		lib = new Librarian("@Leo","TyFzN8we","Leo",500,"(912) 152-7493","leo@librarian.com");
@@ -39,13 +39,13 @@ public class Manager extends Librarian {
     	ArrayList<Book> stockbooks = BillNumber.getStockBooks();
     	String ans = "Warning!\n";
     	int check=0;
-    	
-    	for (int i=0;i<stockbooks.size();i++) {
-    		if (stockbooks.get(i).getStock()<5) {
-    			check=1;
-    			ans = ans.concat("Book: "+stockbooks.get(i).getTitle()+", With ISBN code: "+stockbooks.get(i).getISBN()+", Has Stock: "+stockbooks.get(i).getStock()+"\n");
-    		}
-    	}
+
+        for (Book stockbook : stockbooks) {
+            if (stockbook.getStock() < 5) {
+                check = 1;
+                ans = ans.concat("Book: " + stockbook.getTitle() + ", With ISBN code: " + stockbook.getISBN() + ", Has Stock: " + stockbook.getStock() + "\n");
+            }
+        }
     	
     	if (check==0)
     		return "Every book has 5 or more items in stock";
@@ -57,14 +57,14 @@ public class Manager extends Librarian {
     	
     	ArrayList<Book> stockbooks = BillNumber.getStockBooks();
     	ArrayList<Book> ans = new ArrayList<>();
-    	
-    	for (int i=0;i<stockbooks.size();i++) {
-    		
-    		if (stockbooks.get(i).getStock() < 5 ) {
-    			ans.add(stockbooks.get(i));
-    		}
-    		
-    	}
+
+        for (Book stockbook : stockbooks) {
+
+            if (stockbook.getStock() < 5) {
+                ans.add(stockbook);
+            }
+
+        }
     	
     	return ans;
     	
@@ -79,58 +79,58 @@ public class Manager extends Librarian {
     }
     
     public static boolean partOfLibrarian(Librarian lib) {
-    	
-    	for (int i=0;i<librarians.size();i++) 
-    		if (librarians.get(i).getUsername().equals(lib.getUsername()))
-    			return true;
+
+        for (Librarian librarian : librarians)
+            if (librarian.getUsername().equals(lib.getUsername()))
+                return true;
     		
     	return false;
     	
     }
     
     public static Librarian reEnter(Librarian lib) {
-    	
-    	for (int i=0;i<librarians.size();i++) {
-    		if (librarians.get(i).getUsername().equals(lib.getUsername()))
-    			return librarians.get(i);
-    	}
+
+        for (Librarian librarian : librarians) {
+            if (librarian.getUsername().equals(lib.getUsername()))
+                return librarian;
+        }
     	
     	return null;
     	
     }
     
     public static boolean LibrarianChecker(Librarian lib) {
-    	for (int i=0;i<librarians.size();i++) {
-    		if (librarians.get(i).getUsername().equals(lib.getUsername()) && librarians.get(i).getPassword().equals(lib.getPassword()))
-    			return true;
-    	}
+        for (Librarian librarian : librarians) {
+            if (librarian.getUsername().equals(lib.getUsername()) && librarian.getPassword().equals(lib.getPassword()))
+                return true;
+        }
     	return false;
     	
     	
     }
     
     public static Librarian getBackLibrarian(Librarian lib) {
-    	
-    	for (int i=0;i<librarians.size();i++){
-    		if (librarians.get(i).getUsername().equals(lib.getUsername()))
-    			return librarians.get(i);
-    	}
+
+        for (Librarian librarian : librarians) {
+            if (librarian.getUsername().equals(lib.getUsername()))
+                return librarian;
+        }
     	return null;
     }
     
     public static void updateLibrarians(Librarian lib) {
-    	
-    	for (int i=0;i<librarians.size();i++){
-    		if (librarians.get(i).getUsername().equals(lib.getUsername())) {
-    			librarians.get(i).setEmail( lib.getEmail() );
-    			librarians.get(i).setPhone( lib.getPhone() );
-    			librarians.get(i).setSalary( lib.getSalary() );
-    			librarians.get(i).setPassword( lib.getPassword() );
-    			librarians.get(i).setUsername( lib.getUsername() );
-    			return;
-    		}
-    			
-    	}
+
+        for (Librarian librarian : librarians) {
+            if (librarian.getUsername().equals(lib.getUsername())) {
+                librarian.setEmail(lib.getEmail());
+                librarian.setPhone(lib.getPhone());
+                librarian.setSalary(lib.getSalary());
+                librarian.setPassword(lib.getPassword());
+                librarian.setUsername(lib.getUsername());
+                return;
+            }
+
+        }
     
     	
     }
