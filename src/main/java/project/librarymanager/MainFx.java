@@ -367,12 +367,12 @@ public BorderPane mainPage() {
     	 BorderPane border = new BorderPane();
      	 
          ArrayList<Book> stockBooks = BillNumber.getStockBooks();
-         for(int i=0;i<stockBooks.size();i++) {
-         	if (stockBooks.get(i).getQuantitiesPurchased()>0) {
-         		titlesBought.add(stockBooks.get(i).getTitle());
-         		quantitiesBought.add(stockBooks.get(i).getQuantitiesPurchased());
-         	}
-         }
+        for (Book stockBook : stockBooks) {
+            if (stockBook.getQuantitiesPurchased() > 0) {
+                titlesBought.add(stockBook.getTitle());
+                quantitiesBought.add(stockBook.getQuantitiesPurchased());
+            }
+        }
         
     	 
     	 PieChart pieChart = new PieChart();
@@ -427,11 +427,11 @@ public BorderPane mainPage() {
                
         PieChart pieChart = new PieChart();
         ArrayList<Book> stockBooks = BillNumber.getStockBooks();
-        for(int i=0;i<stockBooks.size();i++) {
-        	if (stockBooks.get(i).getPurchasedAmount()>0) {
-        		titlesSold.add(stockBooks.get(i).getTitle());
-        		quantitiesSold.add(stockBooks.get(i).getPurchasedAmount());
-        	}
+        for (Book stockBook : stockBooks) {
+            if (stockBook.getPurchasedAmount() > 0) {
+                titlesSold.add(stockBook.getTitle());
+                quantitiesSold.add(stockBook.getPurchasedAmount());
+            }
         }
         BillNumber.removeDuplicatesSoldTitles(titlesSold,quantitiesSold);
         
@@ -777,8 +777,8 @@ public BorderPane mainPage() {
      			
      			
      			
-     			String bcateg = menuNewCategory.getSelectionModel().getSelectedItem().toString();
-     			categ.add(bcateg);
+     			String category = menuNewCategory.getSelectionModel().getSelectedItem().toString();
+     			categ.add(category);
      			textAddCategoryWarning.setText("Added!");
      			
      			
@@ -1429,7 +1429,7 @@ public BorderPane mainPage() {
 	    			email.getCharacters().toString());
 	    	
 	    	Manager.AddLibrarian(librarian);
-	    	libWarningNew.setText("Succes!");
+	    	libWarningNew.setText("Success!");
 	    	
 	    	
 	    	username.clear();
@@ -1581,7 +1581,7 @@ public BorderPane mainPage() {
 	    	totalAmountOfMoneyMadeInDay.clear();
 	    	totalAmountOfMoneyMadeInMonth.clear();
 	    	totalAmountOfMoneyMadeInYear.clear();
-	    	libLoginWarning.setText("Deleted Succesfully!");
+	    	libLoginWarning.setText("Deleted Successfully!");
 	    	
 	    	
 	    	
@@ -1825,7 +1825,7 @@ public BorderPane mainPage() {
 	    			email.getCharacters().toString());
 	    	
 	    	Administrator.AddManager(manager);
-	    	magWarningNew.setText("Succes!");
+	    	magWarningNew.setText("Success!");
 	    	
 	    	username.clear();
 	    	name.clear();
@@ -1950,7 +1950,7 @@ public BorderPane mainPage() {
 	    	salary.clear();
 	    	phone.clear();
 	    	email.clear();
-	    	magLoginWarning.setText("Deleted Succesfully!");
+	    	magLoginWarning.setText("Deleted Successfully!");
 	    });
 	    
 	    bttSubmit.setOnAction(event ->{
@@ -2234,11 +2234,11 @@ public BorderPane mainPage() {
         
         PieChart pieChart = new PieChart();
         ArrayList<Book> stockBooks = BillNumber.getStockBooks();
-        for(int i=0;i<stockBooks.size();i++) {
-        	if (stockBooks.get(i).getPurchasedAmount()>0) {
-        		titlesSold.add(stockBooks.get(i).getTitle());
-        		quantitiesSold.add(stockBooks.get(i).getPurchasedAmount());
-        	}
+        for (Book stockBook : stockBooks) {
+            if (stockBook.getPurchasedAmount() > 0) {
+                titlesSold.add(stockBook.getTitle());
+                quantitiesSold.add(stockBook.getPurchasedAmount());
+            }
         }
         BillNumber.removeDuplicatesSoldTitles(titlesSold,quantitiesSold);
         
@@ -2289,11 +2289,11 @@ public BorderPane mainPage() {
         BorderPane border = new BorderPane();
         
         ArrayList<Book> stockBooks = BillNumber.getStockBooks();
-        for(int i=0;i<stockBooks.size();i++) {
-        	if (stockBooks.get(i).getQuantitiesPurchased()>0) {
-        		titlesBought.add(stockBooks.get(i).getTitle());
-        		quantitiesBought.add(stockBooks.get(i).getQuantitiesPurchased());
-        	}
+        for (Book stockBook : stockBooks) {
+            if (stockBook.getQuantitiesPurchased() > 0) {
+                titlesBought.add(stockBook.getTitle());
+                quantitiesBought.add(stockBook.getQuantitiesPurchased());
+            }
         }
        
    	 
