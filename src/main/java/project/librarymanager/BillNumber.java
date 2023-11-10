@@ -3,6 +3,8 @@ package project.librarymanager;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public abstract class BillNumber {
 
@@ -486,35 +488,29 @@ public static ArrayList<Integer> getAllStock(){
 	return ans;
 	
 }
+	public static void removeDuplicatesSoldTitles(ArrayList<String> titles, ArrayList<Integer> quantities) {
+		Map<String, Integer> titleQuantities = new LinkedHashMap<>();
 
-public static void removeDuplicatesSoldTitles(ArrayList<String> titles, ArrayList<Integer> quantities) {
-	
-	for (int k=0;k<2;k++) {
-		
-		for (int i=0;i<titles.size();i++) {
-			for (int j=i+1;j<titles.size();j++) {
-				if (titles.get(i).equals(titles.get(j))){
-					quantities.set(i, quantities.get(i) + quantities.get(j));
-					titles.remove(j);
-					quantities.remove(j);
-				}
+		for (int i = 0; i < titles.size(); i++) {
+			String currentTitle = titles.get(i);
+			int currentQuantity = quantities.get(i);
+
+			if (titleQuantities.containsKey(currentTitle)) {
+				int updatedQuantity = titleQuantities.get(currentTitle) + currentQuantity;
+				titleQuantities.put(currentTitle, updatedQuantity);
+			} else {
+				titleQuantities.put(currentTitle, currentQuantity);
 			}
-	    }
-		
-	}
-	
-	int n=titles.size()-1;
-	try {
-		if (  titles.get(n).equals( titles.get(n-1) ) ) {
-			
-			quantities.set(n-1,  quantities.get(n)+quantities.get(n-1) );
-			quantities.remove(n);
-			titles.remove(n);
+		}
+
+		titles.clear();
+		quantities.clear();
+
+		for (Map.Entry<String, Integer> entry : titleQuantities.entrySet()) {
+			titles.add(entry.getKey());
+			quantities.add(entry.getValue());
 		}
 	}
-	catch(IndexOutOfBoundsException ignored) {}
-	
-}
-    
+
 	
 }

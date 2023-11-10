@@ -2368,7 +2368,8 @@ public BorderPane mainPage() {
 				username.clear();
 				password.clear();
 				librarian = Manager.getBackLibrarian(librarian);
-				usernamePage = librarian.getName();
+                assert librarian != null;
+                usernamePage = librarian.getName();
 				bttSubmit.getScene().setRoot(librarianMainPage());
 				
 			}
@@ -2377,7 +2378,8 @@ public BorderPane mainPage() {
 				username.clear();
 				password.clear();
 				manager = Administrator.getBackManager(manager);
-				usernamePage = manager.getName();
+                assert manager != null;
+                usernamePage = manager.getName();
 				bttSubmit.getScene().setRoot(mangaerMainPage());
 				
 			}

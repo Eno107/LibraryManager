@@ -172,12 +172,8 @@ public class Librarian extends BillNumber {
 	}
 	
 	public double moneyMadeInMonth() {
-		
-		if (this.datesSold==null) {
-			return 0;
-		}
-		
-		double ans=0;
+
+        double ans=0;
 		Date today = new Date();
 		
 		
@@ -193,12 +189,8 @@ public class Librarian extends BillNumber {
 	}
 	
 	public double moneyMadeInYear() {
-		
-		if (this.datesSold==null) {
-			return 0;
-		}
-		
-		double ans=0;
+
+        double ans=0;
 		Date today = new Date();
 		
 		for (int i=0;i<datesSold.size();i++) {
