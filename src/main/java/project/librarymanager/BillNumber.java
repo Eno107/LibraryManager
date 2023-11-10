@@ -33,10 +33,14 @@ public abstract class BillNumber {
 		try {
 			FileInputStream fis = new FileInputStream("Books.txt");
 		    ObjectInputStream objis = new ObjectInputStream(fis);
-		    
-		    while(true){
-	            stockBooks.add( (Book) objis.readObject() );
-	        }
+
+			while (true) {
+				try {
+					stockBooks.add((Book) objis.readObject());
+				} catch (EOFException e) {
+					break;
+				}
+			}
 		    
 		}
 		catch(IOException | ClassNotFoundException ignored) {}
@@ -92,7 +96,13 @@ public abstract class BillNumber {
 		    ObjectInputStream obis = new ObjectInputStream(fis);
 		    
 		    while(true){
-	            System.out.println( (Book) obis.readObject() );
+				try{
+					System.out.println( (Book) obis.readObject() );
+				}
+				catch (EOFException e) {
+					break;
+				}
+
 	        }
 		    
 		}
