@@ -1,4 +1,5 @@
 package project.librarymanager;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +12,6 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -1160,7 +1160,7 @@ public BorderPane mainPage() {
     		    stockbooks.add(book);
     		    try {
 					BillNumber.updateBooks(stockbooks);
-				} catch (IOException e) {}
+				} catch (IOException ignored) {}
     		    
     		    bookISBN.clear();
     		    title.clear();
@@ -2425,7 +2425,7 @@ public BorderPane mainPage() {
 			}
 			
 			String isbn = comboBoxLibrarian.getValue().toString().substring(0,13);
-			Integer quan = Integer.parseInt(quantity.getCharacters().toString());
+			int quan = Integer.parseInt(quantity.getCharacters().toString());
 			String Title = comboBoxLibrarian.getValue().toString().substring(16);
 			date = new Date();
 			

@@ -39,6 +39,7 @@ public abstract class BillNumber {
 		}
 		catch(IOException | ClassNotFoundException ignored) {}
 
+
         return stockBooks;
 	}
 	

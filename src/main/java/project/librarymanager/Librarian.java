@@ -156,11 +156,7 @@ public class Librarian extends BillNumber {
 	
 	public double moneyMadeInDay() {
 
-		if (this.datesSold==null) {
-			return 0;
-		}
-
-		double ans=0;
+        double ans=0;
 		Date today = new Date();
 		
 		for (int i=0;i<this.datesSold.size();i++) {
