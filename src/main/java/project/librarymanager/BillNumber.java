@@ -48,45 +48,54 @@ public abstract class BillNumber {
 
         return stockBooks;
 	}
-	
-	public static void setInitialStock() throws IOException {
-		FileOutputStream out = new FileOutputStream("Books.txt");
-		ObjectOutputStream objout = new ObjectOutputStream(out);
-		
-		
+
+	public static ArrayList<Book> getInitialStock(){
+
+		ArrayList<Book> bookArrayList = new ArrayList<>();
+
 		Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",5);
-		objout.writeObject(book);
-		
+		bookArrayList.add(book);
+
 		book = new Book("4647500268094","Ulysses","Fiction","Baker & Taylor",15.00,18.00,"James Joyce",2);
-		objout.writeObject(book);
-		
+		bookArrayList.add(book);
+
 		book = new Book("0629778828041","Don Quixote","Novel","BCH Fulfillment & Distribution",5.00,6.59,"Miguel de Cervantes",10);
-		objout.writeObject(book);
-		
+		bookArrayList.add(book);
+
 		book = new Book("3655736671389","One Hundred Years of Solitude","Magic realism","Ingram Content Group, Inc",13.00,16.99,"Gabriel Garcia Marquez",3);
-		objout.writeObject(book);
-		
+		bookArrayList.add(book);
+
 		book = new Book("3115666367951","The Great Gatsby","Tragedy","Ingram Content Group, Inc",10.00,11.95,"F. Scott Fitzgerald",7);
-		objout.writeObject(book);
-		
+		bookArrayList.add(book);
+
 		book = new Book("9515267203718","Moby Dick","Adventure fiction","Cardinal Publishers Group",7.00,10.00,"Herman Melville",5);
-		objout.writeObject(book);
-		
-	    book = new Book("0725587872636","War and Peace","Historical novel","Bella Distribution",17.00,19.99,"Leo Tolstoy",2);
-	    objout.writeObject(book);
-	    
-	    book = new Book("0664687443145","Hamlet","Tragedy","Publishers Group West",12.00,14.99,"William Shakespeare",12);
-	    objout.writeObject(book);	    
-	    
-	    book = new Book("8047862766153","The Odyssey","Epic","Publishers Group West",15.00,22.99,"Homer",4);
-	    objout.writeObject(book);
-	    
-	    book = new Book("4535777140780","Lolita","Novel","Ingram Content Group, Inc",10.00,14.40,"Vladimir Nabokov",9);
-	    objout.writeObject(book);
-	   
+		bookArrayList.add(book);
+
+		book = new Book("0725587872636","War and Peace","Historical novel","Bella Distribution",17.00,19.99,"Leo Tolstoy",2);
+		bookArrayList.add(book);
+
+		book = new Book("0664687443145","Hamlet","Tragedy","Publishers Group West",12.00,14.99,"William Shakespeare",12);
+		bookArrayList.add(book);
+
+		book = new Book("8047862766153","The Odyssey","Epic","Publishers Group West",15.00,22.99,"Homer",4);
+		bookArrayList.add(book);
+
+		book = new Book("4535777140780","Lolita","Novel","Ingram Content Group, Inc",10.00,14.40,"Vladimir Nabokov",9);
+		bookArrayList.add(book);
+
+		return bookArrayList;
+	}
+	
+	public static void setInitialStock(String path) throws IOException {
+		FileOutputStream out = new FileOutputStream(path);
+		ObjectOutputStream objout = new ObjectOutputStream(out);
+
+		for (Book book : BillNumber.getInitialStock()){
+			objout.writeObject(book);
+		}
+
 		objout.close();
 		out.close();
-
 	}
 	
 	public static void showStock() {

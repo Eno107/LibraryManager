@@ -120,7 +120,7 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 
 	public static void main(String[] args) throws IOException  {
 		
-		BillNumber.setInitialStock();
+		BillNumber.setInitialStock("Books.txt");
 		Manager.InstantiateLibrarians();
 		Administrator.InstantiateManagers();
 		Administrator.InstantiateAdmins();
