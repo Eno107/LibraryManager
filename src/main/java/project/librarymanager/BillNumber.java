@@ -13,9 +13,9 @@ public abstract class BillNumber {
 	public static int totalBooksSold=0;
 	
 	
-	public static void updateBooks(ArrayList<Book> arr) throws IOException {
+	public static void updateBooks(String path, ArrayList<Book> arr) throws IOException {
 		
-		FileOutputStream out = new FileOutputStream("Books.txt");
+		FileOutputStream out = new FileOutputStream(path);
 		ObjectOutputStream objout = new ObjectOutputStream(out);
 
         for (Book book : arr) {
@@ -171,7 +171,7 @@ public abstract class BillNumber {
 		
 		ArrayList<Book> stockbooks = BillNumber.getStockBooks(path);
 		stockbooks.add(book);
-		BillNumber.updateBooks(stockbooks);
+		BillNumber.updateBooks(path, stockbooks);
 	}
 	
 	public static String showStringStock(String path) {

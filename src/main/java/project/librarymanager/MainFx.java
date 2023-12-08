@@ -20,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -1008,7 +1009,7 @@ public BorderPane mainPage() {
     		    }
     		    
     		    try {
-					BillNumber.updateBooks(stockbooks);
+					BillNumber.updateBooks(FILE_PATH, stockbooks);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -1142,7 +1143,7 @@ public BorderPane mainPage() {
     		    ArrayList<Book> stockbooks = BillNumber.getStockBooks(FILE_PATH);
     		    stockbooks.add(book);
     		    try {
-					BillNumber.updateBooks(stockbooks);
+					BillNumber.updateBooks(FILE_PATH, stockbooks);
 				} catch (IOException e) {
 					System.err.println("An error occurred while updating books: " + e.getMessage());
 				}
@@ -2424,7 +2425,7 @@ public BorderPane mainPage() {
 				}
 			}
 			try {
-				BillNumber.updateBooks(stockbooks);
+				BillNumber.updateBooks(FILE_PATH, stockbooks);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

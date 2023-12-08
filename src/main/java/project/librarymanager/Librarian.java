@@ -71,7 +71,7 @@ public class Librarian extends BillNumber {
 		}
 		
 		
-		BillNumber.updateBooks(storybooks);
+		BillNumber.updateBooks(path, storybooks);
 		moneyMade+=totalPrice;
 		numberOfBills+=1;
 		datesSold.add(new Date());

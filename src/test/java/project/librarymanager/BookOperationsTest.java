@@ -82,7 +82,6 @@ class BookOperationsTest {
             ArrayList<String> categoryArrayList  = BillNumber.getCategories("BooksTesting.txt");
 
             for (int i=0; i<bookArrayList.size(); i++){
-                System.out.println(categoryArrayList.get(i) + " " + bookArrayList.get(i).getCategory());
                 assertEquals(categoryArrayList.get(i), bookArrayList.get(i).getCategory());
             }
 
@@ -90,4 +89,24 @@ class BookOperationsTest {
             fail("Exception: " + e.getMessage());
         }
     }
+
+    @Test
+    void test_addBookToStock() {
+
+        try{
+            Book book = new Book("0629778828041","Don Quixote","Novel","BCH Fulfillment & Distribution",5.00,6.59,"Miguel de Cervantes",10);
+            BillNumber.addBookToStock(TEST_FILE_PATH, book);
+            objOut.writeObject(book);
+
+            ArrayList<Book> bookArrayList = BillNumber.getStockBooks(TEST_FILE_PATH);
+
+            assertEquals(bookArrayList.get(bookArrayList.size()-1).getISBN(), book.getISBN());
+
+        } catch (IOException e) {
+            fail("Exception during setup");
+        }
+
+
+    }
+
 }
