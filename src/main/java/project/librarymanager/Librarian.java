@@ -41,10 +41,10 @@ public class Librarian extends BillNumber {
 	}
 	
 	
-	public void checkOutBooks(ArrayList<Book> books,ArrayList<Integer> quantities) throws IOException {
+	public void checkOutBooks(String path, ArrayList<Book> books,ArrayList<Integer> quantities) throws IOException {
 
 		PrintWriter writer = new PrintWriter("Bill"+(++BillNumber.billNumber)+".txt");
-		ArrayList<Book> storybooks = BillNumber.getStockBooks();
+		ArrayList<Book> storybooks = BillNumber.getStockBooks(path);
 		double totalPrice = 0;
 		
 		removeDuplicatesSoldBooks(books,quantities);
@@ -117,9 +117,9 @@ public class Librarian extends BillNumber {
 
 	
 	
-	public static boolean BookPresent(String ISBN) {
+	public static boolean BookPresent(String path, String ISBN) {
 		
-		ArrayList<Book> storybooks = BillNumber.getStockBooks();
+		ArrayList<Book> storybooks = BillNumber.getStockBooks(path);
 
         for (Book stockbook : storybooks) {
             if (stockbook.getISBN().equals(ISBN))
@@ -128,9 +128,9 @@ public class Librarian extends BillNumber {
 		return false;
 	}
 	
-	public static boolean EnoughStock(String ISBN, int quantity) {
+	public static boolean EnoughStock(String path, String ISBN, int quantity) {
 		
-		ArrayList<Book> storybooks = BillNumber.getStockBooks();
+		ArrayList<Book> storybooks = BillNumber.getStockBooks(path);
 
         for (Book stockbook : storybooks) {
             if (stockbook.getISBN().equals(ISBN))

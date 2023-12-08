@@ -34,9 +34,9 @@ public class Manager extends Librarian {
 	}
 	
     
-    public static String checkStock() {
+    public static String checkStock(String path) {
     	
-    	ArrayList<Book> stockbooks = BillNumber.getStockBooks();
+    	ArrayList<Book> stockbooks = BillNumber.getStockBooks(path);
     	String ans = "Warning!\n";
     	int check=0;
 
@@ -53,9 +53,9 @@ public class Manager extends Librarian {
     	
     }
     
-    public static ArrayList<Book> getLowStock(){
+    public static ArrayList<Book> getLowStock(String path){
     	
-    	ArrayList<Book> stockbooks = BillNumber.getStockBooks();
+    	ArrayList<Book> stockbooks = BillNumber.getStockBooks(path);
     	ArrayList<Book> ans = new ArrayList<>();
 
         for (Book stockbook : stockbooks) {

@@ -22,6 +22,12 @@ class BookOperationsTest {
             out = new FileOutputStream(TEST_FILE_PATH);
             objOut = new ObjectOutputStream(out);
 
+            Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",5);
+            objOut.writeObject(book);
+
+            book = new Book("4647500268094","Ulysses","Fiction","Baker & Taylor",15.00,18.00,"James Joyce",2);
+            objOut.writeObject(book);
+
         } catch (IOException e) {
             fail("Exception during setup");
         }
@@ -49,6 +55,35 @@ class BookOperationsTest {
             for (int i=0;i<bookArrayList.size();i++){
                 assertEquals(bookArrayList.get(i).getISBN(), expected_list.get(i).getISBN(), "ISBN mismatch at book with index " + i);
                 assertEquals(bookArrayList.get(i).getStock(), expected_list.get(i).getStock(), "Stock mismatch at book with index " + i);
+            }
+
+        } catch (IOException | ClassNotFoundException e){
+            fail("Exception: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void test_getCategories(){
+
+        try {
+            FileInputStream in = new FileInputStream(TEST_FILE_PATH);
+            ObjectInputStream objIn = new ObjectInputStream(in);
+
+            ArrayList<Book> bookArrayList = new ArrayList<>();
+
+            while (true){
+                try{
+                    bookArrayList.add((Book) objIn.readObject());
+                } catch (EOFException e){
+                    break;
+                }
+            }
+
+            ArrayList<String> categoryArrayList  = BillNumber.getCategories("BooksTesting.txt");
+
+            for (int i=0; i<bookArrayList.size(); i++){
+                System.out.println(categoryArrayList.get(i) + " " + bookArrayList.get(i).getCategory());
+                assertEquals(categoryArrayList.get(i), bookArrayList.get(i).getCategory());
             }
 
         } catch (IOException | ClassNotFoundException e){

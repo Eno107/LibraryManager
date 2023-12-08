@@ -298,7 +298,7 @@ public class Book implements Serializable{
 
  }
 
-	private int getNumberDatesMonth(ArrayList<Date> dates, ArrayList<Integer> purchasedAmount) {
+	public int getNumberDatesMonth(ArrayList<Date> dates, ArrayList<Integer> purchasedAmount) {
 		if (dates.isEmpty()) {
 			 return 0;
 		 }

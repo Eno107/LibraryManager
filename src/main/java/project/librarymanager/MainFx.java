@@ -25,12 +25,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MainFx extends Application implements EventHandler<ActionEvent> {
-	
-	//entry buttons
-	Button bttLibrarian = new Button("Librarian");
 
-	Button bttAdministrator = new Button("Administrator");
-	
+	// main file path
+	String  FILE_PATH = "Books.txt";
+
 	//shared
 	String usernamePage;
 	TextField username = new TextField();
@@ -39,13 +37,8 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 	Text textPassword = new Text("Password");
 	Button bttSubmit = new Button("Submit");
 	Button bttBack = new Button("Back");
-	Text textWarningEmpty = new Text("Warning empty field");
 	Text textSystem = new Text("System");
 	TextField mainLoginWarning = new TextField();
-	ObservableList<Data> pieChartDataSold = FXCollections.observableArrayList();
-	ObservableList<Data> pieChartDataBought = FXCollections.observableArrayList();
-	PieChart pieChartSold = new PieChart(pieChartDataSold);
-	PieChart pieChartBought = new PieChart(pieChartDataBought);
 	ArrayList<String> titlesSold = new ArrayList<>();
 	ArrayList<Integer> quantitiesSold = new ArrayList<>();
 	ArrayList<String> titlesBought = new ArrayList<>();
@@ -75,8 +68,6 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 	Button bttCheckStock = new Button("Check Stock");
 	Button bttAddStock = new Button("Add Stock");
 	Button bttNewCategory = new Button("New Category");
-	Button bttCategory;
-	Button bttCurrentBookStock;
 	Button bttNewBook = new Button("New Book");
 	Button bttAddBookToStock = new Button("Add to Stock");
 	TextField addedOrNot = new TextField();
@@ -95,7 +86,7 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 	Button bttBackManager = new Button("Back");
 	TextField category = new TextField();
 	Text textCategory = new Text("Category");
-	ArrayList<String> categ = BillNumber.getCategories();
+	ArrayList<String> categ = BillNumber.getCategories(FILE_PATH);
 	TextField totalNumberBillsLibrarian = new TextField();
 	Text textTotalNumberBillsLibrarian = new Text("Total Number of Bills");
 	TextField booksSold = new TextField();
@@ -106,17 +97,10 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 	Text textTotalMoneyMonth = new Text("Money made in a month");
 	TextField totalAmountOfMoneyMadeInYear = new TextField();
 	Text textTotalMoneyYear = new Text("Money made in a year");
-	ArrayList<String> booksBoughtTitles = new ArrayList<>();
-	
-	//administrator variables
-	Administrator administrator;
-	TextField admLoginWarning = new TextField();
-	Button bttManageManager = new Button("Manage Managers");
-	Button bttManageLibrarians = new Button("Manage Librarians");
-	Button bttStats = new Button("Stats");
-	
 
-	
+	//administrator variables
+	Button bttManageLibrarians = new Button("Manage Librarians");
+
 
 	public static void main(String[] args) throws IOException  {
 		
@@ -181,7 +165,7 @@ public BorderPane mainPage() {
 	public BorderPane librarianMainPage() {
 		
 	   
-		comboBoxLibrarian = new ComboBox(FXCollections.observableArrayList(BillNumber.getISBNName()));
+		comboBoxLibrarian = new ComboBox(FXCollections.observableArrayList(BillNumber.getISBNName(FILE_PATH)));
 		
 		Text textHeaderLibrarian = new Text("Welcome "+usernamePage);
 		StackPane stackHeader = new StackPane();
@@ -281,7 +265,7 @@ public BorderPane mainPage() {
     	table.getColumns().add(column7);
     	table.getColumns().add(column8);
     	
-    	table.setItems(FXCollections.observableArrayList(Manager.getLowStock()));
+    	table.setItems(FXCollections.observableArrayList(Manager.getLowStock(FILE_PATH)));
         table.setMaxHeight(150);
         pane.getChildren().add(table);
     	
@@ -366,7 +350,7 @@ public BorderPane mainPage() {
     	
     	 BorderPane border = new BorderPane();
      	 
-         ArrayList<Book> stockBooks = BillNumber.getStockBooks();
+         ArrayList<Book> stockBooks = BillNumber.getStockBooks(FILE_PATH);
         for (Book stockBook : stockBooks) {
             if (stockBook.getQuantitiesPurchased() > 0) {
                 titlesBought.add(stockBook.getTitle());
@@ -391,10 +375,10 @@ public BorderPane mainPage() {
  		border.setTop(stack);
  		
  	
- 		Text text1 = new Text(BillNumber.getBooksBoughtDay());
- 		Text text2 = new Text(BillNumber.getBooksBoughtMonth());
- 		Text text3 = new Text(BillNumber.getBooksBoughtYear());
- 		Text text4 = new Text(BillNumber.getBooksBoughtTotal());
+ 		Text text1 = new Text(BillNumber.getBooksBoughtDay(FILE_PATH));
+ 		Text text2 = new Text(BillNumber.getBooksBoughtMonth(FILE_PATH));
+ 		Text text3 = new Text(BillNumber.getBooksBoughtYear(FILE_PATH));
+ 		Text text4 = new Text(BillNumber.getBooksBoughtTotal(FILE_PATH));
  		
  		GridPane grid = new GridPane();
  		grid.add(text1, 0, 0);
@@ -426,7 +410,7 @@ public BorderPane mainPage() {
         BorderPane border = new BorderPane();
                
         PieChart pieChart = new PieChart();
-        ArrayList<Book> stockBooks = BillNumber.getStockBooks();
+        ArrayList<Book> stockBooks = BillNumber.getStockBooks(FILE_PATH);
         for (Book stockBook : stockBooks) {
             if (stockBook.getPurchasedAmount() > 0) {
                 titlesSold.add(stockBook.getTitle());
@@ -447,10 +431,10 @@ public BorderPane mainPage() {
 		stack.setPadding(new Insets(20));
 		border.setTop(stack);
 		
-		Text text1 = new Text(BillNumber.getBooksSoldDay());
-		Text text2 = new Text(BillNumber.getBooksSoldMonth());
-		Text text3 = new Text(BillNumber.getBooksSoldYear());
-		Text text4 = new Text( BillNumber.getBooksSoldTotal());
+		Text text1 = new Text(BillNumber.getBooksSoldDay(FILE_PATH));
+		Text text2 = new Text(BillNumber.getBooksSoldMonth(FILE_PATH));
+		Text text3 = new Text(BillNumber.getBooksSoldYear(FILE_PATH));
+		Text text4 = new Text( BillNumber.getBooksSoldTotal(FILE_PATH));
 		
 		GridPane grid = new GridPane();
 		
@@ -657,7 +641,7 @@ public BorderPane mainPage() {
     	table.getColumns().add(column7);
     	table.getColumns().add(column8);
     	
-    	table.setItems(FXCollections.observableArrayList(BillNumber.getStockBooks()));
+    	table.setItems(FXCollections.observableArrayList(BillNumber.getStockBooks(FILE_PATH)));
     	
     	border.setCenter(table);
     	    	   	
@@ -720,7 +704,7 @@ public BorderPane mainPage() {
     public BorderPane chooseNewCategoryAddStock() {
     	
     	ChoiceBox menuNewCategory = new ChoiceBox(FXCollections.observableArrayList(Manager.getAllCategories()));
-    	ArrayList<Book> stockbooks = BillNumber.getStockBooks();
+    	ArrayList<Book> stockbooks = BillNumber.getStockBooks(FILE_PATH);
     
     	BorderPane border = new BorderPane();
     	
@@ -892,7 +876,7 @@ public BorderPane mainPage() {
 		border.setTop(stack);
 		
 		
-		ArrayList<Book> books = BillNumber.getBookFromCategory(category);
+		ArrayList<Book> books = BillNumber.getBookFromCategory(FILE_PATH, category);
 		GridPane grid = new GridPane();
      	grid.setHgap(5);
      	grid.setVgap(5);
@@ -1012,7 +996,7 @@ public BorderPane mainPage() {
     				return;
     			}
     			
-    		    ArrayList<Book> stockbooks = BillNumber.getStockBooks();
+    		    ArrayList<Book> stockbooks = BillNumber.getStockBooks(FILE_PATH);
     		    
     		    for (int i=0;i<stockbooks.size();i++) {
     		    	if (stockbooks.get(i).getISBN().equals(book.getISBN())) {
@@ -1136,7 +1120,7 @@ public BorderPane mainPage() {
     				return;
     			}
     			
-    			if (BillNumber.isPartOfBooks(bookISBN.getCharacters().toString())){
+    			if (BillNumber.isPartOfBooks(FILE_PATH, bookISBN.getCharacters().toString())){
     				addedOrNotStockCategory.setText("Failed, Already In Stock");
     				return;
     				
@@ -1155,7 +1139,7 @@ public BorderPane mainPage() {
     		    date = new Date();
     		    book.addPurchasedDate(date);
             	
-    		    ArrayList<Book> stockbooks = BillNumber.getStockBooks();
+    		    ArrayList<Book> stockbooks = BillNumber.getStockBooks(FILE_PATH);
     		    stockbooks.add(book);
     		    try {
 					BillNumber.updateBooks(stockbooks);
@@ -2114,12 +2098,12 @@ public BorderPane mainPage() {
 		totalBooksYearly.setEditable(false);
 		totalIncomeYearly.setEditable(false);
 		
-		totalBooksDay.setText( Integer.toString( BillNumber.getIntBooksSoldDay() ) );
-		totalIncomeDay.setText( Double.toString( BillNumber.getIncomeDay()) );
-		totalBooksMonth.setText( Integer.toString( BillNumber.getIntBooksSoldMonth() )  );
-	    totalIncomeMonth.setText( Double.toString( BillNumber.getIncomeMonth())  );	
-	    totalBooksYearly.setText( Integer.toString( BillNumber.getIntBooksSoldYear() ));
-	    totalIncomeYearly.setText( Double.toString( BillNumber.getIncomeYear() ));
+		totalBooksDay.setText( Integer.toString( BillNumber.getIntBooksSoldDay(FILE_PATH) ) );
+		totalIncomeDay.setText( Double.toString( BillNumber.getIncomeDay(FILE_PATH)) );
+		totalBooksMonth.setText( Integer.toString( BillNumber.getIntBooksSoldMonth(FILE_PATH) )  );
+	    totalIncomeMonth.setText( Double.toString( BillNumber.getIncomeMonth(FILE_PATH))  );
+	    totalBooksYearly.setText( Integer.toString( BillNumber.getIntBooksSoldYear(FILE_PATH) ));
+	    totalIncomeYearly.setText( Double.toString( BillNumber.getIncomeYear(FILE_PATH) ));
  		
  		StackPane stackBackButton = new StackPane();
 		stackBackButton.getChildren().add(bttBackManager);
@@ -2203,15 +2187,15 @@ public BorderPane mainPage() {
 		
 		
 		
-		totalBooksDay.setText( Integer.toString( BillNumber.getTotalBoughtBooksDay() ) );
-		totalIncomeDay.setText( Double.toString( BillNumber.getCostDay()) );
+		totalBooksDay.setText( Integer.toString( BillNumber.getTotalBoughtBooksDay(FILE_PATH) ) );
+		totalIncomeDay.setText( Double.toString( BillNumber.getCostDay(FILE_PATH)) );
 		
-		totalBooksMonth.setText( Integer.toString( BillNumber.getTotalBoughtBooksMonth() )  );
-	    totalIncomeMonth.setText( Double.toString( BillNumber.getCostMonth())  );	
+		totalBooksMonth.setText( Integer.toString( BillNumber.getTotalBoughtBooksMonth(FILE_PATH) )  );
+	    totalIncomeMonth.setText( Double.toString( BillNumber.getCostMonth(FILE_PATH))  );
 	    salaryMonth.setText( Double.toString(Administrator.getSalaries()) );
 	    
-	    totalBooksYearly.setText( Integer.toString( BillNumber.getTotalBoughtBooksYear() ));
-	    totalIncomeYearly.setText( Double.toString( BillNumber.getCostYear() ));
+	    totalBooksYearly.setText( Integer.toString( BillNumber.getTotalBoughtBooksYear(FILE_PATH) ));
+	    totalIncomeYearly.setText( Double.toString( BillNumber.getCostYear(FILE_PATH) ));
 	    salaryYear.setText( Double.toString(Administrator.getSalaries()*12) );
  		
  		StackPane stackBackButton = new StackPane();
@@ -2233,7 +2217,7 @@ public BorderPane mainPage() {
         BorderPane border = new BorderPane();
         
         PieChart pieChart = new PieChart();
-        ArrayList<Book> stockBooks = BillNumber.getStockBooks();
+        ArrayList<Book> stockBooks = BillNumber.getStockBooks(FILE_PATH);
         for (Book stockBook : stockBooks) {
             if (stockBook.getPurchasedAmount() > 0) {
                 titlesSold.add(stockBook.getTitle());
@@ -2254,10 +2238,10 @@ public BorderPane mainPage() {
  		stack.setPadding(new Insets(20));
  		border.setTop(stack);
  		
- 		Text text1 = new Text(BillNumber.getBooksSoldDay());
- 		Text text2 = new Text(BillNumber.getBooksSoldMonth());
- 		Text text3 = new Text(BillNumber.getBooksSoldYear());
- 		Text text4 = new Text( BillNumber.getBooksSoldTotal());
+ 		Text text1 = new Text(BillNumber.getBooksSoldDay(FILE_PATH));
+ 		Text text2 = new Text(BillNumber.getBooksSoldMonth(FILE_PATH));
+ 		Text text3 = new Text(BillNumber.getBooksSoldYear(FILE_PATH));
+ 		Text text4 = new Text( BillNumber.getBooksSoldTotal(FILE_PATH));
  		
  		GridPane grid = new GridPane();
  		grid.add(text1, 0, 0);
@@ -2288,7 +2272,7 @@ public BorderPane mainPage() {
     	
         BorderPane border = new BorderPane();
         
-        ArrayList<Book> stockBooks = BillNumber.getStockBooks();
+        ArrayList<Book> stockBooks = BillNumber.getStockBooks(FILE_PATH);
         for (Book stockBook : stockBooks) {
             if (stockBook.getQuantitiesPurchased() > 0) {
                 titlesBought.add(stockBook.getTitle());
@@ -2312,10 +2296,10 @@ public BorderPane mainPage() {
  		stack.setPadding(new Insets(20));
  		border.setTop(stack);
  		
- 		Text text1 = new Text(BillNumber.getBooksBoughtDay());
- 		Text text2 = new Text(BillNumber.getBooksBoughtMonth());
- 		Text text3 = new Text(BillNumber.getBooksBoughtYear());
- 		Text text4 = new Text(BillNumber.getBooksBoughtTotal());
+ 		Text text1 = new Text(BillNumber.getBooksBoughtDay(FILE_PATH));
+ 		Text text2 = new Text(BillNumber.getBooksBoughtMonth(FILE_PATH));
+ 		Text text3 = new Text(BillNumber.getBooksBoughtYear(FILE_PATH));
+ 		Text text4 = new Text(BillNumber.getBooksBoughtTotal(FILE_PATH));
  		
  		GridPane grid = new GridPane();
  		grid.add(text1, 0, 0);
@@ -2422,7 +2406,7 @@ public BorderPane mainPage() {
 			}
 			
 			
-			if (!Librarian.EnoughStock(comboBoxLibrarian.getValue().toString().substring(0,13), Integer.parseInt(quantity.getCharacters().toString())) ) {
+			if (!Librarian.EnoughStock(FILE_PATH, comboBoxLibrarian.getValue().toString().substring(0,13), Integer.parseInt(quantity.getCharacters().toString())) ) {
 				warningsLibrarian.setText("Failed,not enough stock");
 				return;
 			}
@@ -2432,7 +2416,7 @@ public BorderPane mainPage() {
 			String Title = comboBoxLibrarian.getValue().toString().substring(16);
 			date = new Date();
 			
-			ArrayList<Book> stockbooks = BillNumber.getStockBooks();
+			ArrayList<Book> stockbooks = BillNumber.getStockBooks(FILE_PATH);
 			for (int i=0;i<stockbooks.size();i++) {
 				if (stockbooks.get(i).getISBN().equals(isbn)) {
 					
@@ -2465,7 +2449,7 @@ public BorderPane mainPage() {
 			}
 			
 			try {
-				librarian.checkOutBooks(books, bookQuantities);
+				librarian.checkOutBooks(FILE_PATH, books, bookQuantities);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
