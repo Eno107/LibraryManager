@@ -1,3 +1,6 @@
+
+//TODO : getIncomeDay(), getTotalBoughtBooksDay(), getCostDay(), isPartOfBooks(), getAllStock()
+
 package project.librarymanager;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +21,7 @@ class BookOperationsTest {
     private static final String TEST_FILE_PATH = "BooksTesting.txt";
     Date today = new Date();
 
-    // NOTE: sets up test file with sold items
+    // NOTE: sets up test file with sold & purchased items
     @BeforeEach
     void setUp() {
         try {
@@ -29,12 +32,16 @@ class BookOperationsTest {
             Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",5);
             book.addDate(today);
             book.addQuantity(2);
+            book.addPurchasedDate(today);
+            book.addQuantitiesPurchased(2);
             objOut.writeObject(book);
 
             // book is sold today
             book = new Book("0629778828041","Don Quixote","Novel","BCH Fulfillment & Distribution",5.00,6.59,"Miguel de Cervantes",10);
             book.addDate(today);
             book.addQuantity(3);
+            book.addPurchasedDate(today);
+            book.addQuantitiesPurchased(3);
             objOut.writeObject(book);
 
             // book is sold tomorrow
@@ -44,6 +51,8 @@ class BookOperationsTest {
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             book.addDate(calendar.getTime());
             book.addQuantity(6);
+            book.addPurchasedDate(calendar.getTime());
+            book.addQuantitiesPurchased(6);
             objOut.writeObject(book);
 
             // book is sold yesterday
@@ -53,6 +62,8 @@ class BookOperationsTest {
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             book.addDate(calendar.getTime());
             book.addQuantity(2);
+            book.addPurchasedDate(calendar.getTime());
+            book.addQuantitiesPurchased(2);
             objOut.writeObject(book);
 
             // book is sold a month ago
@@ -62,6 +73,8 @@ class BookOperationsTest {
             calendar.add(Calendar.MONTH, -1);
             book.addDate(calendar.getTime());
             book.addQuantity(2);
+            book.addPurchasedDate(calendar.getTime());
+            book.addQuantitiesPurchased(2);
             objOut.writeObject(book);
 
             // book is sold after a year
@@ -71,6 +84,8 @@ class BookOperationsTest {
             calendar.add(Calendar.YEAR, 1);
             book.addDate(calendar.getTime());
             book.addQuantity(5);
+            book.addPurchasedDate(calendar.getTime());
+            book.addQuantitiesPurchased(5);
             objOut.writeObject(book);
         } catch (IOException e) {
             fail("Exception during setup");
@@ -180,13 +195,13 @@ class BookOperationsTest {
     @Test
     public void test_getBooksSoldDay_emptyDates(){
         setUpWithoutDates();
-        assertEquals(BillNumber.getBooksSoldDay(TEST_FILE_PATH),
-                """
+        assertEquals("""
                         For Books Sold Today We Have:
 
                         In Search of Lost Time has had no purchases
                         Ulysses has had no purchases
-                        """);
+                        """, BillNumber.getBooksSoldDay(TEST_FILE_PATH)
+                );
     }
 
     @Test
@@ -202,5 +217,51 @@ class BookOperationsTest {
                     "For \"" + "The Great Gatsby" +"\" We have sold in a day:\n");
     }
     // } end of "BillNumber.getBooksSoldDay()" testing
+
+
+    // Start of testing method "BillNumber.getBooksBoughtDay()" {
+    @Test
+    public void test_getBooksBoughtDay_noneBought(){
+        setUpWithoutDates();
+        assertEquals("""
+                        For Books Bought Today We Have
+
+                        We have made no purchases on "In Search of Lost Time"
+                        We have made no purchases on "Ulysses"
+                        """,
+                BillNumber.getBooksBoughtDay(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getBooksBoughtDay(){
+
+        String expected = "For Books Bought Today We Have\n\n" +
+                "For \"" + "In Search of Lost Time" + "\" We have bought in a day:\n" +
+                "2 at "+today+"\n" +
+                "For \"" + "Don Quixote" + "\" We have bought in a day:\n" +
+                "3 at "+today+"\n" +
+                "For \"" + "Ulysses" + "\" We have bought in a day:\n" +
+                "For \"" + "Moby Dick" + "\" We have bought in a day:\n" +
+                "For \"" + "One Hundred Years of Solitude" + "\" We have bought in a day:\n" +
+                "For \"" + "The Great Gatsby" + "\" We have bought in a day:\n";
+
+
+       assertEquals(expected, BillNumber.getBooksBoughtDay(TEST_FILE_PATH));
+    }
+    // } end of "BillNumber.getBooksBoughtDay()" testing
+
+
+    // Start of testing method "BillNumber.getIntBooksSoldDay()" {
+    @Test
+    public void test_getIntBooksSoldDay_noSoldBooks(){
+        setUpWithoutDates();
+        assertEquals(0, BillNumber.getIntBooksSoldDay(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getIntBooksSoldDay(){
+        assertEquals(5, BillNumber.getIntBooksSoldDay(TEST_FILE_PATH));
+    }
+    // } end of "BillNumber.getIntBooksSoldDay()"
 
 }
