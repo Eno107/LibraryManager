@@ -166,10 +166,18 @@ public abstract class BillNumber {
 		return ans;
 		
 	}
-	
+
 	public static void addBookToStock(String path, Book book) throws IOException {
-		
+
 		ArrayList<Book> stockbooks = BillNumber.getStockBooks(path);
+		for (Book stockbook: stockbooks){
+			if (stockbook.getISBN().equals(book.getISBN())){
+				stockbook.AddStock(book.getStock());
+				BillNumber.updateBooks(path, stockbooks);
+				return;
+			}
+		}
+
 		stockbooks.add(book);
 		BillNumber.updateBooks(path, stockbooks);
 	}
