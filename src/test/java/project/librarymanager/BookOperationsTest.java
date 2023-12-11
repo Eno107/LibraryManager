@@ -1,5 +1,5 @@
 
-//TODO : getIncomeDay(), getTotalBoughtBooksDay(), getCostDay(), isPartOfBooks(), getAllStock()
+//TODO : isPartOfBooks(), getAllStock()
 
 package project.librarymanager;
 
@@ -20,8 +20,9 @@ class BookOperationsTest {
 
     private static final String TEST_FILE_PATH = "BooksTesting.txt";
     Date today = new Date();
+    ArrayList<Book> startBookArrayList = new ArrayList<>();
 
-    // NOTE: sets up test file with sold & purchased items
+    // NOTE: sets up test file with sold & purchased items & >5 stock
     @BeforeEach
     void setUp() {
         try {
@@ -29,12 +30,13 @@ class BookOperationsTest {
             objOut = new ObjectOutputStream(out);
 
             // book is sold today
-            Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",5);
+            Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",6);
             book.addDate(today);
             book.addQuantity(2);
             book.addPurchasedDate(today);
-            book.addQuantitiesPurchased(2);
+            book.addQuantitiesPurchased(1);
             objOut.writeObject(book);
+            startBookArrayList.add(book);
 
             // book is sold today
             book = new Book("0629778828041","Don Quixote","Novel","BCH Fulfillment & Distribution",5.00,6.59,"Miguel de Cervantes",10);
@@ -43,9 +45,10 @@ class BookOperationsTest {
             book.addPurchasedDate(today);
             book.addQuantitiesPurchased(3);
             objOut.writeObject(book);
+            startBookArrayList.add(book);
 
             // book is sold tomorrow
-            book = new Book("4647500268094","Ulysses","Fiction","Baker & Taylor",15.00,18.00,"James Joyce",2);
+            book = new Book("4647500268094","Ulysses","Fiction","Baker & Taylor",15.00,18.00,"James Joyce",7);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(today);
             calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -54,9 +57,10 @@ class BookOperationsTest {
             book.addPurchasedDate(calendar.getTime());
             book.addQuantitiesPurchased(6);
             objOut.writeObject(book);
+            startBookArrayList.add(book);
 
             // book is sold yesterday
-            book = new Book("9515267203718","Moby Dick","Adventure fiction","Cardinal Publishers Group",7.00,10.00,"Herman Melville",5);
+            book = new Book("9515267203718","Moby Dick","Adventure fiction","Cardinal Publishers Group",7.00,10.00,"Herman Melville",6);
             calendar = Calendar.getInstance();
             calendar.setTime(today);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
@@ -65,9 +69,10 @@ class BookOperationsTest {
             book.addPurchasedDate(calendar.getTime());
             book.addQuantitiesPurchased(2);
             objOut.writeObject(book);
+            startBookArrayList.add(book);
 
             // book is sold a month ago
-            book = new Book("3655736671389","One Hundred Years of Solitude","Magic realism","Ingram Content Group, Inc",13.00,16.99,"Gabriel Garcia Marquez",3);
+            book = new Book("3655736671389","One Hundred Years of Solitude","Magic realism","Ingram Content Group, Inc",13.00,16.99,"Gabriel Garcia Marquez",7);
             calendar = Calendar.getInstance();
             calendar.setTime(today);
             calendar.add(Calendar.MONTH, -1);
@@ -76,9 +81,10 @@ class BookOperationsTest {
             book.addPurchasedDate(calendar.getTime());
             book.addQuantitiesPurchased(2);
             objOut.writeObject(book);
+            startBookArrayList.add(book);
 
             // book is sold after a year
-            book = new Book("3115666367951","The Great Gatsby","Tragedy","Ingram Content Group, Inc",10.00,11.95,"F. Scott Fitzgerald",7);
+            book = new Book("3115666367951","The Great Gatsby","Tragedy","Ingram Content Group, Inc",10.00,11.95,"F. Scott Fitzgerald",5);
             calendar = Calendar.getInstance();
             calendar.setTime(today);
             calendar.add(Calendar.YEAR, 1);
@@ -87,21 +93,22 @@ class BookOperationsTest {
             book.addPurchasedDate(calendar.getTime());
             book.addQuantitiesPurchased(5);
             objOut.writeObject(book);
+            startBookArrayList.add(book);
         } catch (IOException e) {
             fail("Exception during setup");
         }
     }
 
-    // NOTE: HELPER METHOD, sets up test file with unsold items
+    // NOTE: HELPER METHOD, sets up test file with unsold items & <5 stock
     void setUpWithoutDates() {
         try {
             out = new FileOutputStream(TEST_FILE_PATH);
             objOut = new ObjectOutputStream(out);
 
-            Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",5);
+            Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",4);
             objOut.writeObject(book);
 
-            book = new Book("4647500268094","Ulysses","Fiction","Baker & Taylor",15.00,18.00,"James Joyce",2);
+            book = new Book("4647500268094","Ulysses","Fiction","Baker & Taylor",15.00,18.00,"James Joyce",3);
             objOut.writeObject(book);
 
         } catch (IOException e) {
@@ -237,7 +244,7 @@ class BookOperationsTest {
 
         String expected = "For Books Bought Today We Have\n\n" +
                 "For \"" + "In Search of Lost Time" + "\" We have bought in a day:\n" +
-                "2 at "+today+"\n" +
+                "1 at "+today+"\n" +
                 "For \"" + "Don Quixote" + "\" We have bought in a day:\n" +
                 "3 at "+today+"\n" +
                 "For \"" + "Ulysses" + "\" We have bought in a day:\n" +
@@ -262,6 +269,80 @@ class BookOperationsTest {
     public void test_getIntBooksSoldDay(){
         assertEquals(5, BillNumber.getIntBooksSoldDay(TEST_FILE_PATH));
     }
-    // } end of "BillNumber.getIntBooksSoldDay()"
+    // } end of "BillNumber.getIntBooksSoldDay()" testing
+
+
+    // Start of testing method "BillNumber.getIncomeDay()" {
+    @Test
+    public void test_getIncomeDay_noSoldBooks(){
+        setUpWithoutDates();
+        System.out.println(BillNumber.getIncomeDay(TEST_FILE_PATH));
+
+        assertEquals(0, BillNumber.getIncomeDay(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getIncomeDay(){
+        assertEquals(167.69, BillNumber.getIncomeDay(TEST_FILE_PATH));
+    }
+    // end of "BillNumber.getIncomeDay()" testing
+
+
+    // Start of testing method "BillNumber.getTotalBoughtBooksDay()" {
+    @Test
+    public void test_getTotalBoughtBooksDay_noSoldBooks(){
+        setUpWithoutDates();
+
+        assertEquals(0, BillNumber.getTotalBoughtBooksDay(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getTotalBoughtBooksDay(){
+        assertEquals(4, BillNumber.getTotalBoughtBooksDay(TEST_FILE_PATH));
+    }
+    // } end of "BillNumber.getTotalBoughtBooksDay()" testing
+
+
+    // Start of testing method "BillNumber.getCostDay()" {
+    @Test
+    public void test_getCostDay_noSoldBooks(){
+        setUpWithoutDates();
+
+        assertEquals(0, BillNumber.getCostDay(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getCostDay(){
+        assertEquals(80, BillNumber.getCostDay(TEST_FILE_PATH));
+    }
+    // } end of "BillNumber.getCostDay()" testing
+
+
+    // Start of testing method "BillNumber.isPartOfBooks()" {
+    @Test
+    public void test_isPartOfBooks_notPart(){
+        Book book = new Book("0664687443145","Hamlet","Tragedy","Publishers Group West",12.00,14.99,"William Shakespeare",12);
+        assertFalse(BillNumber.isPartOfBooks(TEST_FILE_PATH, book.getISBN()));
+    }
+
+    @Test
+    public void test_isPartOfBooks(){
+        Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",5);
+        assertTrue(BillNumber.isPartOfBooks(TEST_FILE_PATH, book.getISBN()));
+    }
+    // } end of "BillNumber.isPartOfBooks()" testing
+
+
+    @Test
+    public void test_getAllStock(){
+
+       ArrayList<Integer> allStock = BillNumber.getAllStock(TEST_FILE_PATH);
+
+       for (int i=0; i<allStock.size(); i++){
+           assertEquals(startBookArrayList.get(i).getStock(), allStock.get(i));
+       }
+    }
+
+
 
 }
