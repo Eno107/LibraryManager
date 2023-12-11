@@ -1,8 +1,6 @@
-
-//TODO : isPartOfBooks(), getAllStock()
-
 package project.librarymanager;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -344,5 +342,52 @@ class BookOperationsTest {
     }
 
 
+    //TODO: Admin methods without file operations
+    //TODO: @beforeAll instantiate managers
+    @BeforeAll
+    public static void instantiateManagers(){
+        Administrator.InstantiateManagers();
+    }
+
+    @Test
+    public void test_instantiateManager(){
+
+        ArrayList<Manager> expectedManagerArrayList = new ArrayList<>();
+        Manager mag = new Manager("Calv1n","PQ532Abba","Calvin",900,"(912) 561-2628","calvl@manager.com") ;
+        expectedManagerArrayList.add(mag);
+        mag = new Manager("Lui54","y@.3FYrn","Lui",900,"(912) 218-2594","lu@manager.com") ;
+        expectedManagerArrayList.add(mag);
+        mag = new Manager("1","2","TestManager",900,"(912) 623-5353","TestEmail@librarian.com");
+        expectedManagerArrayList.add(mag);
+
+        Administrator.InstantiateManagers();
+        ArrayList<Manager> managerArrayList = Administrator.getManagers();
+
+        assertEquals(expectedManagerArrayList.size(), managerArrayList.size(), "size");
+        for (int i=0; i<managerArrayList.size(); i++){
+            assertEquals(expectedManagerArrayList.get(i).getUsername(), managerArrayList.get(i).getUsername(), "username");
+            assertEquals(expectedManagerArrayList.get(i).getPassword(), managerArrayList.get(i).getPassword(), "password");
+            assertEquals(expectedManagerArrayList.get(i).getName(), managerArrayList.get(i).getName(), "name");
+            assertEquals(expectedManagerArrayList.get(i).getSalary(), managerArrayList.get(i).getSalary(), "salary");
+            assertEquals(expectedManagerArrayList.get(i).getPhone(), managerArrayList.get(i).getPhone(), "phone");
+            assertEquals(expectedManagerArrayList.get(i).getEmail(), managerArrayList.get(i).getEmail(), "email");
+        }
+    }
+
+
+    @Test
+    public void test_partOfManager_notPart(){
+        Manager mag = new Manager("2","2","TestManager",900,"(912) 623-5353","TestEmail@librarian.com");
+        assertFalse(Administrator.partOfManager(mag));
+        mag = new Manager("5","95","TestManager#2",1000,"(912) 623-9999","#2TestEmail@librarian.com");
+        assertFalse(Administrator.partOfManager(mag));
+    }
+
+    @Test
+    public void test_partOfManager(){
+        Manager mag = new Manager("1","2","TestManager",900,"(912) 623-5353","TestEmail@librarian.com");
+        assertTrue(Administrator.partOfManager(mag));
+    }
+    // end
 
 }
