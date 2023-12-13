@@ -1,8 +1,10 @@
 package project.librarymanager;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,11 +15,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BookOperationsTest {
 
+    // TODO
+    @TempDir
+    File tempDir;
+
+
     FileOutputStream out;
     ObjectOutputStream objOut;
 
     private static final String TEST_FILE_PATH = "BooksTesting.txt";
+
+
     Date today = new Date();
+
     ArrayList<Book> startBookArrayList = new ArrayList<>();
 
     // NOTE: sets up test file with sold & purchased items & >5 stock
