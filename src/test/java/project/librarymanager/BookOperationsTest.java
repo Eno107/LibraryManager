@@ -1,10 +1,10 @@
+
+//TODO : isPartOfBooks(), getAllStock()
+
 package project.librarymanager;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -15,19 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BookOperationsTest {
 
-    // TODO
-    @TempDir
-    File tempDir;
-
-
     FileOutputStream out;
     ObjectOutputStream objOut;
 
     private static final String TEST_FILE_PATH = "BooksTesting.txt";
-
-
     Date today = new Date();
-
     ArrayList<Book> startBookArrayList = new ArrayList<>();
 
     // NOTE: sets up test file with sold & purchased items & >5 stock
@@ -351,53 +343,53 @@ class BookOperationsTest {
        }
     }
 
-
-    //TODO: Admin methods without file operations
-    //TODO: @beforeAll instantiate managers
-    @BeforeAll
-    public static void instantiateManagers(){
-        Administrator.InstantiateManagers();
-    }
-
+    // Start of testing method "BillNumber.updateBooks()" {
     @Test
-    public void test_instantiateManager(){
+    void testUpdateBooks() {
+        ArrayList<Book> books = new ArrayList<>();
+        books.add(new Book("0096184570112", "In Search of Lost Time", "Modernist", "Ingram Content Group, Inc", 65.00, 73.96, "Marcel Proust", 5));
+        books.add(new Book("4647500268094", "Ulysses", "Fiction", "Baker & Taylor", 15.00, 18.00, "James Joyce", 2));
 
-        ArrayList<Manager> expectedManagerArrayList = new ArrayList<>();
-        Manager mag = new Manager("Calv1n","PQ532Abba","Calvin",900,"(912) 561-2628","calvl@manager.com") ;
-        expectedManagerArrayList.add(mag);
-        mag = new Manager("Lui54","y@.3FYrn","Lui",900,"(912) 218-2594","lu@manager.com") ;
-        expectedManagerArrayList.add(mag);
-        mag = new Manager("1","2","TestManager",900,"(912) 623-5353","TestEmail@librarian.com");
-        expectedManagerArrayList.add(mag);
+        try {
+            BillNumber.updateBooks(TEST_FILE_PATH, books);
 
-        Administrator.InstantiateManagers();
-        ArrayList<Manager> managerArrayList = Administrator.getManagers();
+            ArrayList<Book> updatedBooks = BillNumber.getStockBooks(TEST_FILE_PATH);
+            assertEquals(books.size(), updatedBooks.size(), "Number of books in file after update");
 
-        assertEquals(expectedManagerArrayList.size(), managerArrayList.size(), "size");
-        for (int i=0; i<managerArrayList.size(); i++){
-            assertEquals(expectedManagerArrayList.get(i).getUsername(), managerArrayList.get(i).getUsername(), "username");
-            assertEquals(expectedManagerArrayList.get(i).getPassword(), managerArrayList.get(i).getPassword(), "password");
-            assertEquals(expectedManagerArrayList.get(i).getName(), managerArrayList.get(i).getName(), "name");
-            assertEquals(expectedManagerArrayList.get(i).getSalary(), managerArrayList.get(i).getSalary(), "salary");
-            assertEquals(expectedManagerArrayList.get(i).getPhone(), managerArrayList.get(i).getPhone(), "phone");
-            assertEquals(expectedManagerArrayList.get(i).getEmail(), managerArrayList.get(i).getEmail(), "email");
+            for (int i = 0; i < books.size(); i++) {
+                assertEquals(books.get(i).getISBN(), updatedBooks.get(i).getISBN(), "ISBN match for book at index " + i);
+                assertEquals(books.get(i).getTitle(), updatedBooks.get(i).getTitle(), "Title match for book at index " + i);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+    // } end of testing method "BillNumber.updateBooks()"
 
-
+    // Start of testing method "BillNumber.getBookFromCathegory() {
     @Test
-    public void test_partOfManager_notPart(){
-        Manager mag = new Manager("2","2","TestManager",900,"(912) 623-5353","TestEmail@librarian.com");
-        assertFalse(Administrator.partOfManager(mag));
-        mag = new Manager("5","95","TestManager#2",1000,"(912) 623-9999","#2TestEmail@librarian.com");
-        assertFalse(Administrator.partOfManager(mag));
-    }
+    void testGetBookFromCategory() {
+        try {
+            BillNumber.setInitialStock(TEST_FILE_PATH);
+        } catch (IOException e) {
+            fail("Exception during test setup");
+        }
 
-    @Test
-    public void test_partOfManager(){
-        Manager mag = new Manager("1","2","TestManager",900,"(912) 623-5353","TestEmail@librarian.com");
-        assertTrue(Administrator.partOfManager(mag));
+        // Define a category to test
+        String categoryToTest = "Modernist";
+
+        // Perform the test
+        ArrayList<Book> booksInCategory = BillNumber.getBookFromCategory(TEST_FILE_PATH, categoryToTest);
+
+        // Validate the result
+        assertNotNull(booksInCategory);
+        assertFalse(booksInCategory.isEmpty());
+
+        // Check if all retrieved books belong to the specified category
+        for (Book book : booksInCategory) {
+            assertEquals(categoryToTest, book.getCategory());
+        }
     }
-    // end
+    // } end of testing method "BillNumber.getBookFromCathegory() {
 
 }
