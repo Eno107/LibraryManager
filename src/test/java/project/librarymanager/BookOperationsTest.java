@@ -390,6 +390,6 @@ class BookOperationsTest {
             assertEquals(categoryToTest, book.getCategory());
         }
     }
-    // } end of testing method "BillNumber.getBookFromCathegory() {
+    // } end of testing method "BillNumber.getBooksFromCathegory() {
 
 }
