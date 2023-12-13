@@ -332,7 +332,7 @@ class BookOperationsTest {
     }
     // } end of "BillNumber.isPartOfBooks()" testing
 
-
+    // Start of testing method "BillNumber.getAllStock()"{
     @Test
     public void test_getAllStock(){
 
@@ -342,6 +342,7 @@ class BookOperationsTest {
            assertEquals(startBookArrayList.get(i).getStock(), allStock.get(i));
        }
     }
+    // } end of "BillNumber.getAllStock()" testing
 
     // Start of testing method "BillNumber.updateBooks()" {
     @Test
@@ -375,17 +376,13 @@ class BookOperationsTest {
             fail("Exception during test setup");
         }
 
-        // Define a category to test
         String categoryToTest = "Modernist";
 
-        // Perform the test
         ArrayList<Book> booksInCategory = BillNumber.getBookFromCategory(TEST_FILE_PATH, categoryToTest);
 
-        // Validate the result
         assertNotNull(booksInCategory);
         assertFalse(booksInCategory.isEmpty());
 
-        // Check if all retrieved books belong to the specified category
         for (Book book : booksInCategory) {
             assertEquals(categoryToTest, book.getCategory());
         }
