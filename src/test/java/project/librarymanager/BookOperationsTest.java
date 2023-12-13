@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -115,6 +116,27 @@ class BookOperationsTest {
             fail("Exception during setup");
         }
     }
+
+    @Test
+    public void test_showStringStock_noData(){
+        setUpWithoutDates();
+        assertEquals(""" 
+             Currently in Stock:
+             Book [ISBN=0096184570112, title=In Search of Lost Time, category=Modernist, supplier=Ingram Content Group, Inc, sellingPrice=73.96, originalPrice=65.0, author=Marcel Proust, stock=4]
+             Book [ISBN=4647500268094, title=Ulysses, category=Fiction, supplier=Baker & Taylor, sellingPrice=18.0, originalPrice=15.0, author=James Joyce, stock=3]
+             """,BillNumber.showStringStock(TEST_FILE_PATH));
+    }
+    @Test
+    public void test_showStringStock(){
+        assertEquals("Currently in Stock:\n" +
+                "Book [ISBN=0096184570112, title=In Search of Lost Time, category=Modernist, supplier=Ingram Content Group, Inc, sellingPrice=73.96, originalPrice=65.0, author=Marcel Proust, stock=6]\n" +
+                "Book [ISBN=0629778828041, title=Don Quixote, category=Novel, supplier=BCH Fulfillment & Distribution, sellingPrice=6.59, originalPrice=5.0, author=Miguel de Cervantes, stock=10]\n" +
+                "Book [ISBN=4647500268094, title=Ulysses, category=Fiction, supplier=Baker & Taylor, sellingPrice=18.0, originalPrice=15.0, author=James Joyce, stock=7]\n" +
+                "Book [ISBN=9515267203718, title=Moby Dick, category=Adventure fiction, supplier=Cardinal Publishers Group, sellingPrice=10.0, originalPrice=7.0, author=Herman Melville, stock=6]\n" +
+                "Book [ISBN=3655736671389, title=One Hundred Years of Solitude, category=Magic realism, supplier=Ingram Content Group, Inc, sellingPrice=16.99, originalPrice=13.0, author=Gabriel Garcia Marquez, stock=7]\n" +
+                "Book [ISBN=3115666367951, title=The Great Gatsby, category=Tragedy, supplier=Ingram Content Group, Inc, sellingPrice=11.95, originalPrice=10.0, author=F. Scott Fitzgerald, stock=5]\n",BillNumber.showStringStock(TEST_FILE_PATH));
+    }
+
 
 
     @Test
@@ -225,6 +247,62 @@ class BookOperationsTest {
     }
     // } end of "BillNumber.getBooksSoldDay()" testing
 
+    // start of testing "BillNumber.getBooksSoldMonth()"
+    @Test
+    public void test_getBooksSoldMonth_emptydate(){
+        setUpWithoutDates();
+        assertEquals("""
+                        For Books Sold In A Month We Have
+
+                        In Search of Lost Time has had no purchases
+                        Ulysses has had no purchases
+                        """, BillNumber.getBooksSoldMonth(TEST_FILE_PATH)
+        );
+    }
+    @Test
+    public void test_getBooksSoldMonth () {
+        assertEquals( "For Books Sold In A Month We Have:\n\n" +
+                "For \""+  "In Search of Lost Time" +"\" We have sold in a month:\n" +
+                "2 at "+ today +"\n" +
+                "For \"" + "Don Quixote" +"\" We have sold in a month:\n" +
+                "3 at "+ today + "\n" +
+                "For \"" + "Ulysses" + "\" We have sold in a month:\n" +
+                "6 at "+ today + "\n" +
+                "For \"" + "Moby Dick" + "\" We have sold in a month:\n" +
+                "2 at "+ today + "\n" +
+                "For \"" + "One Hundred Years of Solitude" +"\" We have sold in a month:\n" +
+                "For \"" + "The Great Gatsby" +"\" We have sold in a month:\n", BillNumber.getBooksSoldMonth(TEST_FILE_PATH));
+    }
+    // end of testing "BillNumber.getBooksSoldMonth()"
+    //start of testing "BillNumber.getBooksSoldTotal()"
+    @Test
+    public void test_getBooksSoldTotal_noDate(){
+        setUpWithoutDates();
+        assertEquals("""
+                        For Books Sold in Total We Have
+
+                        In Search of Lost Time has had no purchases
+                        Ulysses has had no purchases
+                        """, BillNumber.getBooksSoldTotal(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getBooksSoldTotal(){
+        assertEquals( "For Books Sold in Total We Have:\n\n" +
+                "For \""+  "In Search of Lost Time" +"\" We have sold in a month:\n" +
+                "2 at "+ today +"\n" +
+                "For \"" + "Don Quixote" +"\" We have sold in a month:\n" +
+                "3 at "+ today + "\n" +
+                "For \"" + "Ulysses" + "\" We have sold in a month:\n" +
+                "6 at "+ today + "\n" +
+                "For \"" + "Moby Dick" + "\" We have sold in a month:\n" +
+                "2 at "+ today + "\n" +
+                "For \"" + "One Hundred Years of Solitude" +"\" We have sold in a month:\n" +
+                "For \"" + "The Great Gatsby" +"\" We have sold in a month:\n", BillNumber.getBooksSoldMonth(TEST_FILE_PATH));
+
+    }
+
+    //end of testing "BillNumber.getBooksSoldTotal()"
 
     // Start of testing method "BillNumber.getBooksBoughtDay()" {
     @Test
@@ -257,6 +335,30 @@ class BookOperationsTest {
     }
     // } end of "BillNumber.getBooksBoughtDay()" testing
 
+    //start of testing "BillNumber.getBooksBoughtMonth()"
+    @Test
+    public void test_getBooksBoughtMonth_noData(){
+        setUpWithoutDates();
+        assertEquals("For Books Bought In A Month We Have\n" +
+                "\n" +
+                "We have made no purchases on \"In Search of Lost Time\"\n" +
+                "We have made no purchases on \"Ulysses\"\n", BillNumber.getBooksBoughtMonth(TEST_FILE_PATH));
+    }
+    @Test
+    public void test_getBooksBoughtMonth(){
+        String exp = "\"For Books Bought In A Month We Have\\n\\n\" +\n\n" +
+                "\"For \"In Search of Lost Time\" We have bought in a month: +\n " +
+                "1 at "+today+"\n" +
+                "\"For \"Don Quixote\" + \"\" We have bought in a month:\\n\" +\n" +
+                "3 at " +today+ "\n" +
+                "\"For \"Ulysses\" + \"\" We have bought in a month:\\n\" +\n" +
+                "\"For \"Moby Dick\" + \"\" We have bought in a month:\\n\" +\n" +
+                "\"For \"One Hundred Years of Solitude\" + \"\" We have bought in a month:\\n\" +\n" +
+                "\"For \"The Great Gatsby\" + \"\" We have bought in a month:\\n\";\n";
+        assertEquals(exp, BillNumber.getBooksBoughtMonth(TEST_FILE_PATH));
+    }
+    //end of testing "BillNumber.getBooksBoughtMonth"
+
 
     // Start of testing method "BillNumber.getIntBooksSoldDay()" {
     @Test
@@ -270,7 +372,18 @@ class BookOperationsTest {
         assertEquals(5, BillNumber.getIntBooksSoldDay(TEST_FILE_PATH));
     }
     // } end of "BillNumber.getIntBooksSoldDay()" testing
+    // Start of testing "BillNumber.getIntSoldMonth()"
+    @Test
+    public void test_getIntBooksSoldMonth_noSoldBooks(){
+        setUpWithoutDates();
+        assertEquals(0, BillNumber.getIntBooksSoldMonth(TEST_FILE_PATH));
+    }
 
+    @Test
+    public void test_getIntBooksSoldMonth(){
+        assertEquals(13,BillNumber.getIntBooksSoldMonth(TEST_FILE_PATH));
+    }
+    //end of testing "BillNumber.getIntSoldMonth()"
 
     // Start of testing method "BillNumber.getIncomeDay()" {
     @Test
@@ -287,7 +400,18 @@ class BookOperationsTest {
     }
     // end of "BillNumber.getIncomeDay()" testing
 
+    //Start of testing "BillNumber.getIncomeMonth"
+    @Test
+    public void test_getIncomeMonth_noSale(){
+        setUpWithoutDates();
+        assertEquals(0,BillNumber.getIncomeMonth(TEST_FILE_PATH));
+    }
+    @Test
+    public void test_getIncomeMonth(){
+        assertEquals(295.69,BillNumber.getIncomeMonth(TEST_FILE_PATH));
+    }
 
+    //End of testing  "BillNumber.getIncomeMonth"
     // Start of testing method "BillNumber.getTotalBoughtBooksDay()" {
     @Test
     public void test_getTotalBoughtBooksDay_noSoldBooks(){
@@ -302,7 +426,17 @@ class BookOperationsTest {
     }
     // } end of "BillNumber.getTotalBoughtBooksDay()" testing
 
+    // Start of testing method "BillNumber.getTotalBoughtBooksMonth()"
+    @Test
+    public void test_getTotalBoughtBooksMonth_noSales(){
+        setUpWithoutDates();
+        assertEquals(0,BillNumber.getTotalBoughtBooksMonth(TEST_FILE_PATH));
+    }
 
+    @Test
+    public void test_getTotalBoughtBooksMonth(){
+        assertEquals(12,BillNumber.getTotalBoughtBooksMonth(TEST_FILE_PATH));
+    }
     // Start of testing method "BillNumber.getCostDay()" {
     @Test
     public void test_getCostDay_noSoldBooks(){
@@ -317,7 +451,18 @@ class BookOperationsTest {
     }
     // } end of "BillNumber.getCostDay()" testing
 
+    //start of "BillNumber.getCostMonth()" testing
+    @Test
+    public void test_getCostMonth_noSoldBooks(){
+        setUpWithoutDates();
+        assertEquals(0, BillNumber.getCostMonth(TEST_FILE_PATH));
+    }
 
+    @Test
+    public void test_getCostMonth(){
+        assertEquals(184,BillNumber.getCostMonth(TEST_FILE_PATH));
+    }
+    // End of testing method "BillNumber.getCostMonth"
     // Start of testing method "BillNumber.isPartOfBooks()" {
     @Test
     public void test_isPartOfBooks_notPart(){
@@ -387,6 +532,37 @@ class BookOperationsTest {
             assertEquals(categoryToTest, book.getCategory());
         }
     }
-    // } end of testing method "BillNumber.getBooksFromCathegory() {
+    // } end of testing method "BillNumber.getBooksFromCathegory()
+
+    @Test
+    public void test_getISBN_noEntry(){
+        setUpWithoutDates();
+        String str = "[0096184570112 - In Search of Lost Time, 4647500268094 - Ulysses]";
+        assertEquals("[0096184570112 - In Search of Lost Time, 4647500268094 - Ulysses]", BillNumber.getISBNName(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getISBN(){
+        assertEquals("[0096184570112 - In Search of Lost Time, 0629778828041 - Don Quixote, 4647500268094 - Ulysses, 9515267203718 - Moby Dick, 3655736671389 - One Hundred Years of Solitude, 3115666367951 - The Great Gatsby]",BillNumber.getISBNName(TEST_FILE_PATH));
+    }
+
+    @Test
+    void testRemoveDuplicatesSoldTitles() {
+        try {
+            // Create test data with duplicate titles and quantities
+            ArrayList<String> titles = new ArrayList<>(Arrays.asList("Book1", "Book2", "Book1", "Book3"));
+            ArrayList<Integer> quantities = new ArrayList<>(Arrays.asList(5, 3, 2, 4));
+
+            BillNumber.removeDuplicatesSoldTitles(titles, quantities);
+
+            ArrayList<String> expectedTitles = new ArrayList<>(Arrays.asList("Book1", "Book2", "Book3"));
+            ArrayList<Integer> expectedQuantities = new ArrayList<>(Arrays.asList(7, 3, 4));
+
+            assertEquals(expectedTitles, titles, "Titles mismatch after removing duplicates");
+            assertEquals(expectedQuantities, quantities, "Quantities mismatch after removing duplicates");
+        } catch (Exception e) {
+            fail("Exception: " + e.getMessage());
+        }
+    }
 
 }
