@@ -484,51 +484,6 @@ class BookFileOperationsTest {
     }
     // } end of "BillNumber.getAllStock()" testing
 
-    // Start of testing method "BillNumber.updateBooks()" {
-    @Test
-    void testUpdateBooks() {
-        ArrayList<Book> books = new ArrayList<>();
-        books.add(new Book("0096184570112", "In Search of Lost Time", "Modernist", "Ingram Content Group, Inc", 65.00, 73.96, "Marcel Proust", 5));
-        books.add(new Book("4647500268094", "Ulysses", "Fiction", "Baker & Taylor", 15.00, 18.00, "James Joyce", 2));
-
-        try {
-            BillNumber.updateBooks(TEST_FILE_PATH, books);
-
-            ArrayList<Book> updatedBooks = BillNumber.getStockBooks(TEST_FILE_PATH);
-            assertEquals(books.size(), updatedBooks.size(), "Number of books in file after update");
-
-            for (int i = 0; i < books.size(); i++) {
-                assertEquals(books.get(i).getISBN(), updatedBooks.get(i).getISBN(), "ISBN match for book at index " + i);
-                assertEquals(books.get(i).getTitle(), updatedBooks.get(i).getTitle(), "Title match for book at index " + i);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    // } end of testing method "BillNumber.updateBooks()"
-
-    // Start of testing method "BillNumber.getBookFromCathegory() {
-    @Test
-    void testGetBookFromCategory() {
-        try {
-            BillNumber.setInitialStock(TEST_FILE_PATH);
-        } catch (IOException e) {
-            fail("Exception during test setup");
-        }
-
-        String categoryToTest = "Modernist";
-
-        ArrayList<Book> booksInCategory = BillNumber.getBookFromCategory(TEST_FILE_PATH, categoryToTest);
-
-        assertNotNull(booksInCategory);
-        assertFalse(booksInCategory.isEmpty());
-
-        for (Book book : booksInCategory) {
-            assertEquals(categoryToTest, book.getCategory());
-        }
-    }
-    // } end of testing method "BillNumber.getBooksFromCathegory()
-
     //Start of testing method "BillNumber.getISBNName()"
     @Test
     public void test_getISBNName(){
@@ -542,7 +497,7 @@ class BookFileOperationsTest {
 
         assertEquals( expected, BillNumber.getISBNName(TEST_FILE_PATH));
     }
-//end of testing method "BillNumber.getISBNName"
+    //end of testing method "BillNumber.getISBNName"
 
     //Start of testing method "BillNumber.removeDuplicatesSoldTitles"
     @Test
@@ -585,6 +540,244 @@ class BookFileOperationsTest {
         storybooks.remove(book);
     }
     //end of testing method Librarian.BookPresent()
+
+    // Start of testing method "BillNumber.updateBooks()" {
+    @Test
+    void testUpdateBooks() {
+        ArrayList<Book> books = new ArrayList<>();
+        books.add(new Book("0096184570112", "In Search of Lost Time", "Modernist", "Ingram Content Group, Inc", 65.00, 73.96, "Marcel Proust", 5));
+        books.add(new Book("4647500268094", "Ulysses", "Fiction", "Baker & Taylor", 15.00, 18.00, "James Joyce", 2));
+
+        try {
+            BillNumber.updateBooks(TEST_FILE_PATH, books);
+
+            ArrayList<Book> updatedBooks = BillNumber.getStockBooks(TEST_FILE_PATH);
+            assertEquals(books.size(), updatedBooks.size(), "Number of books in file after update");
+
+            for (int i = 0; i < books.size(); i++) {
+                assertEquals(books.get(i).getISBN(), updatedBooks.get(i).getISBN(), "ISBN match for book at index " + i);
+                assertEquals(books.get(i).getTitle(), updatedBooks.get(i).getTitle(), "Title match for book at index " + i);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    // } end of testing method "BillNumber.updateBooks()"
+
+    // Start of testing method "BillNumber.getBookFromCategory() {
+    @Test
+    void testGetBookFromCategory() {
+        try {
+            BillNumber.setInitialStock(TEST_FILE_PATH);
+        } catch (IOException e) {
+            fail("Exception during test setup");
+        }
+
+        String categoryToTest = "Modernist";
+
+        ArrayList<Book> booksInCategory = BillNumber.getBookFromCategory(TEST_FILE_PATH, categoryToTest);
+
+        assertNotNull(booksInCategory);
+        assertFalse(booksInCategory.isEmpty());
+
+        for (Book book : booksInCategory) {
+            assertEquals(categoryToTest, book.getCategory());
+        }
+    }
+    // } end of testing method "BillNumber.getBooksFromCategory()
+
+    // Start of testing method BillNumber.partOfCategoriesChecker()
+    @Test
+    void testPartOfCategoriesChecker() {
+        try {
+            BillNumber.setInitialStock(TEST_FILE_PATH);
+        } catch (IOException e) {
+            fail("Exception during test setup");
+        }
+
+        ArrayList<String> categories = BillNumber.getCategories(TEST_FILE_PATH);
+
+        for (String category : categories) {
+            assertTrue(BillNumber.partOfCateogriesChecker(categories, category));
+        }
+        assertFalse(BillNumber.partOfCateogriesChecker(categories, "NonExistentCategory"));
+    }
+    // end of testing BillNumber.partOfCategoriesChecker()
+
+    // Start of testing method "BillNumber.getBooksSoldYear()" {
+    @Test
+    public void test_getBooksSoldYear_emptyDates(){
+
+        setUpWithoutDates();
+        assertEquals("""
+                        For Books Sold In A Year We Have
+
+                        In Search of Lost Time has had no purchases
+                        Ulysses has had no purchases
+                        """, BillNumber.getBooksSoldYear(TEST_FILE_PATH)
+        );
+    }
+
+    @Test
+    public void test_getBooksSoldYear(){
+
+        String expected = "For Books Sold In A Year We Have\n\n";
+        for (Book book: startBookArrayList){
+            expected += book.getSoldDatesQuantitiesYear();
+        }
+
+        assertEquals(expected, BillNumber.getBooksSoldYear(TEST_FILE_PATH));
+    }
+    // } end of testing method "BillNumber.getBooksSoldYear()"
+
+    // Start of testing method "BillNumber.getBooksBoughtYear()" {
+    @Test
+    public void test_getBooksBoughtYear_noneBought(){
+
+        setUpWithoutDates();
+        assertEquals("""
+                        For Books Bought In A Year We Have
+
+                        We have made no purchases on "In Search of Lost Time"
+                        We have made no purchases on "Ulysses"
+                        """,
+                BillNumber.getBooksBoughtYear(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getBooksBoughtYear(){
+
+        String expected = "For Books Bought In A Year We Have\n\n";
+        for (Book book: startBookArrayList){
+            expected += book.getBoughtDatesQuantitiesYear();
+        }
+
+        assertEquals(expected, BillNumber.getBooksBoughtYear(TEST_FILE_PATH));
+    }
+    // } end of testing method "BillNumber.getBooksBoughtYear()"
+
+    // Start of testing method "BillNumber.getIntBooksSoldYear()" {
+    @Test
+    public void test_getIntBooksSoldYear_noSoldBooks(){
+        setUpWithoutDates();
+        assertEquals(0, BillNumber.getIntBooksSoldYear(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getIntBooksSoldYear(){
+        assertEquals(15, BillNumber.getIntBooksSoldYear(TEST_FILE_PATH));
+    }
+    // } end of testing method "BillNumber.getIntBooksSoldYear()"
+
+    // Start of testing method "BillNumber.getIncomeYear()" {
+    @Test
+    public void test_getIncomeYear_noSoldBooks(){
+        setUpWithoutDates();
+        assertEquals(0, BillNumber.getIncomeYear(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getIncomeYear(){
+        assertEquals(329.67, BillNumber.getIncomeYear(TEST_FILE_PATH));
+    }
+    // } end of testing method "BillNumber.getIncomeYear()"
+
+    // Start of testing method "BillNumber.getTotalBoughtBooksYear()" {
+    @Test
+    public void test_getTotalBoughtBooksYear_noSoldBooks(){
+        setUpWithoutDates();
+        assertEquals(0, BillNumber.getTotalBoughtBooksYear(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getTotalBoughtBooksYear(){
+        assertEquals(14, BillNumber.getTotalBoughtBooksYear(TEST_FILE_PATH));
+    }
+    // } end of testing method "BillNumber.getTotalBoughtBooksYear()"
+
+    // Start of testing method "BillNumber.getCostYear()" {
+    @Test
+    public void test_getCostYear_noSoldBooks(){
+        setUpWithoutDates();
+        assertEquals(0, BillNumber.getCostYear(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getCostYear(){
+        assertEquals(210, BillNumber.getCostYear(TEST_FILE_PATH));
+    }
+    // } end of testing method "BillNumber.getCostYear()"
+
+    // Start of testing method "BillNumber.getBooksBoughtTotal()" {
+    @Test
+    public void test_getBooksBoughTotal_noneBought(){
+
+        setUpWithoutDates();
+        assertEquals("""
+                        For Books Bought in Total We Have
+
+                        We have made no purchases on "In Search of Lost Time"
+                        We have made no purchases on "Ulysses"
+                        """,
+                BillNumber.getBooksBoughtTotal(TEST_FILE_PATH));
+    }
+
+    @Test
+    public void test_getBooksBoughtTotal(){
+        System.out.println(BillNumber.getBooksBoughtTotal(TEST_FILE_PATH));
+        System.out.println("--------------------------------------------------\n");
+        String expected = "For Books Bought in Total We Have\n\n";
+        for (Book book: startBookArrayList){
+            expected += book.getBoughtDatesQuantitiesTotal();
+        }
+
+        System.out.println(expected);
+        assertEquals(expected, BillNumber.getBooksBoughtTotal(TEST_FILE_PATH));
+    }
+    // } end of testing method "BillNumber.getBooksBoughtTotal()"
+
+    // Start of testing method for "BillNumber.getAllTitles()"{
+    @Test
+    void testGetAllTitles() {
+        ArrayList<Book> testBooks = new ArrayList<>();
+
+        try {
+            BillNumber.setInitialStock(TEST_FILE_PATH);
+        } catch (IOException e) {
+            fail("Exception during setup: " + e.getMessage());
+        }
+
+        for (Book book : testBooks) {
+            try {
+                BillNumber.addBookToStock(TEST_FILE_PATH, book);
+            } catch (IOException e) {
+                fail("Exception during setup: " + e.getMessage());
+            }
+        }
+
+        ArrayList<String> titles = BillNumber.getAllTitles(TEST_FILE_PATH);
+
+        assertEquals(10, titles.size());
+        assertTrue(titles.contains("Ulysses"));
+        assertTrue(titles.contains("One Hundred Years of Solitude"));
+    }
+    // } end of testing method for "BillNumber.getAllTitles()"
+
+
+    // Start of testing method for "BillNumber.showStock()"{
+    @Test
+    void testShowStock() {
+
+        String expectedOutput = "Book [ISBN=0096184570112, title=In Search of Lost Time, category=Modernist, supplier=Ingram Content Group, Inc, sellingPrice=73.96, originalPrice=65.0, author=Marcel Proust, stock=6]\n" +
+                "Book [ISBN=0629778828041, title=Don Quixote, category=Novel, supplier=BCH Fulfillment & Distribution, sellingPrice=6.59, originalPrice=5.0, author=Miguel de Cervantes, stock=10]\n" +
+                "Book [ISBN=4647500268094, title=Ulysses, category=Fiction, supplier=Baker & Taylor, sellingPrice=18.0, originalPrice=15.0, author=James Joyce, stock=7]\n" +
+                "Book [ISBN=9515267203718, title=Moby Dick, category=Adventure fiction, supplier=Cardinal Publishers Group, sellingPrice=10.0, originalPrice=7.0, author=Herman Melville, stock=6]\n" +
+                "Book [ISBN=3655736671389, title=One Hundred Years of Solitude, category=Magic realism, supplier=Ingram Content Group, Inc, sellingPrice=16.99, originalPrice=13.0, author=Gabriel Garcia Marquez, stock=7]\n" +
+                "Book [ISBN=3115666367951, title=The Great Gatsby, category=Tragedy, supplier=Ingram Content Group, Inc, sellingPrice=11.95, originalPrice=10.0, author=F. Scott Fitzgerald, stock=5]\n";
+
+        assertEquals(expectedOutput,BillNumber.showStock(TEST_FILE_PATH) );
+    }
+    // } end of testing method for "BillNumber.showStock()"
 
 }
 
