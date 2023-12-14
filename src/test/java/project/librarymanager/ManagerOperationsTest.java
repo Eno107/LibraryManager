@@ -84,4 +84,45 @@ public class ManagerOperationsTest {
     }
     // end of "Manager.getAllCategories()" testing
 
+    //Start of testing method for "Manager.LibrarianChecker()"{
+    @Test
+    public void testLibrarianChecker_ValidCredentials() {
+        Manager.InstantiateLibrarians();
+        Librarian librarian = new Librarian("Alfie123", "SSU6aldo", "Alfie", 500, "(912) 921-2728", "aflie@librarian.com");
+        assertTrue(Manager.LibrarianChecker(librarian));
+    }
+
+    @Test
+    public void testLibrarianChecker_InvalidLibrarian() {
+        Librarian librarian = new Librarian("NonExistingUser", "NonExistingPassword", "NonExistingName", 0, "0000000000", "nonexisting@librarian.com");
+        assertFalse(Manager.LibrarianChecker(librarian));
+    }
+
+    @Test
+    public void testLibrarianChecker_NullLibrarian() {
+        Librarian librarian = null;
+        assertFalse(Manager.LibrarianChecker(librarian));
+    }
+    // } end of testing methods for "Manager.LibrarianChecker()"
+
+    //Start of testing method for "Manager.deleteLibrarian()"{
+    @Test
+    public void testDeleteLibrarian_ValidLibrarian() {
+        Librarian librarianToDelete = new Librarian("Alfie123", "SSU6aldo", "Alfie", 500, "(912) 921-2728", "aflie@librarian.com");
+        Manager.AddLibrarian(librarianToDelete);
+        int initialSize = Manager.getLibrarians().size();
+        Manager.deleteLibrarian(librarianToDelete);
+        int finalSize = Manager.getLibrarians().size();
+        assertEquals(initialSize - 1, finalSize);
+    }
+
+    @Test
+    public void testDeleteLibrarian_NonExistingLibrarian() {
+        Librarian librarianToDelete = new Librarian("NonExistingUser", "NonExistingPassword", "NonExistingName", 0, "0000000000", "nonexisting@librarian.com");
+        int initialSize = Manager.getLibrarians().size();
+        Manager.deleteLibrarian(librarianToDelete);
+        int finalSize = Manager.getLibrarians().size();
+        assertEquals(initialSize, finalSize);
+    }
+    // } end of testing method for "Manager.deleteLibrarian()"
 }

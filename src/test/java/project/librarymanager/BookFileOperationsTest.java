@@ -876,6 +876,23 @@ class BookFileOperationsTest {
         assertFalse(librarian.EnoughStock(TEST_FILE_PATH, "ISBN1", 5));
     }
     // } end of testing method for "Librarian.enoughStock()"
+
+    //Start of testing method for "Manager.checkStock()"{
+    @Test
+    public void testSufficientStock() {
+        String result = Manager.checkStock(TEST_FILE_PATH);
+        assertEquals("Every book has 5 or more items in stock", result);
+    }
+
+    @Test
+    public void testLowStock() {
+        setUpWithoutDates();
+        String expectedWarning = "Warning!\n" +
+                "Book: In Search of Lost Time, With ISBN code: 0096184570112, Has Stock: 4\n" +
+                "Book: Ulysses, With ISBN code: 4647500268094, Has Stock: 3\n";
+        assertEquals(expectedWarning, Manager.checkStock(TEST_FILE_PATH) );
+    }
+    // } end of testing method for "Manager.checkStock()"
 }
 
 
