@@ -12,8 +12,8 @@ public class Librarian extends BillNumber {
 	private int numberOfBills=0;
 	private int booksSold=0;
 	private double moneyMade=0;
-	private final ArrayList<Date> datesSold;
-	private final ArrayList<Double> moneyMadeDates;
+	final ArrayList<Date> datesSold;
+	final ArrayList<Double> moneyMadeDates;
 	private String username;
 	private String password;
 	private String name;
