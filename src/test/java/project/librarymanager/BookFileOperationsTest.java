@@ -561,7 +561,33 @@ class BookFileOperationsTest {
         } catch (Exception e) {
             fail("Exception: " + e.getMessage());
         }
+    }//end of testing method "BillNumber.removeDuplicatesSoldTitles()"
+
+    //Start of testing method "Librarian.BookPresent()"
+    @Test
+    public void testBookPresent_noBook(){
+        Book book = new Book("3655736671123","One Hundred Years of Solitude","Magic realism","Ingram Content Group, Inc",13.00,16.99,"Gabriel Garcia Marquez",7);
+        String sampleISBN = book.getISBN();
+        ArrayList<Book> storybooks = BillNumber.getStockBooks(TEST_FILE_PATH);
+        storybooks.add(book);
+        storybooks.remove(book);
+        boolean isBookPresent = Librarian.BookPresent( TEST_FILE_PATH , sampleISBN);
+        assertFalse(isBookPresent);
     }
+    @Test
+    public void testBookPresent() {
+        Book book = new Book("3655736671389","One Hundred Years of Solitude","Magic realism","Ingram Content Group, Inc",13.00,16.99,"Gabriel Garcia Marquez",7);
+        String sampleISBN = book.getISBN();
+        ArrayList<Book> storybooks = BillNumber.getStockBooks(TEST_FILE_PATH);
+        storybooks.add(book);
+        boolean isBookPresent = Librarian.BookPresent( TEST_FILE_PATH , sampleISBN);
+        assertTrue(isBookPresent);
+        storybooks.remove(book);
+    }
+    //end of testing method Librarian.BookPresent()
 
 }
-    //end of testing method "BillNumber.removeDuplicatesSoldTitles()"
+
+
+
+
