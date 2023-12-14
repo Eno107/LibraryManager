@@ -143,11 +143,10 @@ public class Librarian extends BillNumber {
 		
 	}
 
+//	public static ArrayList<Date> addBookDates(Book book, ArrayList<Date> dates) {
+//		return new ArrayList<>(dates);
+//	}
 
-	public static ArrayList<Date> addBookDates(Book book, ArrayList<Date> dates) {
-		return new ArrayList<>(dates);
-	}
-	
 	public double moneyMadeInDay() {
 
         double ans=0;
