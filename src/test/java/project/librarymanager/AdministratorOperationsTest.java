@@ -44,4 +44,123 @@ public class AdministratorOperationsTest {
     }
     // } end of "Administrator.checker()" testing
 
+    //Start of testing method for "Administrator.getSalaries()"{
+    @Test
+    public void testGetSalaries() {
+        Administrator.getManagers().clear();
+        Administrator.getAdmins().clear();
+
+        Administrator admin1 = new Administrator("J0sh","&zsX6QVZ","Josh",1500,"(912) 561-2328","josh@administrator.com") ;
+        Manager manager1 = new Manager("Calv1n", "PQ532Abba", "Calvin", 900, "(912) 561-2628", "calvl@manager.com");
+        Manager manager2 = new Manager("Lui54", "y@.3FYrn", "Lui", 900, "(912) 218-2594", "lu@manager.com");
+        Manager manager3 = new Manager("1", "2", "TestManager", 900, "(912) 623-5353", "TestEmail@librarian.com");
+        Librarian librarian1 = new Librarian("Alfie123","SSU6aldo","Alfie",500,"(912) 921-2728","aflie@librarian.com");
+        Librarian librarian2 = new Librarian("Julie?!","NDt8f6xL","Julie",500,"(912) 742-7832","julie@librarian.com");
+
+        Administrator.getAdmins().add(admin1);
+        Administrator.getManagers().add(manager1);
+        Administrator.getManagers().add(manager2);
+        Administrator.getManagers().add(manager3);
+        Manager.AddLibrarian(librarian1);
+        Manager.AddLibrarian(librarian2);
+
+        double expectedSalaries = 1500 + (900 * 3) + (500 * 2);
+        double actualSalaries = Administrator.getSalaries();
+        assertEquals(expectedSalaries, actualSalaries);
+    }
+    // } end of testing method for "Administrator.getSalaries()"
+
+    //Start of testing method for "Administrator.getAdmins()"{
+    @Test
+    public void testGetAdmins() {
+        Administrator.getManagers().clear();
+        Administrator.getAdmins().clear();
+
+        Administrator.InstantiateAdmins();
+        Administrator.InstantiateManagers();
+
+        assertEquals(2, Administrator.getAdmins().size());
+
+        Administrator admin1 = new Administrator("NewAdmin1", "Pass1", "Admin1", 1500, "(111) 111-1111", "admin1@administrator.com");
+        Administrator admin2 = new Administrator("NewAdmin2", "Pass2", "Admin2", 1500, "(222) 222-2222", "admin2@administrator.com");
+
+        Administrator.getAdmins().add(admin1);
+        Administrator.getAdmins().add(admin2);
+
+        assertEquals(4, Administrator.getAdmins().size());
+        assertTrue(Administrator.getAdmins().contains(admin1));
+        assertTrue(Administrator.getAdmins().contains(admin2));
+    }
+    // } end of testing method for "Administrator.getAdmins()"
+
+    //Start of testing method for "Administrator.addManager()"{
+    @Test
+    public void testAddManager() {
+        Administrator.getAdmins().clear();
+        Administrator.getManagers().clear();
+
+        Administrator.InstantiateManagers();
+        Administrator.InstantiateAdmins();
+
+        assertEquals(3, Administrator.getManagers().size());
+
+        Manager newManager = new Manager("NewManager", "Pass", "Manager", 1200, "(333) 333-3333", "manager@test.com");
+        Administrator.AddManager(newManager);
+
+        assertEquals(4, Administrator.getManagers().size());
+        assertTrue(Administrator.getManagers().contains(newManager));
+    }
+    // } end of testing method for "Administrator.addManager()"
+
+    //Start of testing method for "Administrator.getBackManager()"{
+    @Test
+    public void testGetBackManager() {
+        Administrator.getAdmins().clear();
+        Manager.getLibrarians().clear();
+
+        Administrator.InstantiateManagers();
+        Administrator.InstantiateAdmins();
+        Manager.InstantiateLibrarians();
+
+        Manager existingManager = Administrator.getManagers().get(0);
+        Manager retrievedManager = Administrator.getBackManager(existingManager);
+
+        assertNotNull(retrievedManager);
+        assertEquals(existingManager.getUsername(), retrievedManager.getUsername());
+        assertEquals(existingManager.getPassword(), retrievedManager.getPassword());
+        assertEquals(existingManager.getName(), retrievedManager.getName());
+
+        Manager nonExistingManager = new Manager("NonExisting", "Pass", "NonExisting", 1200, "(333) 333-3333", "nonexisting@test.com");
+
+        Manager retrievedManager2 = Administrator.getBackManager(nonExistingManager);
+        assertNull(retrievedManager2);
+    }
+    // } end of testing method for "Administrator.getBackManager()"
+
+    //Start of testing method for "Administrator.updateManager()"{
+    @Test
+    public void testUpdateManager() {
+        Administrator.getAdmins().clear();
+
+        Administrator.InstantiateManagers();
+        Administrator.InstantiateAdmins();
+
+        Manager existingManager = Administrator.getManagers().get(0);
+
+        existingManager.setName("UpdatedName");
+        existingManager.setSalary(1500);
+
+        Administrator.updateManagers(existingManager);
+
+        Manager updatedManager = Administrator.getManagers().get(0);
+        assertEquals("UpdatedName", updatedManager.getName());
+
+        Manager nonExistingManager = new Manager("NonExisting", "Pass", "NonExisting", 1200, "(333) 333-3333", "nonexisting@test.com");
+        Administrator.updateManagers(nonExistingManager);
+
+        Manager updatedManager2 = Administrator.getBackManager(nonExistingManager);
+        assertNull(updatedManager2);
+    }
+    // } end of testing method for "Administrator.updateManager()"
+
 }
