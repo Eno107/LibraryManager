@@ -39,6 +39,7 @@ public class LibrarianOperationsTest {
         storybooks.add(book);
        boolean isBookPresent = Librarian.BookPresent( TEST_FILE_PATH , sampleISBN);
          assertTrue(isBookPresent);
+         storybooks.remove(book);
  }
     //end of testing method Librarian.BookPresent()
 
