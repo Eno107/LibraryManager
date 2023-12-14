@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 //
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -779,6 +782,100 @@ class BookFileOperationsTest {
     }
     // } end of testing method for "BillNumber.showStock()"
 
+    //Start of testing method for "Librarian.checkOutBooks()"{
+    @Test
+    public void testCheckOutBooks_ValidData() throws IOException {
+        Librarian librarian = new Librarian("username", "password");
+        ArrayList<Book> books = new ArrayList<>();
+        ArrayList<Integer> quantities = new ArrayList<>();
+        books.add( new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",5));
+        quantities.add(2);
+        try {
+            librarian.checkOutBooks(TEST_FILE_PATH, books, quantities);
+        } catch (IOException e) {
+            fail("IOException should not be thrown for valid data");
+        }
+
+
+        String billPath = "Bill"+BillNumber.billNumber+".txt";
+        File file = new File(billPath);
+
+        assertTrue(file.exists());
+
+        Path path = Paths.get(billPath);
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("Title: \"In Search of Lost Time\", Quantities: 2, OriginalPrice 73.96, Price: 147.92");
+        expected.add("");
+        expected.add("Total price: 147.92 Date: " + new Date());
+        expected.add("");
+
+        try {
+            try (BufferedReader reader = Files.newBufferedReader(path)){
+                String line;
+                int lineNumber = 0;
+                while ((line = reader.readLine()) != null){
+                    assertEquals(expected.get(lineNumber++), line);
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Files.delete(path);
+        Librarian.billNumber = 0;
+
+    }
+
+    @Test
+    public void testGetBillFilePath () throws IOException {
+      //  assertEquals("Bill1.txt", Librarian.getBillFilePath() );
+      //  assertEquals("Bill2.txt", Librarian.getBillFilePath() );
+      //  assertEquals("Bill3.txt", Librarian.getBillFilePath() );
+        Librarian.billNumber = 0;
+    }
+    // } end of testing method for "Librarian.checkOutBooks()"
+
+    //Start of testing method for "Librarian.enoughStock()"{
+    @Test
+    public void testEnoughStock_EnoughQuantityAvailable() {
+        assertTrue(Librarian.EnoughStock(TEST_FILE_PATH, "0096184570112", 5));
+    }
+
+    @Test
+    public void testEnoughStock_InsufficientQuantityAvailable() {
+        assertFalse(Librarian.EnoughStock(TEST_FILE_PATH, "0096184570112", 20));
+    }
+
+    @Test
+    public void testEnoughStock_BookNotPresent() {
+        Librarian librarian = new Librarian("username", "password");
+        assertFalse(librarian.EnoughStock(TEST_FILE_PATH, "NonExistentISBN", 5));
+    }
+
+    @Test
+    public void testEnoughStock_NullISBN() {
+        Librarian librarian = new Librarian("username", "password");
+        ArrayList<Book> books = new ArrayList<>();
+        books.add(new Book(null, "Book1", "Category1", "Supplier1", 10.0, 15.0, "Author1", 10));
+        assertFalse(librarian.EnoughStock(TEST_FILE_PATH, null, 5));
+    }
+
+    @Test
+    public void testEnoughStock_NegativeQuantity() {
+        Librarian librarian = new Librarian("username", "password");
+        ArrayList<Book> books = new ArrayList<>();
+        Book availableBook = new Book("ISBN1", "Book1", "Category1", "Supplier1", 10.0, 15.0, "Author1", 10); // Available stock: 10
+        books.add(availableBook);
+
+        assertFalse(librarian.EnoughStock(TEST_FILE_PATH, "ISBN1", -5));
+    }
+
+    @Test
+    public void testEnoughStock_NullBooks() {
+        Librarian librarian = new Librarian("username", "password");
+        assertFalse(librarian.EnoughStock(TEST_FILE_PATH, "ISBN1", 5));
+    }
+    // } end of testing method for "Librarian.enoughStock()"
 }
 
 
