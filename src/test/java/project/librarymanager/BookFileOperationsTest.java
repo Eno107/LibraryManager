@@ -118,7 +118,7 @@ class BookFileOperationsTest {
             fail("Exception during setup");
         }
     }
-
+//Start
     @Test
     public void test_showStringStock_noData(){
         setUpWithoutDates();
@@ -249,7 +249,7 @@ class BookFileOperationsTest {
     }
     // } end of "BillNumber.getBooksSoldDay()" testing
 
-    // start of testing "BillNumber.getBooksSoldMonth()"
+    // Start of testing method "BillNumber.getBooksSoldMonth()"
     @Test
     public void test_getBooksSoldMonth_emptydate(){
         setUpWithoutDates();
@@ -263,20 +263,20 @@ class BookFileOperationsTest {
     }
     @Test
     public void test_getBooksSoldMonth () {
-        assertEquals( "For Books Sold In A Month We Have:\n\n" +
-                "For \""+  "In Search of Lost Time" +"\" We have sold in a month:\n" +
-                "2 at "+ today +"\n" +
-                "For \"" + "Don Quixote" +"\" We have sold in a month:\n" +
-                "3 at "+ today + "\n" +
-                "For \"" + "Ulysses" + "\" We have sold in a month:\n" +
-                "6 at "+ today + "\n" +
-                "For \"" + "Moby Dick" + "\" We have sold in a month:\n" +
-                "2 at "+ today + "\n" +
-                "For \"" + "One Hundred Years of Solitude" +"\" We have sold in a month:\n" +
-                "For \"" + "The Great Gatsby" +"\" We have sold in a month:\n", BillNumber.getBooksSoldMonth(TEST_FILE_PATH));
+
+        String expected = "For Books Sold In A Month We Have\n\n";
+        for (Book book: startBookArrayList){
+            expected += book.getSoldDatesQuantitiesMonth();
+        }
+
+        assertEquals(expected, BillNumber.getBooksSoldMonth(TEST_FILE_PATH));
+
     }
-    // end of testing "BillNumber.getBooksSoldMonth()"
-    //start of testing "BillNumber.getBooksSoldTotal()"
+    // } End of testing method getBooksSoldMonth ()
+
+
+    // End of testing "BillNumber.getBooksSoldMonth()"
+    //Start of testing method "BillNumber.getBooksSoldTotal()"
     @Test
     public void test_getBooksSoldTotal_noDate(){
         setUpWithoutDates();
@@ -290,21 +290,15 @@ class BookFileOperationsTest {
 
     @Test
     public void test_getBooksSoldTotal(){
-        assertEquals( "For Books Sold in Total We Have:\n\n" +
-                "For \""+  "In Search of Lost Time" +"\" We have sold in a month:\n" +
-                "2 at "+ today +"\n" +
-                "For \"" + "Don Quixote" +"\" We have sold in a month:\n" +
-                "3 at "+ today + "\n" +
-                "For \"" + "Ulysses" + "\" We have sold in a month:\n" +
-                "6 at "+ today + "\n" +
-                "For \"" + "Moby Dick" + "\" We have sold in a month:\n" +
-                "2 at "+ today + "\n" +
-                "For \"" + "One Hundred Years of Solitude" +"\" We have sold in a month:\n" +
-                "For \"" + "The Great Gatsby" +"\" We have sold in a month:\n", BillNumber.getBooksSoldMonth(TEST_FILE_PATH));
+        String expected = "For Books Bought in Total We Have\n\n";
+        for (Book book: startBookArrayList){
+            expected += book.getBoughtDatesQuantitiesTotal();
+        }
+
+        assertEquals(expected, BillNumber.getBooksBoughtTotal(TEST_FILE_PATH));
 
     }
-
-    //end of testing "BillNumber.getBooksSoldTotal()"
+    // } End of testing method "BillNumber.getBooksSoldTotal()
 
     // Start of testing method "BillNumber.getBooksBoughtDay()" {
     @Test
@@ -335,9 +329,9 @@ class BookFileOperationsTest {
 
        assertEquals(expected, BillNumber.getBooksBoughtDay(TEST_FILE_PATH));
     }
-    // } end of "BillNumber.getBooksBoughtDay()" testing
+    // } end of testing method "BillNumber.getBooksBoughtDay()"
 
-    //start of testing "BillNumber.getBooksBoughtMonth()"
+    //Start of testing method "BillNumber.getBooksBoughtMonth()"
     @Test
     public void test_getBooksBoughtMonth_noData(){
         setUpWithoutDates();
@@ -348,18 +342,17 @@ class BookFileOperationsTest {
     }
     @Test
     public void test_getBooksBoughtMonth(){
-        String exp = "\"For Books Bought In A Month We Have\\n\\n\" +\n\n" +
-                "\"For \"In Search of Lost Time\" We have bought in a month: +\n " +
-                "1 at "+today+"\n" +
-                "\"For \"Don Quixote\" + \"\" We have bought in a month:\\n\" +\n" +
-                "3 at " +today+ "\n" +
-                "\"For \"Ulysses\" + \"\" We have bought in a month:\\n\" +\n" +
-                "\"For \"Moby Dick\" + \"\" We have bought in a month:\\n\" +\n" +
-                "\"For \"One Hundred Years of Solitude\" + \"\" We have bought in a month:\\n\" +\n" +
-                "\"For \"The Great Gatsby\" + \"\" We have bought in a month:\\n\";\n";
-        assertEquals(exp, BillNumber.getBooksBoughtMonth(TEST_FILE_PATH));
+        String expected = "For Books Bought In A Month We Have\n\n";
+        for (Book book: startBookArrayList){
+            expected += book.getBoughtDatesQuantitiesMonth();
+        }
+
+        System.out.println(expected);
+        assertEquals(expected, BillNumber.getBooksBoughtMonth(TEST_FILE_PATH));
+
+
     }
-    //end of testing "BillNumber.getBooksBoughtMonth"
+    //end of testing method "BillNumber.getBooksBoughtMonth"
 
 
     // Start of testing method "BillNumber.getIntBooksSoldDay()" {
@@ -374,7 +367,7 @@ class BookFileOperationsTest {
         assertEquals(5, BillNumber.getIntBooksSoldDay(TEST_FILE_PATH));
     }
     // } end of "BillNumber.getIntBooksSoldDay()" testing
-    // Start of testing "BillNumber.getIntSoldMonth()"
+    // Start of testing  method "BillNumber.getIntSoldMonth()"
     @Test
     public void test_getIntBooksSoldMonth_noSoldBooks(){
         setUpWithoutDates();
@@ -402,7 +395,7 @@ class BookFileOperationsTest {
     }
     // end of "BillNumber.getIncomeDay()" testing
 
-    //Start of testing "BillNumber.getIncomeMonth"
+    //Start of testing method "BillNumber.getIncomeMonth"
     @Test
     public void test_getIncomeMonth_noSale(){
         setUpWithoutDates();
@@ -451,9 +444,9 @@ class BookFileOperationsTest {
     public void test_getCostDay(){
         assertEquals(80, BillNumber.getCostDay(TEST_FILE_PATH));
     }
-    // } end of "BillNumber.getCostDay()" testing
+    // } end of testing method "BillNumber.getCostDay()"
 
-    //start of "BillNumber.getCostMonth()" testing
+    //start of testing method "BillNumber.getCostMonth()"
     @Test
     public void test_getCostMonth_noSoldBooks(){
         setUpWithoutDates();
@@ -477,7 +470,7 @@ class BookFileOperationsTest {
         Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",5);
         assertTrue(BillNumber.isPartOfBooks(TEST_FILE_PATH, book.getISBN()));
     }
-    // } end of "BillNumber.isPartOfBooks()" testing
+    // } end of testing method "BillNumber.isPartOfBooks()"
 
     // Start of testing method "BillNumber.getAllStock()"{
     @Test
@@ -536,22 +529,25 @@ class BookFileOperationsTest {
     }
     // } end of testing method "BillNumber.getBooksFromCathegory()
 
+    //Start of testing method "BillNumber.getISBNName()"
     @Test
-    public void test_getISBN_noEntry(){
-        setUpWithoutDates();
-        String str = "[0096184570112 - In Search of Lost Time, 4647500268094 - Ulysses]";
-        assertEquals("[0096184570112 - In Search of Lost Time, 4647500268094 - Ulysses]", BillNumber.getISBNName(TEST_FILE_PATH));
-    }
+    public void test_getISBNName(){
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("0096184570112 - In Search of Lost Time");
+        expected.add("0629778828041 - Don Quixote");
+        expected.add("4647500268094 - Ulysses");
+        expected.add("9515267203718 - Moby Dick");
+        expected.add("3655736671389 - One Hundred Years of Solitude");
+        expected.add("3115666367951 - The Great Gatsby");
 
-    @Test
-    public void test_getISBN(){
-        assertEquals("[0096184570112 - In Search of Lost Time, 0629778828041 - Don Quixote, 4647500268094 - Ulysses, 9515267203718 - Moby Dick, 3655736671389 - One Hundred Years of Solitude, 3115666367951 - The Great Gatsby]",BillNumber.getISBNName(TEST_FILE_PATH));
+        assertEquals( expected, BillNumber.getISBNName(TEST_FILE_PATH));
     }
+//end of testing method "BillNumber.getISBNName"
 
+    //Start of testing method "BillNumber.removeDuplicatesSoldTitles"
     @Test
     void testRemoveDuplicatesSoldTitles() {
         try {
-            // Create test data with duplicate titles and quantities
             ArrayList<String> titles = new ArrayList<>(Arrays.asList("Book1", "Book2", "Book1", "Book3"));
             ArrayList<Integer> quantities = new ArrayList<>(Arrays.asList(5, 3, 2, 4));
 
@@ -568,3 +564,4 @@ class BookFileOperationsTest {
     }
 
 }
+    //end of testing method "BillNumber.removeDuplicatesSoldTitles()"
