@@ -133,9 +133,6 @@ public class Book implements Serializable{
 	    return sum;
 	}
 
-	
-
-	
 
 
 	public String getSoldDatesQuantitiesTotal() {
@@ -322,7 +319,7 @@ public class Book implements Serializable{
 
 	}
 
-	private int getNumberDatesYear(ArrayList<Date> dates, ArrayList<Integer> purchasedAmount) {
+	int getNumberDatesYear(ArrayList<Date> dates, ArrayList<Integer> purchasedAmount) {
 		if (dates.isEmpty()) {
 			   return 0;
 		   }
