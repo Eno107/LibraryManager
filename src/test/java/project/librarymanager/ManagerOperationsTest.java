@@ -3,6 +3,8 @@ package project.librarymanager;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -119,4 +121,46 @@ public class ManagerOperationsTest {
         assertEquals(initialSize, finalSize);
     }
     // } end of testing method for "Manager.deleteLibrarian()"
+
+
+
+    //Start testing method Manager.reEnter
+    @Test
+    public void testReEnterExistingLibrarian() {
+      Librarian  lib = new Librarian("@Leo","TyFzN8we","Leo",500,"(912) 152-7493","leo@librarian.com");
+        Manager.AddLibrarian(lib);
+        Librarian reEnteredLibrarian = Manager.reEnter(lib);
+        assertEquals(lib, reEnteredLibrarian);
+       }
+
+    @Test
+    public void testReEnterNonExistingLibrarian() {
+        Librarian nonExistingLibrarian = new Librarian("NonExistingUser", "NonExistingPassword");
+        Librarian reEnteredLibrarian = Manager.reEnter(nonExistingLibrarian);
+        assertNull(reEnteredLibrarian);
+    }
+    // end of testing method Manager.reEnter
+
+    @Test
+    public void testUpdateExistingLibrarian() {
+        Librarian existingLibrarian = new Librarian("Alfie123", "SSU6aldo", "Alfie", 500, "(912) 921-2728", "aflie@librarian.com");
+        Manager.AddLibrarian(existingLibrarian);
+        existingLibrarian.setEmail("new_email@librarian.com");
+        existingLibrarian.setSalary(600);
+        Manager.updateLibrarians(existingLibrarian);
+        Librarian updatedLibrarian = Manager.getBackLibrarian(existingLibrarian);
+        assertEquals(existingLibrarian, updatedLibrarian);
+        }
+
+    @Test
+    public void testUpdateNonExistingLibrarian() {
+        Librarian nonExistingLibrarian = new Librarian("NonExistingUser", "NonExistingPassword");
+        nonExistingLibrarian.setEmail("new_email@librarian.com");
+        Manager.updateLibrarians(nonExistingLibrarian);
+
+        Librarian retrievedLibrarian = Manager.getBackLibrarian(nonExistingLibrarian);
+        assertNull(retrievedLibrarian);
+    }
+
+
 }

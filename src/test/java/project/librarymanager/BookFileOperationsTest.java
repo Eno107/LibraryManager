@@ -895,6 +895,16 @@ class BookFileOperationsTest {
         assertEquals(expectedWarning, Manager.checkStock(TEST_FILE_PATH) );
     }
     // } end of testing method for "Manager.checkStock()"
+
+    @Test
+    public void testGetLowStock() throws IOException {
+        ArrayList<Book> stockbooks = BillNumber.getStockBooks(TEST_FILE_PATH);
+        ArrayList<Book> ans = new ArrayList<>();
+        ArrayList<Book> lowStockBooks = Manager.getLowStock(TEST_FILE_PATH);
+
+        assertTrue(lowStockBooks.isEmpty(), "There should be books with low stock");
+    }
+
 }
 
 
