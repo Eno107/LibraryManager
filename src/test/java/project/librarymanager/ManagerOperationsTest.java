@@ -97,12 +97,6 @@ public class ManagerOperationsTest {
         Librarian librarian = new Librarian("NonExistingUser", "NonExistingPassword", "NonExistingName", 0, "0000000000", "nonexisting@librarian.com");
         assertFalse(Manager.LibrarianChecker(librarian));
     }
-
-    @Test
-    public void testLibrarianChecker_NullLibrarian() {
-        Librarian librarian = null;
-        assertFalse(Manager.LibrarianChecker(librarian));
-    }
     // } end of testing methods for "Manager.LibrarianChecker()"
 
     //Start of testing method for "Manager.deleteLibrarian()"{

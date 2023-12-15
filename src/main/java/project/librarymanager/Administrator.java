@@ -113,8 +113,7 @@ public class Administrator extends Manager {
     public static boolean ManagerChecker(Manager mag) {
         for (Manager manager : managers) {
             if (manager.getUsername().equals(mag.getUsername()) && manager.getPassword().equals(mag.getPassword()))
-                return true;
-        }
+                return true;}
     	return false;
     	
     	
