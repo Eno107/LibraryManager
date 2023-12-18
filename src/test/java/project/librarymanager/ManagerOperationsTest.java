@@ -12,24 +12,25 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ManagerOperationsTest {
 
     @BeforeAll
-    public static void setUp(){
+    public static void setUp() {
         Administrator.InstantiateManagers();
     }
 
+
     @Test
-    public void test_instantiateManagers(){
+    public void test_instantiateManagers() {
         ArrayList<Manager> expectedManagerArrayList = new ArrayList<>();
-        Manager mag = new Manager("Calv1n","PQ532Abba","Calvin",900,"(912) 561-2628","calvl@manager.com") ;
+        Manager mag = new Manager("Calv1n", "PQ532Abba", "Calvin", 900, "(912) 561-2628", "calvl@manager.com");
         expectedManagerArrayList.add(mag);
-        mag = new Manager("Lui54","y@.3FYrn","Lui",900,"(912) 218-2594","lu@manager.com") ;
+        mag = new Manager("Lui54", "y@.3FYrn", "Lui", 900, "(912) 218-2594", "lu@manager.com");
         expectedManagerArrayList.add(mag);
-        mag = new Manager("1","2","TestManager",900,"(912) 623-5353","TestEmail@librarian.com");
+        mag = new Manager("1", "2", "TestManager", 900, "(912) 623-5353", "TestEmail@librarian.com");
         expectedManagerArrayList.add(mag);
 
         ArrayList<Manager> managerArrayList = Administrator.getManagers();
 
         assertEquals(expectedManagerArrayList.size(), managerArrayList.size(), "size");
-        for (int i=0; i<managerArrayList.size(); i++){
+        for (int i = 0; i < managerArrayList.size(); i++) {
             assertEquals(expectedManagerArrayList.get(i).getUsername(), managerArrayList.get(i).getUsername(), "username");
             assertEquals(expectedManagerArrayList.get(i).getPassword(), managerArrayList.get(i).getPassword(), "password");
             assertEquals(expectedManagerArrayList.get(i).getName(), managerArrayList.get(i).getName(), "name");
@@ -39,26 +40,159 @@ public class ManagerOperationsTest {
         }
     }
 
+
     // Start of method testing "Administrator.partOfManager()" {
     @Test
-    public void test_partOfManager_notPart(){
-        Manager mag = new Manager("2","2","TestManager",900,"(912) 623-5353","TestEmail@librarian.com");
-        assertFalse(Administrator.partOfManager(mag));
-        mag = new Manager("5","95","TestManager#2",1000,"(912) 623-9999","#2TestEmail@librarian.com");
-        assertFalse(Administrator.partOfManager(mag));
+    public void test_partOfManager_notPart() {
+        Manager mag = new Manager("2", "2", "TestManager", 900, "(912) 623-5353", "TestEmail@librarian.com");
+        assertFalse(Administrator.partOfManager(mag), "Manager object with incorrect username is passed");
     }
 
     @Test
-    public void test_partOfManager(){
-        Manager mag = new Manager("1","2","TestManager",900,"(912) 623-5353","TestEmail@librarian.com");
-        assertTrue(Administrator.partOfManager(mag));
+    public void test_partOfManager_isPart() {
+        Manager mag = new Manager("1", "2", "TestManager", 900, "(912) 623-5353", "TestEmail@librarian.com");
+        assertTrue(Administrator.partOfManager(mag), "Manager object with correct username is not passed");
     }
     // } end of "Administrator.partOfManager()" testing
 
 
-    // Start of method testing "Manager.getAllCategories()" {
+    // Start of method testing for "Administrator.addManager()" {
     @Test
-    public void test_getAllCategories(){
+    public void testAddManager() {
+        assertEquals(3, Administrator.getManagers().size());
+
+        Manager newManager = new Manager("NewManager", "Pass", "Manager", 1200, "(333) 333-3333", "manager@test.com");
+        Administrator.AddManager(newManager);
+
+        assertEquals(4, Administrator.getManagers().size(), "Managers list is not updated");
+        assertTrue(Administrator.getManagers().contains(newManager), "Managers list does not contain 'newManager'");
+
+        Administrator.deleteManager(newManager);
+    }
+    // } end of testing method for "Administrator.addManager()"
+
+
+    // Start of method testing for "Administrator.getBackManager()" {
+    @Test
+    public void testGetBackManager() {
+
+        Manager existingManager = Administrator.getManagers().get(0);
+        Manager retrievedManager = Administrator.getBackManager(existingManager);
+
+        assertNotNull(retrievedManager, "Retrieved manager is null");
+        assertEquals(existingManager.getUsername(), retrievedManager.getUsername(), "Retrieved manager's attributes are not the same");
+        assertEquals(existingManager.getPassword(), retrievedManager.getPassword(), "Retrieved manager's attributes are not the same");
+        assertEquals(existingManager.getName(), retrievedManager.getName(), "Retrieved manager's attributes are not the same");
+
+        Manager nonExistingManager = new Manager("NonExisting", "Pass", "NonExisting", 1200, "(333) 333-3333", "nonexisting@test.com");
+
+        Manager retrievedManager2 = Administrator.getBackManager(nonExistingManager);
+        assertNull(retrievedManager2, "Non existent manager is not null");
+    }
+    // } end of "Administrator.getBackManager()" testing
+
+
+    //Start of method testing for "Administrator.updateManager()" {
+    @Test
+    public void testUpdateManager() {
+        Manager existingManager = Administrator.getManagers().get(0);
+
+        existingManager.setName("UpdatedName");
+        existingManager.setSalary(1500);
+
+        Administrator.updateManagers(existingManager);
+
+        Manager updatedManager = Administrator.getManagers().get(0);
+        assertEquals("UpdatedName", updatedManager.getName());
+
+        Manager nonExistingManager = new Manager("NonExisting", "Pass", "NonExisting", 1200, "(333) 333-3333", "nonexisting@test.com");
+        Administrator.updateManagers(nonExistingManager);
+
+        Manager updatedManager2 = Administrator.getBackManager(nonExistingManager);
+        assertNull(updatedManager2);
+    }
+    // } end of "Administrator.updateManager()" testing
+
+
+    // Start of method testing for "Administrator.reEnter()" {
+    @Test
+    public void testReEnterExistingManager() {
+        Manager existingManager = new Manager("Calv1n", "PQ532Abba", "Calvin", 900, "(912) 561-2628", "calvl@manager.com");
+        Manager reEnteredManager = Administrator.reEnter(existingManager);
+
+        assertNotNull(reEnteredManager, "re-entered Manager is null");
+
+        assertEquals(existingManager.getUsername(), reEnteredManager.getUsername(), "The following attribute is incorrect: username");
+        assertEquals(existingManager.getPassword(), reEnteredManager.getPassword(), "The following attribute is incorrect: password");
+        assertEquals(existingManager.getName(), reEnteredManager.getName(), "The following attribute is incorrect: name");
+        assertEquals(existingManager.getSalary(), reEnteredManager.getSalary(), "The following attribute is incorrect: salary");
+        assertEquals(existingManager.getPhone(), reEnteredManager.getPhone(), "The following attribute is incorrect: phone");
+        assertEquals(existingManager.getEmail(), reEnteredManager.getEmail(), "The following attribute is incorrect: mail");
+    }
+
+    @Test
+    public void testReEnterNonExistingManager() {
+        Manager nonExistingManager = new Manager("NON_EXISTING_USERNAME", "NonExistentPassword");
+        Manager reEnteredManager = Administrator.reEnter(nonExistingManager);
+        assertNull(reEnteredManager);
+    }
+    // } end of "Administrator.reEnter()" testing
+
+
+    // Start of method testing "Administrator.ManagerChecker()" {
+    @Test
+    public void test_ManagerChecker_isManager() {
+        String username = "Calv1n";
+        String password = "PQ532Abba";
+        Manager existingManager = new Manager(username, password);
+
+        assertTrue(Administrator.ManagerChecker(existingManager),
+                "ManagerChecker failed for an existing Manager");
+
+    }
+
+    @Test
+    public void test_ManagerChecker_notManager_wrongUsername() {
+        String username = "idkBro";
+        String password = "PQ532Abba";
+        Manager nonExistingManager = new Manager(username, password);
+        assertFalse(Administrator.ManagerChecker(nonExistingManager),
+                "ManagerChecker failed for a non-existing Manager with a wrong username and a correct password");
+    }
+
+    @Test
+    public void test_ManagerChecker_notManager_wrongPassword() {
+        String username = "Calv1n";
+        String password = "idkBro";
+        Manager nonExistingManager = new Manager(username, password);
+        assertFalse(Administrator.ManagerChecker(nonExistingManager),
+                "ManagerChecker failed for a non-existing Manager with a correct username and a wrong password");
+    }
+    // } end of "Administrator.ManagerChecker()" testing
+
+
+    // Start of method testing for "Administrator.deleteManager()" {
+    @Test
+    public void testDeleteManager() {
+        Manager existingManager = new Manager("Calv1n", "PQ532Abba", "Calvin", 900, "(912) 561-2628", "calvl@manager.com");
+        assertTrue(Administrator.deleteManager(existingManager));
+
+        Administrator.getManagers().clear();
+        Administrator.InstantiateManagers();
+    }
+
+    @Test
+    public void testDeleteNonExistingManager() {
+        Manager nonExistingManager = new Manager("test", "PQ532Abba", "Calvin", 900, "(912) 561-2628", "calvl@manager.com");
+        assertFalse(Administrator.deleteManager(nonExistingManager),
+                "DeleteManager incorrectly removed a non-existing manager from the list");
+    }
+    // } end of "Administrator.deleteManager()" testing
+
+
+    // Start of method testing for "Manager.getAllCategories()" {
+    @Test
+    public void test_getAllCategories() {
         ArrayList<String> expected = new ArrayList<>();
         expected.add("Modernist");
         expected.add("Fiction");
@@ -80,87 +214,11 @@ public class ManagerOperationsTest {
         expected.add("Thriller");
 
         ArrayList<String> allCategoriesList = Manager.getAllCategories();
-        for (int i=0; i<allCategoriesList.size(); i++){
+        for (int i = 0; i < allCategoriesList.size(); i++) {
             assertEquals(expected.get(i), allCategoriesList.get(i));
         }
     }
     // end of "Manager.getAllCategories()" testing
-
-    //Start of testing method for "Manager.LibrarianChecker()"{
-    @Test
-    public void testLibrarianChecker_ValidCredentials() {
-        Manager.InstantiateLibrarians();
-        Librarian librarian = new Librarian("Alfie123", "SSU6aldo", "Alfie", 500, "(912) 921-2728", "aflie@librarian.com");
-        assertTrue(Manager.LibrarianChecker(librarian));
-    }
-
-    @Test
-    public void testLibrarianChecker_InvalidLibrarian() {
-        Librarian librarian = new Librarian("NonExistingUser", "NonExistingPassword", "NonExistingName", 0, "0000000000", "nonexisting@librarian.com");
-        assertFalse(Manager.LibrarianChecker(librarian));
-    }
-    // } end of testing methods for "Manager.LibrarianChecker()"
-
-    //Start of testing method for "Manager.deleteLibrarian()"{
-    @Test
-    public void testDeleteLibrarian_ValidLibrarian() {
-        Librarian librarianToDelete = new Librarian("Alfie123", "SSU6aldo", "Alfie", 500, "(912) 921-2728", "aflie@librarian.com");
-        Manager.AddLibrarian(librarianToDelete);
-        int initialSize = Manager.getLibrarians().size();
-        Manager.deleteLibrarian(librarianToDelete);
-        int finalSize = Manager.getLibrarians().size();
-        assertEquals(initialSize - 1, finalSize);
-    }
-
-    @Test
-    public void testDeleteLibrarian_NonExistingLibrarian() {
-        Librarian librarianToDelete = new Librarian("NonExistingUser", "NonExistingPassword", "NonExistingName", 0, "0000000000", "nonexisting@librarian.com");
-        int initialSize = Manager.getLibrarians().size();
-        Manager.deleteLibrarian(librarianToDelete);
-        int finalSize = Manager.getLibrarians().size();
-        assertEquals(initialSize, finalSize);
-    }
-    // } end of testing method for "Manager.deleteLibrarian()"
-
-
-
-    //Start testing method Manager.reEnter
-    @Test
-    public void testReEnterExistingLibrarian() {
-      Librarian  lib = new Librarian("@Leo","TyFzN8we","Leo",500,"(912) 152-7493","leo@librarian.com");
-        Manager.AddLibrarian(lib);
-        Librarian reEnteredLibrarian = Manager.reEnter(lib);
-        assertEquals(lib, reEnteredLibrarian);
-       }
-
-    @Test
-    public void testReEnterNonExistingLibrarian() {
-        Librarian nonExistingLibrarian = new Librarian("NonExistingUser", "NonExistingPassword");
-        Librarian reEnteredLibrarian = Manager.reEnter(nonExistingLibrarian);
-        assertNull(reEnteredLibrarian);
-    }
-    // end of testing method Manager.reEnter
-
-    @Test
-    public void testUpdateExistingLibrarian() {
-        Librarian existingLibrarian = new Librarian("Alfie123", "SSU6aldo", "Alfie", 500, "(912) 921-2728", "aflie@librarian.com");
-        Manager.AddLibrarian(existingLibrarian);
-        existingLibrarian.setEmail("new_email@librarian.com");
-        existingLibrarian.setSalary(600);
-        Manager.updateLibrarians(existingLibrarian);
-        Librarian updatedLibrarian = Manager.getBackLibrarian(existingLibrarian);
-        assertEquals(existingLibrarian, updatedLibrarian);
-        }
-
-    @Test
-    public void testUpdateNonExistingLibrarian() {
-        Librarian nonExistingLibrarian = new Librarian("NonExistingUser", "NonExistingPassword");
-        nonExistingLibrarian.setEmail("new_email@librarian.com");
-        Manager.updateLibrarians(nonExistingLibrarian);
-
-        Librarian retrievedLibrarian = Manager.getBackLibrarian(nonExistingLibrarian);
-        assertNull(retrievedLibrarian);
-    }
 
 
 }

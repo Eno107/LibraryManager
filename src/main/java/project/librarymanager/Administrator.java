@@ -17,10 +17,7 @@ public class Administrator extends Manager {
 			"3"
 	};
 
-	Administrator(String username,String password){
-		super(username,password);
-	}
-	
+
 	Administrator(String username,String password,String name,double salary,String phone,String email){
 		super(username,password,name,salary,phone,email);
 	}
@@ -132,13 +129,15 @@ public class Administrator extends Manager {
     	return managers;
     }
     
-    public static void deleteManager(Manager mag) {
+    public static boolean deleteManager(Manager mag) {
+
     	for (int i=0;i<managers.size();i++) {
     		if (managers.get(i).getUsername().equals(mag.getUsername()) ) {
     			managers.remove(i);
-    			return;
+    			return true;
     		}
     	}
+		return false;
     }
     
    public static void updateManagers(Manager mag) {
