@@ -75,9 +75,6 @@ public class Book implements Serializable{
 	public void setOriginalPrice(double originalPrice) {
 		this.originalPrice = originalPrice;
 	}
-	public String getAuthor() {
-		return author;
-	}
 	public void setAuthor(String author) {
 		this.author = author;
 	}
@@ -98,12 +95,6 @@ public class Book implements Serializable{
 	}
 	public void addDate(Date date) {
 		this.dates.add(date);
-	}
-	public void setDates(ArrayList<Date> dates) {
-		this.dates = dates;
-	}
-	public ArrayList<Date> getDates(){
-		return dates;
 	}
 	public void addPurchasedDate(Date date) {
 		this.purchasedDates.add(date);
@@ -164,8 +155,6 @@ public class Book implements Serializable{
 		Date today = new Date();
 
 		return getStringDateTotal(ans, today, dates, purchasedAmount);
-
-
 	}
 
 	private String getStringDateTotal(String ans, Date today, ArrayList<Date> dates, ArrayList<Integer> purchasedAmount) {
@@ -284,15 +273,11 @@ public class Book implements Serializable{
   	}
      
      public int getTotalBooksSoldDay() {
-
 		 return getNumberDatesTotal(dates, purchasedAmount);
-
 	 }
 
  public int getTotalBooksSoldMonth() {
-
 	 return getNumberDatesMonth(dates, purchasedAmount);
-
  }
 
 	public int getNumberDatesMonth(ArrayList<Date> dates, ArrayList<Integer> purchasedAmount) {
@@ -314,9 +299,7 @@ public class Book implements Serializable{
 	}
 
 	public int getTotalBooksSoldYear() {
-
 		return getNumberDatesYear(dates, purchasedAmount);
-
 	}
 
 	int getNumberDatesYear(ArrayList<Date> dates, ArrayList<Integer> purchasedAmount) {
@@ -369,22 +352,6 @@ public int getTotalBooksBoughtYear() {
 
 	return getNumberDatesYear(purchasedDates, quantitiesPurchased);
 
-}
-
-public int getTotalBooksSold() {
-	
-	
-	if (dates.isEmpty()) {
-		return 0;
-	}
-	
-	int ans=0;
-	
-	for (int i=0;i<dates.size();i++) {
-		ans+=purchasedAmount.get(i);
-	}
-	
-	return ans;
 }
 
 public int getTotalBooksBought() {

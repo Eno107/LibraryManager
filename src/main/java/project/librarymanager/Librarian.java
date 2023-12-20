@@ -39,11 +39,15 @@ public class Librarian extends BillNumber {
 		datesSold = new ArrayList<>();
 		moneyMadeDates = new ArrayList<>();
 	}
-	
+
+	public static String getBillFilePath(){
+		return "Bill"+(++BillNumber.billNumber)+".txt";
+	}
+
 	
 	public void checkOutBooks(String path, ArrayList<Book> books,ArrayList<Integer> quantities) throws IOException {
 
-		PrintWriter writer = new PrintWriter("Bill"+(++BillNumber.billNumber)+".txt");
+		PrintWriter writer = new PrintWriter(getBillFilePath());
 		ArrayList<Book> storybooks = BillNumber.getStockBooks(path);
 		double totalPrice = 0;
 		
@@ -109,7 +113,6 @@ public class Librarian extends BillNumber {
 		quantities.clear();
 
 		for (Map.Entry<String, Integer> entry : bookQuantities.entrySet()) {
-			// Assuming there is a Book constructor that accepts ISBN
 			books.add(new Book(entry.getKey()));
 			quantities.add(entry.getValue());
 		}
@@ -142,10 +145,6 @@ public class Librarian extends BillNumber {
 		
 		
 	}
-
-//	public static ArrayList<Date> addBookDates(Book book, ArrayList<Date> dates) {
-//		return new ArrayList<>(dates);
-//	}
 
 	public double moneyMadeInDay() {
 
@@ -216,23 +215,13 @@ public class Librarian extends BillNumber {
 	public static boolean checkName(String name) {
 		return name.matches("[a-zA-Z]+");
 	}
-	
-	public static boolean checkUsername(String username) {
-		return username.matches(".{5,}");
-	}
 
 	public int getNumberOfBills() {
 		return numberOfBills;
 	}
 
-
 	public int getBooksSold() {
 		return booksSold;
-	}
-
-
-	public double getMoneyMade() {
-		return moneyMade;
 	}
 
 	public String getUsername() {

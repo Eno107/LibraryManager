@@ -98,27 +98,6 @@ public abstract class BillNumber {
 		objout.close();
 		out.close();
 	}
-	
-	public static void showStock() {
-		
-		try {
-			FileInputStream fis = new FileInputStream("Books.txt");
-		    ObjectInputStream obis = new ObjectInputStream(fis);
-		    
-		    while(true){
-				try{
-					System.out.println( (Book) obis.readObject() );
-				}
-				catch (EOFException e) {
-					break;
-				}
-
-	        }
-		    
-		}
-		catch(IOException | ClassNotFoundException ignored) {}
-
-    }
 
 	public static ArrayList<String> getCategories(String path) {
 		
@@ -204,26 +183,6 @@ public abstract class BillNumber {
 		return false;
 	}
 
-	// UNIT 3
-    public static void printBookDates(ArrayList<Book> arr) {
-    	
-    	ArrayList<Book> stockbooks = arr;
-    	ArrayList<Date> dates;
-
-        for (Book stockbook : stockbooks) {
-
-            dates = stockbook.getDates();
-            if (dates.isEmpty()) {
-                System.out.println("empty");
-                continue;
-            }
-            for (Date date : dates) {
-                System.out.println(date);
-            }
-
-        }
-    }
-    
     public static String getBooksSoldTotal(String path) {
     	
     	String ans = "For Books Sold in Total We Have\n\n";
