@@ -42,7 +42,9 @@ public abstract class BillNumber {
 					break;
 				}
 			}
-		    
+
+			fis.close();
+			objis.close();
 		}
 		catch(IOException | ClassNotFoundException ignored) {}
 
@@ -95,8 +97,8 @@ public abstract class BillNumber {
 			objout.writeObject(book);
 		}
 
-		objout.close();
 		out.close();
+		objout.close();
 	}
 
 	public static ArrayList<String> getCategories(String path) {
