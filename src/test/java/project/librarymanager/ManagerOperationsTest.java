@@ -56,64 +56,6 @@ public class ManagerOperationsTest {
     // } end of "Administrator.partOfManager()" testing
 
 
-    // Start of method testing for "Administrator.addManager()" {
-    @Test
-    public void testAddManager() {
-        assertEquals(3, Administrator.getManagers().size());
-
-        Manager newManager = new Manager("NewManager", "Pass", "Manager", 1200, "(333) 333-3333", "manager@test.com");
-        Administrator.AddManager(newManager);
-
-        assertEquals(4, Administrator.getManagers().size(), "Managers list is not updated");
-        assertTrue(Administrator.getManagers().contains(newManager), "Managers list does not contain 'newManager'");
-
-        Administrator.deleteManager(newManager);
-    }
-    // } end of testing method for "Administrator.addManager()"
-
-
-    // Start of method testing for "Administrator.getBackManager()" {
-    @Test
-    public void testGetBackManager() {
-
-        Manager existingManager = Administrator.getManagers().get(0);
-        Manager retrievedManager = Administrator.getBackManager(existingManager);
-
-        assertNotNull(retrievedManager, "Retrieved manager is null");
-        assertEquals(existingManager.getUsername(), retrievedManager.getUsername(), "Retrieved manager's attributes are not the same");
-        assertEquals(existingManager.getPassword(), retrievedManager.getPassword(), "Retrieved manager's attributes are not the same");
-        assertEquals(existingManager.getName(), retrievedManager.getName(), "Retrieved manager's attributes are not the same");
-
-        Manager nonExistingManager = new Manager("NonExisting", "Pass", "NonExisting", 1200, "(333) 333-3333", "nonexisting@test.com");
-
-        Manager retrievedManager2 = Administrator.getBackManager(nonExistingManager);
-        assertNull(retrievedManager2, "Non existent manager is not null");
-    }
-    // } end of "Administrator.getBackManager()" testing
-
-
-    //Start of method testing for "Administrator.updateManager()" {
-    @Test
-    public void testUpdateManager() {
-        Manager existingManager = Administrator.getManagers().get(0);
-
-        existingManager.setName("UpdatedName");
-        existingManager.setSalary(1500);
-
-        Administrator.updateManagers(existingManager);
-
-        Manager updatedManager = Administrator.getManagers().get(0);
-        assertEquals("UpdatedName", updatedManager.getName());
-
-        Manager nonExistingManager = new Manager("NonExisting", "Pass", "NonExisting", 1200, "(333) 333-3333", "nonexisting@test.com");
-        Administrator.updateManagers(nonExistingManager);
-
-        Manager updatedManager2 = Administrator.getBackManager(nonExistingManager);
-        assertNull(updatedManager2);
-    }
-    // } end of "Administrator.updateManager()" testing
-
-
     // Start of method testing for "Administrator.reEnter()" {
     @Test
     public void testReEnterExistingManager() {
@@ -220,4 +162,60 @@ public class ManagerOperationsTest {
     // end of "Manager.getAllCategories()" testing
 
 
+    // Start of method testing for "Administrator.addManager()" {
+    @Test
+    public void testAddManager() {
+        assertEquals(3, Administrator.getManagers().size());
+
+        Manager newManager = new Manager("NewManager", "Pass", "Manager", 1200, "(333) 333-3333", "manager@test.com");
+        Administrator.AddManager(newManager);
+
+        assertEquals(4, Administrator.getManagers().size(), "Managers list is not updated");
+        assertTrue(Administrator.getManagers().contains(newManager), "Managers list does not contain 'newManager'");
+
+        Administrator.deleteManager(newManager);
+    }
+    // } end of testing method for "Administrator.addManager()"
+
+
+    // Start of method testing for "Administrator.getBackManager()" {
+    @Test
+    public void testGetBackManager() {
+
+        Manager existingManager = Administrator.getManagers().get(0);
+        Manager retrievedManager = Administrator.getBackManager(existingManager);
+
+        assertNotNull(retrievedManager, "Retrieved manager is null");
+        assertEquals(existingManager.getUsername(), retrievedManager.getUsername(), "Retrieved manager's attributes are not the same");
+        assertEquals(existingManager.getPassword(), retrievedManager.getPassword(), "Retrieved manager's attributes are not the same");
+        assertEquals(existingManager.getName(), retrievedManager.getName(), "Retrieved manager's attributes are not the same");
+
+        Manager nonExistingManager = new Manager("NonExisting", "Pass", "NonExisting", 1200, "(333) 333-3333", "nonexisting@test.com");
+
+        Manager retrievedManager2 = Administrator.getBackManager(nonExistingManager);
+        assertNull(retrievedManager2, "Non existent manager is not null");
+    }
+    // } end of "Administrator.getBackManager()" testing
+
+
+    //Start of method testing for "Administrator.updateManager()" {
+    @Test
+    public void testUpdateManager() {
+        Manager existingManager = Administrator.getManagers().get(0);
+
+        existingManager.setName("UpdatedName");
+        existingManager.setSalary(1500);
+
+        Administrator.updateManagers(existingManager);
+
+        Manager updatedManager = Administrator.getManagers().get(0);
+        assertEquals("UpdatedName", updatedManager.getName());
+
+        Manager nonExistingManager = new Manager("NonExisting", "Pass", "NonExisting", 1200, "(333) 333-3333", "nonexisting@test.com");
+        Administrator.updateManagers(nonExistingManager);
+
+        Manager updatedManager2 = Administrator.getBackManager(nonExistingManager);
+        assertNull(updatedManager2);
+    }
+    // } end of "Administrator.updateManager()" testing
 }

@@ -64,6 +64,14 @@ public class AdministratorOperationsTest {
     // } end of "Administrator.checker()" testing
 
 
+    // Start of method testing for "Administrator.getAdmins()" {
+    @Test
+    public void test_getAdmins() {
+        assertEquals(2, Administrator.getAdmins().size(), "Incorrect size");
+    }
+    // } end of "Administrator.getAdmins()" testing
+
+
     // Start of method testing for "Administrator.getSalaries()" {
     @Test
     public void test_getSalaries() {
@@ -82,13 +90,5 @@ public class AdministratorOperationsTest {
         assertEquals(expectedSalaries, Administrator.getSalaries());
     }
     // } end of "Administrator.getSalaries()" testing
-
-
-    // Start of method testing for "Administrator.getAdmins()" {
-    @Test
-    public void test_getAdmins() {
-        assertEquals(2, Administrator.getAdmins().size(), "Incorrect size");
-    }
-    // } end of "Administrator.getAdmins()" testing
 
 }

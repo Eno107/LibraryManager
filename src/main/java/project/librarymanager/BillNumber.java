@@ -11,29 +11,29 @@ public abstract class BillNumber {
 	public static int billNumber=0;
 	public static double  totalIncome=0;
 	public static int totalBooksSold=0;
-	
-	
+
+
 	public static void updateBooks(String path, ArrayList<Book> arr) throws IOException {
-		
+
 		FileOutputStream out = new FileOutputStream(path);
 		ObjectOutputStream objout = new ObjectOutputStream(out);
 
-        for (Book book : arr) {
-            objout.writeObject(book);
-        }
-		
+		for (Book book : arr) {
+			objout.writeObject(book);
+		}
+
 		out.close();
 		objout.close();
-		
+
 	}
 
 
 	public static ArrayList<Book> getStockBooks(String path){
-		
+
 		ArrayList<Book> stockBooks = new ArrayList<>();
 		try {
 			FileInputStream fis = new FileInputStream(path);
-		    ObjectInputStream objis = new ObjectInputStream(fis);
+			ObjectInputStream objis = new ObjectInputStream(fis);
 
 			while (true) {
 				try {
@@ -49,7 +49,7 @@ public abstract class BillNumber {
 		catch(IOException | ClassNotFoundException ignored) {}
 
 
-        return stockBooks;
+		return stockBooks;
 	}
 
 	public static ArrayList<Book> getInitialStock(){
@@ -88,7 +88,7 @@ public abstract class BillNumber {
 
 		return bookArrayList;
 	}
-	
+
 	public static void setInitialStock(String path) throws IOException {
 		FileOutputStream out = new FileOutputStream(path);
 		ObjectOutputStream objout = new ObjectOutputStream(out);
@@ -102,50 +102,50 @@ public abstract class BillNumber {
 	}
 
 	public static ArrayList<String> getCategories(String path) {
-		
+
 		ArrayList<String> ans = new ArrayList<>();
-		
+
 		ArrayList<Book> books = BillNumber.getStockBooks(path);
 
-        for (Book book : books) {
-            ans.add(book.getCategory());
-        }
-		
-		
+		for (Book book : books) {
+			ans.add(book.getCategory());
+		}
+
+
 		return removeDuplicates(ans);
 
 	}
 
-     //    UNIT 1
+	//    UNIT 1
 	public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
-    {
-  
-        ArrayList<T> newList = new ArrayList<T>();
-  
-        for (T element : list) {
-  
-            if (!newList.contains(element)) {
-  
-                newList.add(element);
-            }
-        }
-  
-        return newList;
-    }
-	
+	{
+
+		ArrayList<T> newList = new ArrayList<T>();
+
+		for (T element : list) {
+
+			if (!newList.contains(element)) {
+
+				newList.add(element);
+			}
+		}
+
+		return newList;
+	}
+
 	public static ArrayList<Book> getBookFromCategory(String path, String category){
-		
+
 		ArrayList<Book> ans = new ArrayList<>();
 		ArrayList<Book> stockbooks = BillNumber.getStockBooks(path);
 
-        for (Book stockbook : stockbooks) {
-            if (stockbook.getCategory().equals(category)) {
-                ans.add(stockbook);
-            }
-        }
-		
+		for (Book stockbook : stockbooks) {
+			if (stockbook.getCategory().equals(category)) {
+				ans.add(stockbook);
+			}
+		}
+
 		return ans;
-		
+
 	}
 
 	public static void addBookToStock(String path, Book book) throws IOException {
@@ -162,325 +162,325 @@ public abstract class BillNumber {
 		stockbooks.add(book);
 		BillNumber.updateBooks(path, stockbooks);
 	}
-	
-	public static String showStringStock(String path) {
-		
-		String ans="Currently in Stock:\n";
-	    ArrayList<Book> stockbooks = BillNumber.getStockBooks(path);
 
-        for (Book stockbook : stockbooks) {
-            ans = ans.concat(stockbook + "\n");
-        }
-	    
-	    return ans;
+	public static String showStringStock(String path) {
+
+		String ans="Currently in Stock:\n";
+		ArrayList<Book> stockbooks = BillNumber.getStockBooks(path);
+
+		for (Book stockbook : stockbooks) {
+			ans = ans.concat(stockbook + "\n");
+		}
+
+		return ans;
 	}
 
 	// UNIT 2
-    public static boolean partOfCateogriesChecker(ArrayList<String> categoriesStock,String category) {
+	public static boolean partOfCateogriesChecker(ArrayList<String> categoriesStock,String category) {
 
-        for (String s : categoriesStock) {
-            if (s.equals(category))
-                return true;
-        }
+		for (String s : categoriesStock) {
+			if (s.equals(category))
+				return true;
+		}
 		return false;
 	}
 
-    public static String getBooksSoldTotal(String path) {
-    	
-    	String ans = "For Books Sold in Total We Have\n\n";
-    	
-        ArrayList<Book> array = BillNumber.getStockBooks(path);
+	public static String getBooksSoldTotal(String path) {
 
-        for (Book book : array) {
-            ans = ans.concat(book.getSoldDatesQuantitiesTotal());
-        }
-    	return ans;
-    }
-    
-    public static String getBooksBoughtTotal(String path) {
-    	
-        String ans = "For Books Bought in Total We Have\n\n";
-    	
-        ArrayList<Book> array = BillNumber.getStockBooks(path);
+		String ans = "For Books Sold in Total We Have\n\n";
 
-        for (Book book : array) {
-            ans = ans.concat(book.getBoughtDatesQuantitiesTotal());
-        }
-    	return ans;
-    	
-    }
-    
-    public static String getBooksSoldDay(String path) {
-    	
-    	String ans = "For Books Sold Today We Have:\n\n";
-    	
-    	ArrayList<Book> array = BillNumber.getStockBooks(path);
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
 
-        for (Book book : array) {
-            ans = ans.concat(book.getSoldDatesQuantitiesDay());
-        }
-    	return ans;
-    }
-    
- public static String getBooksSoldMonth(String path) {
-    	
-    	String ans = "For Books Sold In A Month We Have\n\n";
-    	
-    	ArrayList<Book> arr = BillNumber.getStockBooks(path);
-     for (Book book : arr) {
-         ans = ans.concat(book.getSoldDatesQuantitiesMonth());
-     }
-    	return ans;
-    }
- 
-  public static String getBooksSoldYear(String path) {
- 	
- 	String ans = "For Books Sold In A Year We Have\n\n";
- 	
- 	ArrayList<Book> arr = BillNumber.getStockBooks(path);
-      for (Book book : arr) {
-          ans = ans.concat(book.getSoldDatesQuantitiesYear());
-      }
- 	return ans;
- }
-  
-  
-  public static String getBooksBoughtDay(String path) {
-	  
-	  String ans = "For Books Bought Today We Have\n\n";
-  	
-  	ArrayList<Book> array = BillNumber.getStockBooks(path);
+		for (Book book : array) {
+			ans = ans.concat(book.getSoldDatesQuantitiesTotal());
+		}
+		return ans;
+	}
 
-      for (Book book : array) {
-          ans = ans.concat(book.getBoughtDatesQuantitiesDay());
-      }
-  	return ans;
-	  
-  }
-  
-public static String getBooksBoughtMonth(String path) {
-	  
-	  String ans = "For Books Bought In A Month We Have\n\n";
-  	
-  	ArrayList<Book> array = BillNumber.getStockBooks(path);
+	public static String getBooksBoughtTotal(String path) {
 
-    for (Book book : array) {
-        ans = ans.concat(book.getBoughtDatesQuantitiesMonth());
-    }
-  	return ans;
-	  
-  }
+		String ans = "For Books Bought in Total We Have\n\n";
 
-public static String getBooksBoughtYear(String path) {
-	  
-	  String ans = "For Books Bought In A Year We Have\n\n";
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
 
-    for (Book book : array) {
-        ans = ans.concat(book.getBoughtDatesQuantitiesYear());
-    }
-	return ans;
-	  
-}
+		for (Book book : array) {
+			ans = ans.concat(book.getBoughtDatesQuantitiesTotal());
+		}
+		return ans;
 
-public static int getIntBooksSoldDay(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	int ans = 0;
+	}
 
-    for (Book book : array) {
-        ans += book.getTotalBooksSoldDay();
-    }
-	return ans;
-	
-}
+	public static String getBooksSoldDay(String path) {
 
-public static int getIntBooksSoldMonth(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	int ans = 0;
+		String ans = "For Books Sold Today We Have:\n\n";
 
-    for (Book book : array) {
-        ans += book.getTotalBooksSoldMonth();
-    }
-	return ans;
-}
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
 
-public static int getIntBooksSoldYear(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	int ans = 0;
+		for (Book book : array) {
+			ans = ans.concat(book.getSoldDatesQuantitiesDay());
+		}
+		return ans;
+	}
 
-    for (Book book : array) {
-        ans += book.getTotalBooksSoldYear();
-    }
-	return ans;
-	
-}
+	public static String getBooksSoldMonth(String path) {
 
-public static double getIncomeDay(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	double ans = 0;
+		String ans = "For Books Sold In A Month We Have\n\n";
 
-    for (Book book : array) {
-        ans += book.getTotalBooksSoldDay() * book.getSellingPrice();
-    }
-	
-	return ans;
-	
-}
+		ArrayList<Book> arr = BillNumber.getStockBooks(path);
+		for (Book book : arr) {
+			ans = ans.concat(book.getSoldDatesQuantitiesMonth());
+		}
+		return ans;
+	}
 
-public static double getIncomeMonth(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	double ans = 0;
+	public static String getBooksSoldYear(String path) {
 
-    for (Book book : array) {
-        ans += book.getTotalBooksSoldMonth() * book.getSellingPrice();
-    }
-	
-	return ans;
-	
-}
+		String ans = "For Books Sold In A Year We Have\n\n";
 
-public static double getIncomeYear(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	double ans = 0;
+		ArrayList<Book> arr = BillNumber.getStockBooks(path);
+		for (Book book : arr) {
+			ans = ans.concat(book.getSoldDatesQuantitiesYear());
+		}
+		return ans;
+	}
 
-    for (Book book : array) {
-        ans += book.getTotalBooksSoldYear() * book.getSellingPrice();
-    }
-	
-	return ans;
-	
-}
 
-public static int getTotalBoughtBooksDay(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	int ans = 0;
+	public static String getBooksBoughtDay(String path) {
 
-    for (Book book : array) {
-        ans += book.getTotalBooksBoughtDay();
-    }
-	return ans;
-	
-}
+		String ans = "For Books Bought Today We Have\n\n";
 
-public static int getTotalBoughtBooksMonth(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	int ans = 0;
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
 
-    for (Book book : array) {
-        ans += book.getTotalBooksBoughtMonth();
-    }
-	return ans;
-}
+		for (Book book : array) {
+			ans = ans.concat(book.getBoughtDatesQuantitiesDay());
+		}
+		return ans;
 
-public static int getTotalBoughtBooksYear(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	int ans = 0;
+	}
 
-    for (Book book : array) {
-        ans += book.getTotalBooksBoughtYear();
-    }
-	return ans;
-	
-}
+	public static String getBooksBoughtMonth(String path) {
 
-public static double getCostDay(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	double ans = 0;
+		String ans = "For Books Bought In A Month We Have\n\n";
 
-    for (Book book : array) {
-        ans += book.getTotalBooksBoughtDay() * book.getOriginalPrice();
-    }
-	
-	return ans;
-	
-}
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
 
-public static double getCostMonth(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	double ans = 0;
+		for (Book book : array) {
+			ans = ans.concat(book.getBoughtDatesQuantitiesMonth());
+		}
+		return ans;
 
-    for (Book book : array) {
-        ans += book.getTotalBooksBoughtMonth() * book.getOriginalPrice();
-    }
-	
-	return ans;
-	
-}
-public static double getCostYear(String path) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	double ans = 0;
+	}
 
-    for (Book book : array) {
-        ans += book.getTotalBooksBoughtYear() * book.getOriginalPrice();
-    }
-	
-	return ans;
-	
-}
+	public static String getBooksBoughtYear(String path) {
 
-public static boolean isPartOfBooks(String path, String ISBN) {
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
+		String ans = "For Books Bought In A Year We Have\n\n";
 
-    for (Book book : array) {
-        if (book.getISBN().equals(ISBN))
-            return true;
-    }
-	return false;
-}
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
 
-public static ArrayList<String> getISBNName(String path){
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	ArrayList<String> ans = new ArrayList<>();
+		for (Book book : array) {
+			ans = ans.concat(book.getBoughtDatesQuantitiesYear());
+		}
+		return ans;
 
-    for (Book book : array) {
-        ans.add(book.getISBN() + " - " + book.getTitle());
-    }
-	
-	return ans;
-}
+	}
 
-public static ArrayList<String> getAllTitles(String path){
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	ArrayList<String> ans = new ArrayList<>();
+	public static int getIntBooksSoldDay(String path) {
 
-    for (Book book : array) {
-        ans.add(book.getTitle());
-    }
-	
-	return ans;
-	
-}
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		int ans = 0;
 
-public static ArrayList<Integer> getAllStock(String path){
-	
-	ArrayList<Book> array = BillNumber.getStockBooks(path);
-	ArrayList<Integer> ans = new ArrayList<>();
+		for (Book book : array) {
+			ans += book.getTotalBooksSoldDay();
+		}
+		return ans;
 
-    for (Book book : array) {
-        ans.add(book.getStock());
-    }
-	
-	return ans;
-	
-}
+	}
 
-    // UNIT 4
+	public static int getIntBooksSoldMonth(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		int ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksSoldMonth();
+		}
+		return ans;
+	}
+
+	public static int getIntBooksSoldYear(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		int ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksSoldYear();
+		}
+		return ans;
+
+	}
+
+	public static double getIncomeDay(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		double ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksSoldDay() * book.getSellingPrice();
+		}
+
+		return ans;
+
+	}
+
+	public static double getIncomeMonth(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		double ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksSoldMonth() * book.getSellingPrice();
+		}
+
+		return ans;
+
+	}
+
+	public static double getIncomeYear(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		double ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksSoldYear() * book.getSellingPrice();
+		}
+
+		return ans;
+
+	}
+
+	public static int getTotalBoughtBooksDay(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		int ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksBoughtDay();
+		}
+		return ans;
+
+	}
+
+	public static int getTotalBoughtBooksMonth(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		int ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksBoughtMonth();
+		}
+		return ans;
+	}
+
+	public static int getTotalBoughtBooksYear(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		int ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksBoughtYear();
+		}
+		return ans;
+
+	}
+
+	public static double getCostDay(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		double ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksBoughtDay() * book.getOriginalPrice();
+		}
+
+		return ans;
+
+	}
+
+	public static double getCostMonth(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		double ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksBoughtMonth() * book.getOriginalPrice();
+		}
+
+		return ans;
+
+	}
+	public static double getCostYear(String path) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		double ans = 0;
+
+		for (Book book : array) {
+			ans += book.getTotalBooksBoughtYear() * book.getOriginalPrice();
+		}
+
+		return ans;
+
+	}
+
+	public static boolean isPartOfBooks(String path, String ISBN) {
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+
+		for (Book book : array) {
+			if (book.getISBN().equals(ISBN))
+				return true;
+		}
+		return false;
+	}
+
+	public static ArrayList<String> getISBNName(String path){
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		ArrayList<String> ans = new ArrayList<>();
+
+		for (Book book : array) {
+			ans.add(book.getISBN() + " - " + book.getTitle());
+		}
+
+		return ans;
+	}
+
+	public static ArrayList<String> getAllTitles(String path){
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		ArrayList<String> ans = new ArrayList<>();
+
+		for (Book book : array) {
+			ans.add(book.getTitle());
+		}
+
+		return ans;
+
+	}
+
+	public static ArrayList<Integer> getAllStock(String path){
+
+		ArrayList<Book> array = BillNumber.getStockBooks(path);
+		ArrayList<Integer> ans = new ArrayList<>();
+
+		for (Book book : array) {
+			ans.add(book.getStock());
+		}
+
+		return ans;
+
+	}
+
+	// UNIT 4
 	public static void removeDuplicatesSoldTitles(ArrayList<String> titles, ArrayList<Integer> quantities) {
 		Map<String, Integer> titleQuantities = new LinkedHashMap<>();
 
@@ -505,5 +505,5 @@ public static ArrayList<Integer> getAllStock(String path){
 		}
 	}
 
-	
+
 }

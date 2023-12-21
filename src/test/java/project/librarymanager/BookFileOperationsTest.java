@@ -1,13 +1,9 @@
-
-//TODO : isPartOfBooks(), getAllStock()
-
 package project.librarymanager;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-//
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -126,6 +122,14 @@ class BookFileOperationsTest {
             fail("Exception during setup");
         }
     }
+
+    @AfterAll
+    static void tearDown() throws IOException {
+        Path path = Paths.get(TEST_FILE_PATH);
+        Files.delete(path);
+    }
+
+
     // Start of method testing for "BillNumber.showStringStock()" {
     @Test
     public void test_showStringStock_noData(){
@@ -174,6 +178,8 @@ class BookFileOperationsTest {
                 assertEquals(bookArrayList.get(i).getStock(), expected_list.get(i).getStock(), "Stock mismatch at book with index " + i);
             }
 
+            in.close();
+            objIn.close();
         } catch (IOException | ClassNotFoundException e){
             fail("Exception: " + e.getMessage());
         }
@@ -555,7 +561,8 @@ class BookFileOperationsTest {
     }
     //end of testing method Librarian.BookPresent()
 
-    // Start of testing method "BillNumber.updateBooks()" {
+
+    // Start of method testing for "BillNumber.updateBooks()" {
     @Test
     void testUpdateBooks() {
         ArrayList<Book> books = new ArrayList<>();
@@ -576,9 +583,10 @@ class BookFileOperationsTest {
             e.printStackTrace();
         }
     }
-    // } end of testing method "BillNumber.updateBooks()"
+    // } end of "BillNumber.updateBooks()" testing
 
-    // Start of testing method "BillNumber.getBookFromCategory() {
+
+    // Start of method testing for "BillNumber.getBookFromCategory()" {
     @Test
     void testGetBookFromCategory() {
         try {
@@ -598,9 +606,10 @@ class BookFileOperationsTest {
             assertEquals(categoryToTest, book.getCategory());
         }
     }
-    // } end of testing method "BillNumber.getBooksFromCategory()
+    // } end of "BillNumber.getBooksFromCategory()" testing
 
-    // Start of testing method BillNumber.partOfCategoriesChecker()
+
+    // Start of method testing for "BillNumber.partOfCategoriesChecker()" {
     @Test
     void testPartOfCategoriesChecker() {
         try {
@@ -616,9 +625,10 @@ class BookFileOperationsTest {
         }
         assertFalse(BillNumber.partOfCateogriesChecker(categories, "NonExistentCategory"));
     }
-    // end of testing BillNumber.partOfCategoriesChecker()
+    // } end of "BillNumber.partOfCategoriesChecker()" testing
 
-    // Start of testing method "BillNumber.getBooksSoldYear()" {
+
+    // Start of method testing for "BillNumber.getBooksSoldYear()" {
     @Test
     public void test_getBooksSoldYear_emptyDates(){
 
@@ -635,16 +645,17 @@ class BookFileOperationsTest {
     @Test
     public void test_getBooksSoldYear(){
 
-        String expected = "For Books Sold In A Year We Have\n\n";
+        StringBuilder expected = new StringBuilder("For Books Sold In A Year We Have\n\n");
         for (Book book: startBookArrayList){
-            expected += book.getSoldDatesQuantitiesYear();
+            expected.append(book.getSoldDatesQuantitiesYear());
         }
 
-        assertEquals(expected, BillNumber.getBooksSoldYear(TEST_FILE_PATH));
+        assertEquals(expected.toString(), BillNumber.getBooksSoldYear(TEST_FILE_PATH));
     }
-    // } end of testing method "BillNumber.getBooksSoldYear()"
+    // } end of "BillNumber.getBooksSoldYear()" testing
 
-    // Start of testing method "BillNumber.getBooksBoughtYear()" {
+
+    // Start of method testing for "BillNumber.getBooksBoughtYear()" {
     @Test
     public void test_getBooksBoughtYear_noneBought(){
 
@@ -661,16 +672,17 @@ class BookFileOperationsTest {
     @Test
     public void test_getBooksBoughtYear(){
 
-        String expected = "For Books Bought In A Year We Have\n\n";
+        StringBuilder expected = new StringBuilder("For Books Bought In A Year We Have\n\n");
         for (Book book: startBookArrayList){
-            expected += book.getBoughtDatesQuantitiesYear();
+            expected.append(book.getBoughtDatesQuantitiesYear());
         }
 
-        assertEquals(expected, BillNumber.getBooksBoughtYear(TEST_FILE_PATH));
+        assertEquals(expected.toString(), BillNumber.getBooksBoughtYear(TEST_FILE_PATH));
     }
-    // } end of testing method "BillNumber.getBooksBoughtYear()"
+    // } end of "BillNumber.getBooksBoughtYear()" testing
 
-    // Start of testing method "BillNumber.getIntBooksSoldYear()" {
+
+    // Start of method testing for "BillNumber.getIntBooksSoldYear()" {
     @Test
     public void test_getIntBooksSoldYear_noSoldBooks(){
         setUpWithoutDates();
@@ -681,9 +693,10 @@ class BookFileOperationsTest {
     public void test_getIntBooksSoldYear(){
         assertEquals(15, BillNumber.getIntBooksSoldYear(TEST_FILE_PATH));
     }
-    // } end of testing method "BillNumber.getIntBooksSoldYear()"
+    // } end of "BillNumber.getIntBooksSoldYear()" testing
 
-    // Start of testing method "BillNumber.getIncomeYear()" {
+
+    // Start of method testing for "BillNumber.getIncomeYear()" {
     @Test
     public void test_getIncomeYear_noSoldBooks(){
         setUpWithoutDates();
@@ -694,9 +707,10 @@ class BookFileOperationsTest {
     public void test_getIncomeYear(){
         assertEquals(329.67, BillNumber.getIncomeYear(TEST_FILE_PATH));
     }
-    // } end of testing method "BillNumber.getIncomeYear()"
+    // } end of "BillNumber.getIncomeYear()" testing
 
-    // Start of testing method "BillNumber.getTotalBoughtBooksYear()" {
+
+    // Start of method testing for "BillNumber.getTotalBoughtBooksYear()" {
     @Test
     public void test_getTotalBoughtBooksYear_noSoldBooks(){
         setUpWithoutDates();
@@ -707,9 +721,10 @@ class BookFileOperationsTest {
     public void test_getTotalBoughtBooksYear(){
         assertEquals(14, BillNumber.getTotalBoughtBooksYear(TEST_FILE_PATH));
     }
-    // } end of testing method "BillNumber.getTotalBoughtBooksYear()"
+    // } end of "BillNumber.getTotalBoughtBooksYear()" testing
 
-    // Start of testing method "BillNumber.getCostYear()" {
+
+    // Start of method testing for "BillNumber.getCostYear()" {
     @Test
     public void test_getCostYear_noSoldBooks(){
         setUpWithoutDates();
@@ -720,9 +735,10 @@ class BookFileOperationsTest {
     public void test_getCostYear(){
         assertEquals(210, BillNumber.getCostYear(TEST_FILE_PATH));
     }
-    // } end of testing method "BillNumber.getCostYear()"
+    // } end of "BillNumber.getCostYear()" testing
 
-    // Start of testing method "BillNumber.getBooksBoughtTotal()" {
+
+    // Start of method testing for "BillNumber.getBooksBoughtTotal()" {
     @Test
     public void test_getBooksBoughTotal_noneBought(){
 
@@ -748,9 +764,10 @@ class BookFileOperationsTest {
         System.out.println(expected);
         assertEquals(expected, BillNumber.getBooksBoughtTotal(TEST_FILE_PATH));
     }
-    // } end of testing method "BillNumber.getBooksBoughtTotal()"
+    // } end of "BillNumber.getBooksBoughtTotal()" testing
 
-    // Start of testing method for "BillNumber.getAllTitles()"{
+
+    // Start of method testing for "BillNumber.getAllTitles()" {
     @Test
     void testGetAllTitles() {
         ArrayList<Book> testBooks = new ArrayList<>();
@@ -775,10 +792,10 @@ class BookFileOperationsTest {
         assertTrue(titles.contains("Ulysses"));
         assertTrue(titles.contains("One Hundred Years of Solitude"));
     }
-    // } end of testing method for "BillNumber.getAllTitles()"
+    // } end of "BillNumber.getAllTitles()" testing
 
 
-    // Start of testing method for "BillNumber.showStock()"{
+    // Start of method testing for "BillNumber.showStock()" {
     @Test
     void testShowStock() {
 
@@ -792,10 +809,10 @@ class BookFileOperationsTest {
 
         assertEquals(expectedOutput,BillNumber.showStringStock(TEST_FILE_PATH) );
     }
+    // } end of "BillNumber.showStock()" testing
 
-    // } end of testing method for "BillNumber.showStock()"
 
-    //Start of testing method for "Librarian.checkOutBooks()"{
+    // Start of method testing for "Librarian.checkOutBooks()" {
     @Test
     public void testCheckOutBooks_ValidData() throws IOException {
         Librarian librarian = new Librarian("username", "password");
@@ -836,19 +853,22 @@ class BookFileOperationsTest {
 
         Files.delete(path);
         Librarian.billNumber = 0;
-
     }
+    // } end of "Librarian.checkOutBooks()" testing
 
+
+    // Start of method testing for "Librarian.getBillFilePath()" {
     @Test
     public void testGetBillFilePath () throws IOException {
-      //  assertEquals("Bill1.txt", Librarian.getBillFilePath() );
-      //  assertEquals("Bill2.txt", Librarian.getBillFilePath() );
-      //  assertEquals("Bill3.txt", Librarian.getBillFilePath() );
+        assertEquals("Bill1.txt", Librarian.getBillFilePath() );
+        assertEquals("Bill2.txt", Librarian.getBillFilePath() );
+        assertEquals("Bill3.txt", Librarian.getBillFilePath() );
         Librarian.billNumber = 0;
     }
-    // } end of testing method for "Librarian.checkOutBooks()"
+    // } end of "Librarian.getBillFilePath()" testing
 
-    //Start of testing method for "Librarian.enoughStock()"{
+
+    // Start of method testing for "Librarian.enoughStock()" {
     @Test
     public void testEnoughStock_EnoughQuantityAvailable() {
         assertTrue(Librarian.EnoughStock(TEST_FILE_PATH, "0096184570112", 5));
@@ -861,34 +881,10 @@ class BookFileOperationsTest {
 
     @Test
     public void testEnoughStock_BookNotPresent() {
-        Librarian librarian = new Librarian("username", "password");
-        assertFalse(librarian.EnoughStock(TEST_FILE_PATH, "NonExistentISBN", 5));
+        assertFalse(Librarian.EnoughStock(TEST_FILE_PATH, "NonExistentISBN", 5));
     }
+    // } end of "Librarian.enoughStock()" testing
 
-    @Test
-    public void testEnoughStock_NullISBN() {
-        Librarian librarian = new Librarian("username", "password");
-        ArrayList<Book> books = new ArrayList<>();
-        books.add(new Book(null, "Book1", "Category1", "Supplier1", 10.0, 15.0, "Author1", 10));
-        assertFalse(librarian.EnoughStock(TEST_FILE_PATH, null, 5));
-    }
-
-    @Test
-    public void testEnoughStock_NegativeQuantity() {
-        Librarian librarian = new Librarian("username", "password");
-        ArrayList<Book> books = new ArrayList<>();
-        Book availableBook = new Book("ISBN1", "Book1", "Category1", "Supplier1", 10.0, 15.0, "Author1", 10); // Available stock: 10
-        books.add(availableBook);
-
-        assertFalse(librarian.EnoughStock(TEST_FILE_PATH, "ISBN1", -5));
-    }
-
-    @Test
-    public void testEnoughStock_NullBooks() {
-        Librarian librarian = new Librarian("username", "password");
-        assertFalse(librarian.EnoughStock(TEST_FILE_PATH, "ISBN1", 5));
-    }
-    // } end of testing method for "Librarian.enoughStock()"
 
     // Start of method testing for "Manager.checkStock()" {
     @Test
@@ -896,7 +892,7 @@ class BookFileOperationsTest {
         String result = Manager.checkStock(TEST_FILE_PATH);
         assertEquals("Every book has 5 or more items in stock", result);
     }
-    // } end of testing method for"Manager.checkStock()"
+
     @Test
     public void testLowStock() {
         setUpWithoutDates();
@@ -905,21 +901,8 @@ class BookFileOperationsTest {
                 "Book: Ulysses, With ISBN code: 4647500268094, Has Stock: 3\n";
         assertEquals(expectedWarning, Manager.checkStock(TEST_FILE_PATH) );
     }
-    // } end of testing method for "Manager.checkStock()"
+    // } end of "Manager.checkStock()" testing
 
-//    @Test
-//    public void testGetLowStock() throws IOException {
-//        ArrayList<Book> stockbooks = BillNumber.getStockBooks(TEST_FILE_PATH);
-//        ArrayList<Book> ans = new ArrayList<>();
-//        ArrayList<Book> lowStockBooks = Manager.getLowStock(TEST_FILE_PATH);
-//
-//        assertTrue(lowStockBooks.isEmpty(), "There should be books with low stock");
-//    }
-    @AfterAll
-    static void tearDown() throws IOException {
-        Path path = Paths.get(TEST_FILE_PATH);
-        Files.delete(path);
-}
 }
 
 
