@@ -903,6 +903,31 @@ class BookFileOperationsTest {
     }
     // } end of "Manager.checkStock()" testing
 
+    // Start of method testing for "Manager.getLowStock()" {
+    @Test
+    public void testGetLowStock_notLow() {
+        ArrayList<Book> lowStockBooks = Manager.getLowStock(TEST_FILE_PATH);
+
+        assertTrue(lowStockBooks.isEmpty(), "There should not be books with low stock");
+    }
+
+    @Test
+    public void test_getLowStock_withLow() {
+        setUpWithoutDates();
+        ArrayList<Book> lowStockBooks = Manager.getLowStock(TEST_FILE_PATH);
+        ArrayList<Book> stockBooks = BillNumber.getStockBooks(TEST_FILE_PATH);
+
+        assertEquals(stockBooks.size(), lowStockBooks.size());
+
+        for (int i=0; i<lowStockBooks.size(); i++){
+            assertEquals(stockBooks.get(i).getISBN(), lowStockBooks.get(i).getISBN());
+        }
+
+
+    }
+    // } end of "Manager.getLowStock()" testing
+
+
 }
 
 
