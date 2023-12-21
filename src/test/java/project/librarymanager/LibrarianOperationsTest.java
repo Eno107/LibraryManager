@@ -14,55 +14,114 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LibrarianOperationsTest {
+    static ArrayList<Date> testDatesSold = new ArrayList<>();
+    static ArrayList<Double> testMoneyMade = new ArrayList<>();
+
     @BeforeAll
     public static void setUp(){
         Manager.InstantiateLibrarians();
+
+        testDatesSold.add(new Date());
+        testMoneyMade.add(50.0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Date previousDate = calendar.getTime();
+        testDatesSold.add(previousDate);
+        testMoneyMade.add(20.0);
+
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        Date nextDate = calendar.getTime();
+        testDatesSold.add(nextDate);
+        testMoneyMade.add(10.0);
+
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        Date previousMonth = calendar.getTime();
+        testDatesSold.add(previousMonth);
+        testMoneyMade.add(50.0);
+
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, 1);
+        Date nextMonth = calendar.getTime();
+        testDatesSold.add(nextMonth);
+        testMoneyMade.add(40.0);
+
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, - 1);
+        Date previousYear = calendar.getTime();
+        testDatesSold.add(previousYear);
+        testMoneyMade.add(145.0);
     }
 
 
-    //Start of testing method Librarian.MoneyMadeInDay()
+
+
+    // Start of method testing for "Librarian.MoneyMadeInDay()" {
     @Test
     public void testMoneyMadeInDay() {
         Librarian lib = new Librarian("1","1","TestLibrarian",500,"(912) 632-6353","TestEmail@librarian.com");
-        ArrayList<Date> DatesSold = new ArrayList<>();
-        ArrayList<Double> mockMoneyMadeDates = new ArrayList<>();
-        DatesSold.add(new Date());
-        mockMoneyMadeDates.add(50.0);
-        lib.datesSold.addAll(DatesSold);
-        lib.moneyMadeDates.addAll(mockMoneyMadeDates);
+        lib.datesSold.addAll(testDatesSold);
+        lib.moneyMadeDates.addAll(testMoneyMade);
+
         double moneyMadeInDay = lib.moneyMadeInDay();
         assertEquals(50.0, moneyMadeInDay);
 
     }
-//end of testing method MoneyMadeDay()
+    // } end of "MoneyMadeDay()" testing
 
-    //Start testing method "Librarian.CheckPassword"
+    // Start of method testing for "Librarian.CheckPassword()" {
     @Test
-    public void testCheckPasswordValid() {
-        Librarian lib = new Librarian("@Leo","TyFzN8we","Leo",500,"(912) 152-7493","leo@librarian.com");
-        String pass = lib.getPassword();
-      assertTrue(Librarian.checkPassword(pass));
+    public void test_checkPassword_Valid() {
+        String validPass = "TyFzN8we";
+        assertTrue(Librarian.checkPassword(validPass));
+        validPass = "12345678";
+        assertTrue(Librarian.checkPassword(validPass));
     }
     @Test
-    public void testCheckPasswordInvalidShort() {
-        assertFalse( Librarian.checkPassword("Short"));
+    public void test_checkPassword_InvalidShort() {
+        String notValidPass = "1234567";
+        assertFalse(Librarian.checkPassword(notValidPass));
     }
-//end testing method "Librarian.CheckPassword"
+    // } end of "Librarian.CheckPassword()" testing
 
-    //Start of testing method "CheckSalaryValid()"
+
+    // Start of method testing for "CheckSalaryValid()" {
     @Test
-    public void testCheckSalaryValid() {
+    public void test_checkSalary_valid_doubleFormat() {
         assertTrue(Librarian.checkSalary("50000.50"));
     }
 
     @Test
-    public void testCheckSalarychanged() {
-        Librarian lib = new Librarian("@Leo","TyFzN8we","Leo",500,"(912) 152-7493","leo@librarian.com");
-        lib.setSalary(770);
-        String salary= Double.toString(lib.getSalary());
-        assertTrue(Librarian.checkSalary(salary));
+    public void test_checkSalary_valid_leadingDigits(){
+        assertTrue(Librarian.checkSalary("952."));
     }
-//end testing method "Librarian.CheckSalaryChanged"
+    @Test
+    public void test_checkSalary_valid_intFormat(){
+        assertTrue(Librarian.checkSalary("52"));
+    }
+    @Test
+    public void test_checkSalary_notValid_negative() {
+        assertFalse(Librarian.checkSalary("-50"));
+    }
+    @Test
+    public void test_checkSalary_notValid_multipleDots(){
+        assertFalse(Librarian.checkSalary("40.523.52"));
+    }
+    @Test
+    public void test_checkSalary_notValid_noLeadingDigits(){
+        assertFalse(Librarian.checkSalary(".53"));
+    }
+    @Test
+    public void test_checkSalary_notValid_numbersAndLetters(){
+        assertFalse(Librarian.checkSalary("1c3"));
+    }
+    @Test
+    public void test_checkSalary_notValid_allLetters(){
+        assertFalse(Librarian.checkSalary("ABC"));
+    }
+    // } end of "Librarian.checkSalary()" testing
 
 
     // Start of testing method for "Librarian.MoneyMadeInMonth()"{

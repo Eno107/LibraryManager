@@ -122,10 +122,10 @@ public class ManagerOperationsTest {
 
         assertNotNull(reEnteredManager, "re-entered Manager is null");
 
-        assertEquals(existingManager.getUsername(), reEnteredManager.getUsername(), "The following attribute is incorrect: username");
-        assertEquals(existingManager.getPassword(), reEnteredManager.getPassword(), "The following attribute is incorrect: password");
-        assertEquals(existingManager.getName(), reEnteredManager.getName(), "The following attribute is incorrect: name");
-        assertEquals(existingManager.getSalary(), reEnteredManager.getSalary(), "The following attribute is incorrect: salary");
+        assertEquals(existingManager.getUsername(), reEnteredManager.getUsername(),  "The following attribute is incorrect: username");
+        assertEquals(existingManager.getPassword(), reEnteredManager.getPassword(),  "The following attribute is incorrect: password");
+        assertEquals(existingManager.getName(), reEnteredManager.getName(),  "The following attribute is incorrect: name");
+        assertEquals(existingManager.getSalary(), reEnteredManager.getSalary(),  "The following attribute is incorrect: salary");
         assertEquals(existingManager.getPhone(), reEnteredManager.getPhone(), "The following attribute is incorrect: phone");
         assertEquals(existingManager.getEmail(), reEnteredManager.getEmail(), "The following attribute is incorrect: mail");
     }
@@ -150,7 +150,6 @@ public class ManagerOperationsTest {
                 "ManagerChecker failed for an existing Manager");
 
     }
-
     @Test
     public void test_ManagerChecker_notManager_wrongUsername() {
         String username = "idkBro";
@@ -183,9 +182,9 @@ public class ManagerOperationsTest {
 
     @Test
     public void testDeleteNonExistingManager() {
-        Manager nonExistingManager = new Manager("test", "PQ532Abba", "Calvin", 900, "(912) 561-2628", "calvl@manager.com");
+        Manager nonExistingManager = new Manager("test",  "PQ532Abba", "Calvin", 900, "(912) 561-2628", "calvl@manager.com");
         assertFalse(Administrator.deleteManager(nonExistingManager),
-                "DeleteManager incorrectly removed a non-existing manager from the list");
+                 "DeleteManager incorrectly removed a non-existing manager from the list");
     }
     // } end of "Administrator.deleteManager()" testing
 

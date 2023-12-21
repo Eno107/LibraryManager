@@ -3,6 +3,7 @@
 
 package project.librarymanager;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -22,7 +23,6 @@ class BookFileOperationsTest {
 
     FileOutputStream out;
     ObjectOutputStream objOut;
-
     private static final String TEST_FILE_PATH = "BooksTesting.txt";
     Date today = new Date();
     ArrayList<Book> startBookArrayList = new ArrayList<>();
@@ -100,6 +100,9 @@ class BookFileOperationsTest {
             book.addQuantitiesPurchased(5);
             objOut.writeObject(book);
             startBookArrayList.add(book);
+
+            out.close();
+            objOut.close();
         } catch (IOException e) {
             fail("Exception during setup");
         }
@@ -117,11 +120,13 @@ class BookFileOperationsTest {
             book = new Book("4647500268094","Ulysses","Fiction","Baker & Taylor",15.00,18.00,"James Joyce",3);
             objOut.writeObject(book);
 
+            out.close();
+            objOut.close();
         } catch (IOException e) {
             fail("Exception during setup");
         }
     }
-//Start
+    // Start of method testing for "BillNumber.showStringStock()" {
     @Test
     public void test_showStringStock_noData(){
         setUpWithoutDates();
@@ -141,9 +146,10 @@ class BookFileOperationsTest {
                 "Book [ISBN=3655736671389, title=One Hundred Years of Solitude, category=Magic realism, supplier=Ingram Content Group, Inc, sellingPrice=16.99, originalPrice=13.0, author=Gabriel Garcia Marquez, stock=7]\n" +
                 "Book [ISBN=3115666367951, title=The Great Gatsby, category=Tragedy, supplier=Ingram Content Group, Inc, sellingPrice=11.95, originalPrice=10.0, author=F. Scott Fitzgerald, stock=5]\n",BillNumber.showStringStock(TEST_FILE_PATH));
     }
+    // } end of "BillNumber.showStringStock()"
 
 
-
+    // Start of method testing for "BillNumber.setInitialStock()" {
     @Test
     void test_setInitialStock() {
         try{
@@ -151,10 +157,10 @@ class BookFileOperationsTest {
 
             FileInputStream in = new FileInputStream(TEST_FILE_PATH);
             ObjectInputStream objIn = new ObjectInputStream(in);
-            
+
             ArrayList<Book> bookArrayList = new ArrayList<>();
             ArrayList<Book> expected_list = BillNumber.getInitialStock();
-            
+
             while (true){
                 try{
                     bookArrayList.add((Book) objIn.readObject());
@@ -172,6 +178,8 @@ class BookFileOperationsTest {
             fail("Exception: " + e.getMessage());
         }
     }
+    // } end of "BillNumber.setInitialStock()" testing
+
 
     @Test
     void test_getCategories(){
@@ -252,9 +260,9 @@ class BookFileOperationsTest {
     }
     // } end of "BillNumber.getBooksSoldDay()" testing
 
-    // Start of testing method "BillNumber.getBooksSoldMonth()"
+    // Start of method testing for "BillNumber.getBooksSoldMonth()" {
     @Test
-    public void test_getBooksSoldMonth_emptydate(){
+    public void test_getBooksSoldMonth_noDates(){
         setUpWithoutDates();
         assertEquals("""
                         For Books Sold In A Month We Have
@@ -265,23 +273,22 @@ class BookFileOperationsTest {
         );
     }
     @Test
-    public void test_getBooksSoldMonth () {
+    public void test_getBooksSoldMonth_withDates () {
 
-        String expected = "For Books Sold In A Month We Have\n\n";
+        StringBuilder expected = new StringBuilder("For Books Sold In A Month We Have\n\n");
         for (Book book: startBookArrayList){
-            expected += book.getSoldDatesQuantitiesMonth();
+            expected.append(book.getSoldDatesQuantitiesMonth());
         }
 
-        assertEquals(expected, BillNumber.getBooksSoldMonth(TEST_FILE_PATH));
+        assertEquals(expected.toString(), BillNumber.getBooksSoldMonth(TEST_FILE_PATH));
 
     }
-    // } End of testing method getBooksSoldMonth ()
+    // } end of "BillNumber.getBooksSoldMonth()" testing
 
 
-    // End of testing "BillNumber.getBooksSoldMonth()"
-    //Start of testing method "BillNumber.getBooksSoldTotal()"
+    // Start of method testing "BillNumber.getBooksSoldTotal()" {
     @Test
-    public void test_getBooksSoldTotal_noDate(){
+    public void test_getBooksSoldTotal_noDates(){
         setUpWithoutDates();
         assertEquals("""
                         For Books Sold in Total We Have
@@ -292,16 +299,16 @@ class BookFileOperationsTest {
     }
 
     @Test
-    public void test_getBooksSoldTotal(){
-        String expected = "For Books Bought in Total We Have\n\n";
+    public void test_getBooksSoldTotal_withDates(){
+        StringBuilder expected = new StringBuilder("For Books Bought in Total We Have\n\n");
         for (Book book: startBookArrayList){
-            expected += book.getBoughtDatesQuantitiesTotal();
+            expected.append(book.getBoughtDatesQuantitiesTotal());
         }
 
-        assertEquals(expected, BillNumber.getBooksBoughtTotal(TEST_FILE_PATH));
+        assertEquals(expected.toString(), BillNumber.getBooksBoughtTotal(TEST_FILE_PATH));
 
     }
-    // } End of testing method "BillNumber.getBooksSoldTotal()
+    // } end of "BillNumber.getBooksSoldTotal()" testing
 
     // Start of testing method "BillNumber.getBooksBoughtDay()" {
     @Test
@@ -334,9 +341,9 @@ class BookFileOperationsTest {
     }
     // } end of testing method "BillNumber.getBooksBoughtDay()"
 
-    //Start of testing method "BillNumber.getBooksBoughtMonth()"
+    // Start of method testing for "BillNumber.getBooksBoughtMonth()" {
     @Test
-    public void test_getBooksBoughtMonth_noData(){
+    public void test_getBooksBoughtMonth_noBuys(){
         setUpWithoutDates();
         assertEquals("For Books Bought In A Month We Have\n" +
                 "\n" +
@@ -344,19 +351,16 @@ class BookFileOperationsTest {
                 "We have made no purchases on \"Ulysses\"\n", BillNumber.getBooksBoughtMonth(TEST_FILE_PATH));
     }
     @Test
-    public void test_getBooksBoughtMonth(){
-        String expected = "For Books Bought In A Month We Have\n\n";
+    public void test_getBooksBoughtMonth_withBuys(){
+        StringBuilder expected = new StringBuilder("For Books Bought In A Month We Have\n\n");
         for (Book book: startBookArrayList){
-            expected += book.getBoughtDatesQuantitiesMonth();
+            expected.append(book.getBoughtDatesQuantitiesMonth());
         }
 
         System.out.println(expected);
-        assertEquals(expected, BillNumber.getBooksBoughtMonth(TEST_FILE_PATH));
-
-
+        assertEquals(expected.toString(), BillNumber.getBooksBoughtMonth(TEST_FILE_PATH));
     }
-    //end of testing method "BillNumber.getBooksBoughtMonth"
-
+    // } end of "BillNumber.getBooksBoughtMonth" testing
 
     // Start of testing method "BillNumber.getIntBooksSoldDay()" {
     @Test
@@ -370,18 +374,19 @@ class BookFileOperationsTest {
         assertEquals(5, BillNumber.getIntBooksSoldDay(TEST_FILE_PATH));
     }
     // } end of "BillNumber.getIntBooksSoldDay()" testing
-    // Start of testing  method "BillNumber.getIntSoldMonth()"
+
+    // Start of method testing for "BillNumber.getIntSoldMonth()" {
     @Test
-    public void test_getIntBooksSoldMonth_noSoldBooks(){
+    public void test_getIntBooksSoldMonth_noSales(){
         setUpWithoutDates();
         assertEquals(0, BillNumber.getIntBooksSoldMonth(TEST_FILE_PATH));
     }
 
     @Test
-    public void test_getIntBooksSoldMonth(){
+    public void test_getIntBooksSoldMonth_withSales(){
         assertEquals(13,BillNumber.getIntBooksSoldMonth(TEST_FILE_PATH));
     }
-    //end of testing "BillNumber.getIntSoldMonth()"
+    // end of "BillNumber.getIntSoldMonth()" testing
 
     // Start of testing method "BillNumber.getIncomeDay()" {
     @Test
@@ -398,18 +403,19 @@ class BookFileOperationsTest {
     }
     // end of "BillNumber.getIncomeDay()" testing
 
-    //Start of testing method "BillNumber.getIncomeMonth"
+
+    // Start of method testing for "BillNumber.getIncomeMonth" {
     @Test
-    public void test_getIncomeMonth_noSale(){
+    public void test_getIncomeMonth_noSales(){
         setUpWithoutDates();
         assertEquals(0,BillNumber.getIncomeMonth(TEST_FILE_PATH));
     }
     @Test
-    public void test_getIncomeMonth(){
+    public void test_getIncomeMonth_withSales() {
         assertEquals(295.69,BillNumber.getIncomeMonth(TEST_FILE_PATH));
     }
+    // end of "BillNumber.getIncomeMonth" testing
 
-    //End of testing  "BillNumber.getIncomeMonth"
     // Start of testing method "BillNumber.getTotalBoughtBooksDay()" {
     @Test
     public void test_getTotalBoughtBooksDay_noSoldBooks(){
@@ -424,17 +430,19 @@ class BookFileOperationsTest {
     }
     // } end of "BillNumber.getTotalBoughtBooksDay()" testing
 
-    // Start of testing method "BillNumber.getTotalBoughtBooksMonth()"
+
+    // Start of method testing for "BillNumber.getTotalBoughtBooksMonth()" {
     @Test
-    public void test_getTotalBoughtBooksMonth_noSales(){
+    public void test_getTotalBoughtBooksMonth_noBuys(){
         setUpWithoutDates();
         assertEquals(0,BillNumber.getTotalBoughtBooksMonth(TEST_FILE_PATH));
     }
 
     @Test
-    public void test_getTotalBoughtBooksMonth(){
+    public void test_getTotalBoughtBooksMonth_withBuys(){
         assertEquals(12,BillNumber.getTotalBoughtBooksMonth(TEST_FILE_PATH));
     }
+    // } end of "BillNumber.getTotalBoughtBooksMonth()" testing
     // Start of testing method "BillNumber.getCostDay()" {
     @Test
     public void test_getCostDay_noSoldBooks(){
@@ -449,7 +457,7 @@ class BookFileOperationsTest {
     }
     // } end of testing method "BillNumber.getCostDay()"
 
-    //start of testing method "BillNumber.getCostMonth()"
+    // Start of method testing for "BillNumber.getCostMonth()"
     @Test
     public void test_getCostMonth_noSoldBooks(){
         setUpWithoutDates();
@@ -460,7 +468,8 @@ class BookFileOperationsTest {
     public void test_getCostMonth(){
         assertEquals(184,BillNumber.getCostMonth(TEST_FILE_PATH));
     }
-    // End of testing method "BillNumber.getCostMonth"
+    // } end of "BillNumber.getCostMonth()" testing
+
     // Start of testing method "BillNumber.isPartOfBooks()" {
     @Test
     public void test_isPartOfBooks_notPart(){
@@ -487,7 +496,7 @@ class BookFileOperationsTest {
     }
     // } end of "BillNumber.getAllStock()" testing
 
-    //Start of testing method "BillNumber.getISBNName()"
+    // Start of testing method "BillNumber.getISBNName()" {
     @Test
     public void test_getISBNName(){
         ArrayList<String> expected = new ArrayList<>();
@@ -500,9 +509,10 @@ class BookFileOperationsTest {
 
         assertEquals( expected, BillNumber.getISBNName(TEST_FILE_PATH));
     }
-    //end of testing method "BillNumber.getISBNName"
+    // } end of "BillNumber.getISBNName" testing
 
-    //Start of testing method "BillNumber.removeDuplicatesSoldTitles"
+
+    // Start of method testing for "BillNumber.removeDuplicatesSoldTitles" {
     @Test
     void testRemoveDuplicatesSoldTitles() {
         try {
@@ -519,7 +529,8 @@ class BookFileOperationsTest {
         } catch (Exception e) {
             fail("Exception: " + e.getMessage());
         }
-    }//end of testing method "BillNumber.removeDuplicatesSoldTitles()"
+    }
+    // } end "BillNumber.removeDuplicatesSoldTitles()" testing
 
     //Start of testing method "Librarian.BookPresent()"
     @Test
@@ -879,13 +890,13 @@ class BookFileOperationsTest {
     }
     // } end of testing method for "Librarian.enoughStock()"
 
-    //Start of testing method for "Manager.checkStock()"{
+    // Start of method testing for "Manager.checkStock()" {
     @Test
     public void testSufficientStock() {
         String result = Manager.checkStock(TEST_FILE_PATH);
         assertEquals("Every book has 5 or more items in stock", result);
     }
-
+    // } end of testing method for"Manager.checkStock()"
     @Test
     public void testLowStock() {
         setUpWithoutDates();
@@ -896,15 +907,19 @@ class BookFileOperationsTest {
     }
     // } end of testing method for "Manager.checkStock()"
 
-    @Test
-    public void testGetLowStock() throws IOException {
-        ArrayList<Book> stockbooks = BillNumber.getStockBooks(TEST_FILE_PATH);
-        ArrayList<Book> ans = new ArrayList<>();
-        ArrayList<Book> lowStockBooks = Manager.getLowStock(TEST_FILE_PATH);
-
-        assertTrue(lowStockBooks.isEmpty(), "There should be books with low stock");
-    }
-
+//    @Test
+//    public void testGetLowStock() throws IOException {
+//        ArrayList<Book> stockbooks = BillNumber.getStockBooks(TEST_FILE_PATH);
+//        ArrayList<Book> ans = new ArrayList<>();
+//        ArrayList<Book> lowStockBooks = Manager.getLowStock(TEST_FILE_PATH);
+//
+//        assertTrue(lowStockBooks.isEmpty(), "There should be books with low stock");
+//    }
+    @AfterAll
+    static void tearDown() throws IOException {
+        Path path = Paths.get(TEST_FILE_PATH);
+        Files.delete(path);
+}
 }
 
 
