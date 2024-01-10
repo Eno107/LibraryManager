@@ -14,23 +14,14 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class getCategoriesSteps {
-    private String path;
+public class getCategoriesSteps{
+
     private ArrayList<String> categories;
-    private BillNumber mockBillNumber;
-
-    @Given("a stock file path is provided")
-    public void givenAStockFilePathIsProvided() {
-        path = "../file.txt";
-    }
-
-    @Given("there are sold books in the stock")
-    public void givenStockBooksWithDatesAreAvailable() {
-        mockBillNumber = MockSetup.createMockBillNumberWithDates();
-    }
 
     @When("getCategories method is called with the path")
     public void whenGetCategoriesMethodIsCalledWithDates() {
+        BillNumber mockBillNumber = SharedSteps.getMockBillNumber();
+        String path = SharedSteps.getPath();
         categories = mockBillNumber.getCategories(path);
     }
 

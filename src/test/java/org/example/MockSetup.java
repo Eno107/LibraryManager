@@ -13,10 +13,9 @@ import static org.mockito.Mockito.*;
 public class MockSetup {
 
     static Date today = new Date();
+    static ArrayList<Book> booksWithDates = new ArrayList<>();
 
-    public static ArrayList<Book> getBooksWithDates(){
-
-        ArrayList<Book> booksWithDates = new ArrayList<>();
+    private static ArrayList<Book> getBooksWithDates(){
 
         Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",6);
         book.addDate(today);
@@ -103,12 +102,5 @@ public class MockSetup {
         BillNumber mockBillNumber = Mockito.mock(BillNumber.class, CALLS_REAL_METHODS);
         when(mockBillNumber.getStockBooks(Mockito.anyString())).thenReturn(getBooksWithoutDates());
         return mockBillNumber;
-    }
-
-    public static Book createMockBook(String category, String soldDatesQuantitiesTotal) {
-        Book mockBook = Mockito.mock(Book.class);
-        when(mockBook.getCategory()).thenReturn(category);
-        when(mockBook.getSoldDatesQuantitiesTotal()).thenReturn(soldDatesQuantitiesTotal);
-        return mockBook;
     }
 }
