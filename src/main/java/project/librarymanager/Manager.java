@@ -5,6 +5,8 @@ public class Manager extends Librarian {
 	
 	private static ArrayList<Librarian> librarians = new ArrayList<>();
 
+    private static final BillNumber billNumber = new BillNumber();
+
 	Manager(String username, String password) {
 		super(username, password);
 		
@@ -36,7 +38,7 @@ public class Manager extends Librarian {
     
     public static String checkStock(String path) {
     	
-    	ArrayList<Book> stockbooks = BillNumber.getStockBooks(path);
+    	ArrayList<Book> stockbooks = billNumber.getStockBooks(path);
     	String ans = "Warning!\n";
     	int check=0;
 
@@ -55,7 +57,7 @@ public class Manager extends Librarian {
     
     public static ArrayList<Book> getLowStock(String path){
     	
-    	ArrayList<Book> stockbooks = BillNumber.getStockBooks(path);
+    	ArrayList<Book> stockbooks = billNumber.getStockBooks(path);
     	ArrayList<Book> ans = new ArrayList<>();
 
         for (Book stockbook : stockbooks) {

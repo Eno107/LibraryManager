@@ -10,6 +10,7 @@ import java.util.Map;
 public class Librarian extends BillNumber {
 	
 	private int numberOfBills=0;
+	private static final BillNumber billNumber = new BillNumber();
 	private int booksSold=0;
 	private double moneyMade=0;
 	final ArrayList<Date> datesSold;
@@ -48,7 +49,7 @@ public class Librarian extends BillNumber {
 	public void checkOutBooks(String path, ArrayList<Book> books,ArrayList<Integer> quantities) throws IOException {
 
 		PrintWriter writer = new PrintWriter(getBillFilePath());
-		ArrayList<Book> storybooks = BillNumber.getStockBooks(path);
+		ArrayList<Book> storybooks = billNumber.getStockBooks(path);
 		double totalPrice = 0;
 		
 		removeDuplicatesSoldBooks(books,quantities);
@@ -65,17 +66,17 @@ public class Librarian extends BillNumber {
 
                     totalPrice += stockbook.getSellingPrice() * quantities.get(i);
 
-                    BillNumber.totalBooksSold += quantities.get(i);
-                    BillNumber.totalIncome += totalPrice;
+					billNumber.totalBooksSold += quantities.get(i);
+					billNumber.totalIncome += totalPrice;
                     booksSold += quantities.get(i);
 
                 }
 
             }
 		}
-		
-		
-		BillNumber.updateBooks(path, storybooks);
+
+
+		billNumber.updateBooks(path, storybooks);
 		moneyMade+=totalPrice;
 		numberOfBills+=1;
 		datesSold.add(new Date());
@@ -122,7 +123,7 @@ public class Librarian extends BillNumber {
 	
 	public static boolean BookPresent(String path, String ISBN) {
 		
-		ArrayList<Book> storybooks = BillNumber.getStockBooks(path);
+		ArrayList<Book> storybooks = billNumber.getStockBooks(path);
 
         for (Book stockbook : storybooks) {
             if (stockbook.getISBN().equals(ISBN))
@@ -133,7 +134,7 @@ public class Librarian extends BillNumber {
 	
 	public static boolean EnoughStock(String path, String ISBN, int quantity) {
 		
-		ArrayList<Book> storybooks = BillNumber.getStockBooks(path);
+		ArrayList<Book> storybooks = billNumber.getStockBooks(path);
 
         for (Book stockbook : storybooks) {
             if (stockbook.getISBN().equals(ISBN))

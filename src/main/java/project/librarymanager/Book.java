@@ -21,7 +21,7 @@ public class Book implements Serializable{
 	private String author;
 	private int stock=0;
 	
-	Book(String ISBN, String title, String category, String supplier, double originalPrice, double sellingPrice,String author, int stock){
+	public Book(String ISBN, String title, String category, String supplier, double originalPrice, double sellingPrice, String author, int stock){
 		this.setISBN(ISBN);
 		this.setTitle(title);
 		this.setCategory(category);

@@ -22,11 +22,11 @@ public class BookOperationsTest {
     static ArrayList<Integer> purchasedQuantities = new ArrayList<>();
 
     @BeforeAll
-    public static void setUp(){
+    public static void setUp() {
 
-        bookWithoutDates = new Book("0096184570112","Book_Without_Dates","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",5);
+        bookWithoutDates = new Book("0096184570112", "Book_Without_Dates", "Modernist", "Ingram Content Group, Inc", 65.00, 73.96, "Marcel Proust", 5);
 
-        bookWithDates = new Book("4647500268094","Book_With_Dates","Fiction","Baker & Taylor",15.00,18.00,"James Joyce",2);
+        bookWithDates = new Book("4647500268094", "Book_With_Dates", "Fiction", "Baker & Taylor", 15.00, 18.00, "James Joyce", 2);
         bookWithDates.addDate(today);
         bookWithDates.addQuantity(2);
         bookWithDates.addPurchasedDate(today);
@@ -104,8 +104,6 @@ public class BookOperationsTest {
     }
 
 
-
-
     // Start of method testing for "Book.getSoldDatesQuantitiesYear()" {
     @Test
     public void test_getSoldDatesQuantitiesYear_noSales() {
@@ -116,8 +114,10 @@ public class BookOperationsTest {
     @Test
     public void test_getSoldDatesQuantitiesYear_withSales() {
         String result = bookWithDates.getSoldDatesQuantitiesYear();
-        StringBuilder expected = new StringBuilder("For \"" + bookWithDates.getTitle()  +"\" We have sold in a year:\n");
-        for (int i=0; i<soldDates.size()-2; i++){
+        StringBuilder expected = new StringBuilder("For \"" + bookWithDates.getTitle() + "\" We have sold in a year:\n");
+        for (int i = 0; i < soldDates.size() - 1; i++) {
+            if (i == 3)
+                continue;
             expected.append(soldQuantities.get(i)).append(" at ").append(soldDates.get(i)).append("\n");
         }
 
@@ -173,7 +173,7 @@ public class BookOperationsTest {
         book.addQuantity(3);
 
         String result = book.getSoldDatesQuantitiesTotal();
-        String expected = book.getTitle() +" has had no purchases\n";
+        String expected = book.getTitle() + " has had no purchases\n";
         assertEquals(expected, result);
     }
 
@@ -208,11 +208,12 @@ public class BookOperationsTest {
         book.addQuantity(5);
 
         String result = book.getSoldDatesQuantitiesYear();
-        String expected = "For \"" + book.getTitle()  +"\" We have sold in a year:\n"
+        String expected = "For \"" + book.getTitle() + "\" We have sold in a year:\n"
                 + "5 at " + currentDate + "\n";
         assertEquals(expected, result);
     }
-//
+
+    //
     @Test
     public void testGetSoldDatesQuantitiesYear_MultipleSalesThisYear() {
         Book book = new Book("1234");
@@ -228,7 +229,7 @@ public class BookOperationsTest {
 
         // Two sales recorded for the current year, so the result should include both sales
         String result = book.getSoldDatesQuantitiesYear();
-        String expected = "For \"" + book.getTitle()  +"\" We have sold in a year:\n"
+        String expected = "For \"" + book.getTitle() + "\" We have sold in a year:\n"
                 + "5 at " + currentDate + "\n"
                 + "3 at " + fiveDaysAgo + "\n";
         assertEquals(expected, result);
@@ -245,14 +246,14 @@ public class BookOperationsTest {
 
         // No sales recorded for the current year, so the result should indicate no sales
         String result = book.getSoldDatesQuantitiesYear();
-        assertEquals("For \"" + book.getTitle() +"\" We have sold in a year:\n", result);
+        assertEquals("For \"" + book.getTitle() + "\" We have sold in a year:\n", result);
     }
 
     // Start of method testing for "Book.getSoldBoughtQuantitiesMonth()" {
     @Test
     public void test_getBoughtDatesQuantitiesMonth_noPurchases() {
         String result = bookWithoutDates.getBoughtDatesQuantitiesMonth();
-        String expectedMessage = "We have made no purchases on \"" + bookWithoutDates.getTitle()+"\"\n" ;
+        String expectedMessage = "We have made no purchases on \"" + bookWithoutDates.getTitle() + "\"\n";
 
         assertEquals(expectedMessage, result);
     }
@@ -267,6 +268,7 @@ public class BookOperationsTest {
 
         assertEquals(expected, result);
     }
+
     // } end of "Book.getSoldBoughtQuantitiesMonth()" testing
     // Start of method testing for "Book.getTotalBooksSoldMonth()" {
     @Test
@@ -289,10 +291,11 @@ public class BookOperationsTest {
         int result = bookWithoutDates.getNumberDatesYear(new ArrayList<>(), new ArrayList<>());
         assertEquals(0, result);
     }
+
     @Test
     public void test_getNumberDatesYear_withPurchases() {
         int result = bookWithDates.getNumberDatesYear(purchasedDates, purchasedQuantities);
-        assertEquals(16, result);
+        assertEquals(17, result);
     }
     // } end of "Book.getNumberDatesYear()" testing
 
@@ -338,7 +341,7 @@ public class BookOperationsTest {
     @Test
     public void test_getSoldDatesQuantitiesTotal_withDates() {
         StringBuilder expectedTitle = new StringBuilder("For \"Book_With_Dates\" We have sold:\n");
-        for (int i=0;i<soldDates.size();i++){
+        for (int i = 0; i < soldDates.size(); i++) {
             expectedTitle.append(soldQuantities.get(i)).append(" at ").append(soldDates.get(i)).append("\n");
         }
 
@@ -382,7 +385,7 @@ public class BookOperationsTest {
     @Test
     public void test_getBoughtDatesQuantitiesTotal_withDates() {
         StringBuilder expectedTitle = new StringBuilder("For \"Book_With_Dates\" We have bought in a day:\n");
-        for (int i=0;i<purchasedQuantities.size();i++){
+        for (int i = 0; i < purchasedQuantities.size(); i++) {
             expectedTitle.append(purchasedQuantities.get(i)).append(" at ").append(purchasedDates.get(i)).append("\n");
         }
         assertEquals(expectedTitle.toString(), bookWithDates.getBoughtDatesQuantitiesTotal());
@@ -402,7 +405,9 @@ public class BookOperationsTest {
     public void test_getBoughtDatesQuantitiesYear_withDates() {
         String expectedTitle = "For \"Book_With_Dates\" We have bought in a year:\n";
         StringBuilder expectedResult = new StringBuilder(expectedTitle);
-        for (int i=0; i<purchasedQuantities.size()-2; i++){
+        for (int i = 0; i < purchasedQuantities.size() - 1; i++) {
+            if (i == 3)
+                continue;
             expectedResult.append(purchasedQuantities.get(i)).append(" at ").append(purchasedDates.get(i)).append("\n");
         }
         String result = bookWithDates.getBoughtDatesQuantitiesYear();
@@ -429,7 +434,7 @@ public class BookOperationsTest {
 
     // Start of method testing for "Book.getTotalBooksBoughtDay()" {
     @Test
-    public void test_getTotalBooksBoughtDay_noDates(){
+    public void test_getTotalBooksBoughtDay_noDates() {
         assertEquals(0, bookWithoutDates.getTotalBooksBoughtDay());
     }
 

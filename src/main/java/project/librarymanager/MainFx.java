@@ -31,6 +31,7 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 	String  FILE_PATH = "Books.txt";
 
 	//shared
+	static BillNumber billNumber = new BillNumber();
 	String usernamePage;
 	TextField username = new TextField();
 	Text textUsername = new Text("Username");
@@ -87,7 +88,7 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 	Button bttBackManager = new Button("Back");
 	TextField category = new TextField();
 	Text textCategory = new Text("Category");
-	ArrayList<String> categ = BillNumber.getCategories(FILE_PATH);
+	ArrayList<String> categ = billNumber.getCategories(FILE_PATH);
 	TextField totalNumberBillsLibrarian = new TextField();
 	Text textTotalNumberBillsLibrarian = new Text("Total Number of Bills");
 	TextField booksSold = new TextField();
@@ -105,7 +106,7 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 
 	public static void main(String[] args) throws IOException  {
 		
-		BillNumber.setInitialStock("Books.txt");
+		billNumber.setInitialStock("Books.txt");
 		Manager.InstantiateLibrarians();
 		Administrator.InstantiateManagers();
 		Administrator.InstantiateAdmins();
@@ -166,7 +167,7 @@ public BorderPane mainPage() {
 	public BorderPane librarianMainPage() {
 		
 	   
-		comboBoxLibrarian = new ComboBox(FXCollections.observableArrayList(BillNumber.getISBNName(FILE_PATH)));
+		comboBoxLibrarian = new ComboBox(FXCollections.observableArrayList(billNumber.getISBNName(FILE_PATH)));
 		
 		Text textHeaderLibrarian = new Text("Welcome "+usernamePage);
 		StackPane stackHeader = new StackPane();
@@ -351,7 +352,7 @@ public BorderPane mainPage() {
     	
     	 BorderPane border = new BorderPane();
      	 
-         ArrayList<Book> stockBooks = BillNumber.getStockBooks(FILE_PATH);
+         ArrayList<Book> stockBooks = billNumber.getStockBooks(FILE_PATH);
         for (Book stockBook : stockBooks) {
             if (stockBook.getQuantitiesPurchased() > 0) {
                 titlesBought.add(stockBook.getTitle());
@@ -361,7 +362,7 @@ public BorderPane mainPage() {
         
     	 
     	 PieChart pieChart = new PieChart();
-         BillNumber.removeDuplicatesSoldTitles(titlesBought,quantitiesBought);
+         billNumber.removeDuplicatesSoldTitles(titlesBought,quantitiesBought);
          
      	for (int i=0;i<titlesBought.size();i++) {
      		Data test = new Data(titlesBought.get(i), quantitiesBought.get(i));
@@ -376,10 +377,10 @@ public BorderPane mainPage() {
  		border.setTop(stack);
  		
  	
- 		Text text1 = new Text(BillNumber.getBooksBoughtDay(FILE_PATH));
- 		Text text2 = new Text(BillNumber.getBooksBoughtMonth(FILE_PATH));
- 		Text text3 = new Text(BillNumber.getBooksBoughtYear(FILE_PATH));
- 		Text text4 = new Text(BillNumber.getBooksBoughtTotal(FILE_PATH));
+ 		Text text1 = new Text(billNumber.getBooksBoughtDay(FILE_PATH));
+ 		Text text2 = new Text(billNumber.getBooksBoughtMonth(FILE_PATH));
+ 		Text text3 = new Text(billNumber.getBooksBoughtYear(FILE_PATH));
+ 		Text text4 = new Text(billNumber.getBooksBoughtTotal(FILE_PATH));
  		
  		GridPane grid = new GridPane();
  		grid.add(text1, 0, 0);
@@ -411,14 +412,14 @@ public BorderPane mainPage() {
         BorderPane border = new BorderPane();
                
         PieChart pieChart = new PieChart();
-        ArrayList<Book> stockBooks = BillNumber.getStockBooks(FILE_PATH);
+        ArrayList<Book> stockBooks = billNumber.getStockBooks(FILE_PATH);
         for (Book stockBook : stockBooks) {
             if (stockBook.getPurchasedAmount() > 0) {
                 titlesSold.add(stockBook.getTitle());
                 quantitiesSold.add(stockBook.getPurchasedAmount());
             }
         }
-        BillNumber.removeDuplicatesSoldTitles(titlesSold,quantitiesSold);
+        billNumber.removeDuplicatesSoldTitles(titlesSold,quantitiesSold);
         
     	for (int i=0;i<titlesSold.size();i++) {
     		Data test = new Data(titlesSold.get(i), quantitiesSold.get(i));
@@ -432,10 +433,10 @@ public BorderPane mainPage() {
 		stack.setPadding(new Insets(20));
 		border.setTop(stack);
 		
-		Text text1 = new Text(BillNumber.getBooksSoldDay(FILE_PATH));
-		Text text2 = new Text(BillNumber.getBooksSoldMonth(FILE_PATH));
-		Text text3 = new Text(BillNumber.getBooksSoldYear(FILE_PATH));
-		Text text4 = new Text( BillNumber.getBooksSoldTotal(FILE_PATH));
+		Text text1 = new Text(billNumber.getBooksSoldDay(FILE_PATH));
+		Text text2 = new Text(billNumber.getBooksSoldMonth(FILE_PATH));
+		Text text3 = new Text(billNumber.getBooksSoldYear(FILE_PATH));
+		Text text4 = new Text(billNumber.getBooksSoldTotal(FILE_PATH));
 		
 		GridPane grid = new GridPane();
 		
@@ -642,7 +643,7 @@ public BorderPane mainPage() {
     	table.getColumns().add(column7);
     	table.getColumns().add(column8);
     	
-    	table.setItems(FXCollections.observableArrayList(BillNumber.getStockBooks(FILE_PATH)));
+    	table.setItems(FXCollections.observableArrayList(billNumber.getStockBooks(FILE_PATH)));
     	
     	border.setCenter(table);
     	    	   	
@@ -705,7 +706,7 @@ public BorderPane mainPage() {
     public BorderPane chooseNewCategoryAddStock() {
     	
     	ChoiceBox menuNewCategory = new ChoiceBox(FXCollections.observableArrayList(Manager.getAllCategories()));
-    	ArrayList<Book> stockbooks = BillNumber.getStockBooks(FILE_PATH);
+    	ArrayList<Book> stockbooks = billNumber.getStockBooks(FILE_PATH);
     
     	BorderPane border = new BorderPane();
     	
@@ -755,7 +756,7 @@ public BorderPane mainPage() {
      				textAddCategoryWarning.setText("Failed, Invalid Category");
      				return;
      			}
-     			if (BillNumber.partOfCateogriesChecker(categ,menuNewCategory.getSelectionModel().getSelectedItem().toString())) {
+     			if (billNumber.partOfCateogriesChecker(categ,menuNewCategory.getSelectionModel().getSelectedItem().toString())) {
      				textAddCategoryWarning.setText("Failed, Not New");
      				return;
      			}
@@ -802,7 +803,7 @@ public BorderPane mainPage() {
 		border.setBottom(stackBackButton);
 		
 		
-		categ = BillNumber.removeDuplicates(categ);
+		categ = billNumber.removeDuplicates(categ);
 		
         
         GridPane grid = new GridPane();
@@ -877,7 +878,7 @@ public BorderPane mainPage() {
 		border.setTop(stack);
 		
 		
-		ArrayList<Book> books = BillNumber.getBookFromCategory(FILE_PATH, category);
+		ArrayList<Book> books = billNumber.getBookFromCategory(FILE_PATH, category);
 		GridPane grid = new GridPane();
      	grid.setHgap(5);
      	grid.setVgap(5);
@@ -997,7 +998,7 @@ public BorderPane mainPage() {
     				return;
     			}
     			
-    		    ArrayList<Book> stockbooks = BillNumber.getStockBooks(FILE_PATH);
+    		    ArrayList<Book> stockbooks = billNumber.getStockBooks(FILE_PATH);
     		    
     		    for (int i=0;i<stockbooks.size();i++) {
     		    	if (stockbooks.get(i).getISBN().equals(book.getISBN())) {
@@ -1009,7 +1010,7 @@ public BorderPane mainPage() {
     		    }
     		    
     		    try {
-					BillNumber.updateBooks(FILE_PATH, stockbooks);
+					billNumber.updateBooks(FILE_PATH, stockbooks);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -1121,7 +1122,7 @@ public BorderPane mainPage() {
     				return;
     			}
     			
-    			if (BillNumber.isPartOfBooks(FILE_PATH, bookISBN.getCharacters().toString())){
+    			if (billNumber.isPartOfBooks(FILE_PATH, bookISBN.getCharacters().toString())){
     				addedOrNotStockCategory.setText("Failed, Already In Stock");
     				return;
     				
@@ -1140,10 +1141,10 @@ public BorderPane mainPage() {
     		    date = new Date();
     		    book.addPurchasedDate(date);
             	
-    		    ArrayList<Book> stockbooks = BillNumber.getStockBooks(FILE_PATH);
+    		    ArrayList<Book> stockbooks = billNumber.getStockBooks(FILE_PATH);
     		    stockbooks.add(book);
     		    try {
-					BillNumber.updateBooks(FILE_PATH, stockbooks);
+					billNumber.updateBooks(FILE_PATH, stockbooks);
 				} catch (IOException e) {
 					System.err.println("An error occurred while updating books: " + e.getMessage());
 				}
@@ -2099,12 +2100,12 @@ public BorderPane mainPage() {
 		totalBooksYearly.setEditable(false);
 		totalIncomeYearly.setEditable(false);
 		
-		totalBooksDay.setText( Integer.toString( BillNumber.getIntBooksSoldDay(FILE_PATH) ) );
-		totalIncomeDay.setText( Double.toString( BillNumber.getIncomeDay(FILE_PATH)) );
-		totalBooksMonth.setText( Integer.toString( BillNumber.getIntBooksSoldMonth(FILE_PATH) )  );
-	    totalIncomeMonth.setText( Double.toString( BillNumber.getIncomeMonth(FILE_PATH))  );
-	    totalBooksYearly.setText( Integer.toString( BillNumber.getIntBooksSoldYear(FILE_PATH) ));
-	    totalIncomeYearly.setText( Double.toString( BillNumber.getIncomeYear(FILE_PATH) ));
+		totalBooksDay.setText( Integer.toString( billNumber.getIntBooksSoldDay(FILE_PATH) ) );
+		totalIncomeDay.setText( Double.toString( billNumber.getIncomeDay(FILE_PATH)) );
+		totalBooksMonth.setText( Integer.toString( billNumber.getIntBooksSoldMonth(FILE_PATH) )  );
+	    totalIncomeMonth.setText( Double.toString( billNumber.getIncomeMonth(FILE_PATH))  );
+	    totalBooksYearly.setText( Integer.toString( billNumber.getIntBooksSoldYear(FILE_PATH) ));
+	    totalIncomeYearly.setText( Double.toString( billNumber.getIncomeYear(FILE_PATH) ));
  		
  		StackPane stackBackButton = new StackPane();
 		stackBackButton.getChildren().add(bttBackManager);
@@ -2188,15 +2189,15 @@ public BorderPane mainPage() {
 		
 		
 		
-		totalBooksDay.setText( Integer.toString( BillNumber.getTotalBoughtBooksDay(FILE_PATH) ) );
-		totalIncomeDay.setText( Double.toString( BillNumber.getCostDay(FILE_PATH)) );
+		totalBooksDay.setText( Integer.toString( billNumber.getTotalBoughtBooksDay(FILE_PATH) ) );
+		totalIncomeDay.setText( Double.toString( billNumber.getCostDay(FILE_PATH)) );
 		
-		totalBooksMonth.setText( Integer.toString( BillNumber.getTotalBoughtBooksMonth(FILE_PATH) )  );
-	    totalIncomeMonth.setText( Double.toString( BillNumber.getCostMonth(FILE_PATH))  );
+		totalBooksMonth.setText( Integer.toString( billNumber.getTotalBoughtBooksMonth(FILE_PATH) )  );
+	    totalIncomeMonth.setText( Double.toString( billNumber.getCostMonth(FILE_PATH))  );
 	    salaryMonth.setText( Double.toString(Administrator.getSalaries()) );
 	    
-	    totalBooksYearly.setText( Integer.toString( BillNumber.getTotalBoughtBooksYear(FILE_PATH) ));
-	    totalIncomeYearly.setText( Double.toString( BillNumber.getCostYear(FILE_PATH) ));
+	    totalBooksYearly.setText( Integer.toString( billNumber.getTotalBoughtBooksYear(FILE_PATH) ));
+	    totalIncomeYearly.setText( Double.toString( billNumber.getCostYear(FILE_PATH) ));
 	    salaryYear.setText( Double.toString(Administrator.getSalaries()*12) );
  		
  		StackPane stackBackButton = new StackPane();
@@ -2218,14 +2219,14 @@ public BorderPane mainPage() {
         BorderPane border = new BorderPane();
         
         PieChart pieChart = new PieChart();
-        ArrayList<Book> stockBooks = BillNumber.getStockBooks(FILE_PATH);
+        ArrayList<Book> stockBooks = billNumber.getStockBooks(FILE_PATH);
         for (Book stockBook : stockBooks) {
             if (stockBook.getPurchasedAmount() > 0) {
                 titlesSold.add(stockBook.getTitle());
                 quantitiesSold.add(stockBook.getPurchasedAmount());
             }
         }
-        BillNumber.removeDuplicatesSoldTitles(titlesSold,quantitiesSold);
+		billNumber.removeDuplicatesSoldTitles(titlesSold,quantitiesSold);
         
     	for (int i=0;i<titlesSold.size();i++) {
     		Data test = new Data(titlesSold.get(i), quantitiesSold.get(i));
@@ -2239,10 +2240,10 @@ public BorderPane mainPage() {
  		stack.setPadding(new Insets(20));
  		border.setTop(stack);
  		
- 		Text text1 = new Text(BillNumber.getBooksSoldDay(FILE_PATH));
- 		Text text2 = new Text(BillNumber.getBooksSoldMonth(FILE_PATH));
- 		Text text3 = new Text(BillNumber.getBooksSoldYear(FILE_PATH));
- 		Text text4 = new Text( BillNumber.getBooksSoldTotal(FILE_PATH));
+ 		Text text1 = new Text(billNumber.getBooksSoldDay(FILE_PATH));
+ 		Text text2 = new Text(billNumber.getBooksSoldMonth(FILE_PATH));
+ 		Text text3 = new Text(billNumber.getBooksSoldYear(FILE_PATH));
+ 		Text text4 = new Text( billNumber.getBooksSoldTotal(FILE_PATH));
  		
  		GridPane grid = new GridPane();
  		grid.add(text1, 0, 0);
@@ -2273,7 +2274,7 @@ public BorderPane mainPage() {
     	
         BorderPane border = new BorderPane();
         
-        ArrayList<Book> stockBooks = BillNumber.getStockBooks(FILE_PATH);
+        ArrayList<Book> stockBooks = billNumber.getStockBooks(FILE_PATH);
         for (Book stockBook : stockBooks) {
             if (stockBook.getQuantitiesPurchased() > 0) {
                 titlesBought.add(stockBook.getTitle());
@@ -2283,7 +2284,7 @@ public BorderPane mainPage() {
        
    	 
    	    PieChart pieChart = new PieChart();
-        BillNumber.removeDuplicatesSoldTitles(titlesBought,quantitiesBought);
+		billNumber.removeDuplicatesSoldTitles(titlesBought,quantitiesBought);
         
     	for (int i=0;i<titlesBought.size();i++) {
     		Data test = new Data(titlesBought.get(i), quantitiesBought.get(i));
@@ -2297,10 +2298,10 @@ public BorderPane mainPage() {
  		stack.setPadding(new Insets(20));
  		border.setTop(stack);
  		
- 		Text text1 = new Text(BillNumber.getBooksBoughtDay(FILE_PATH));
- 		Text text2 = new Text(BillNumber.getBooksBoughtMonth(FILE_PATH));
- 		Text text3 = new Text(BillNumber.getBooksBoughtYear(FILE_PATH));
- 		Text text4 = new Text(BillNumber.getBooksBoughtTotal(FILE_PATH));
+ 		Text text1 = new Text(billNumber.getBooksBoughtDay(FILE_PATH));
+ 		Text text2 = new Text(billNumber.getBooksBoughtMonth(FILE_PATH));
+ 		Text text3 = new Text(billNumber.getBooksBoughtYear(FILE_PATH));
+ 		Text text4 = new Text(billNumber.getBooksBoughtTotal(FILE_PATH));
  		
  		GridPane grid = new GridPane();
  		grid.add(text1, 0, 0);
@@ -2417,7 +2418,7 @@ public BorderPane mainPage() {
 			String Title = comboBoxLibrarian.getValue().toString().substring(16);
 			date = new Date();
 			
-			ArrayList<Book> stockbooks = BillNumber.getStockBooks(FILE_PATH);
+			ArrayList<Book> stockbooks = billNumber.getStockBooks(FILE_PATH);
 			for (int i=0;i<stockbooks.size();i++) {
 				if (stockbooks.get(i).getISBN().equals(isbn)) {
 					
@@ -2425,7 +2426,7 @@ public BorderPane mainPage() {
 				}
 			}
 			try {
-				BillNumber.updateBooks(FILE_PATH, stockbooks);
+				billNumber.updateBooks(FILE_PATH, stockbooks);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
