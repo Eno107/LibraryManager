@@ -36,7 +36,7 @@ public class Book implements Serializable{
 		purchasedAmount = new ArrayList<>();
 	}
 	
-	Book(String ISBN){
+	public Book(String ISBN){
 		quantitiesPurchased = new ArrayList<>();
 		dates = new ArrayList<>();
 		purchasedDates = new ArrayList<>();
@@ -99,6 +99,8 @@ public class Book implements Serializable{
 	public void addPurchasedDate(Date date) {
 		this.purchasedDates.add(date);
 	}
+	public ArrayList<Date> getDates() {return this.dates; }
+	public ArrayList<Integer> getQuantity() {return this.purchasedAmount;}
 	
 	public void addQuantity(int quan) {
 		this.purchasedAmount.add( quan );

@@ -10,7 +10,7 @@ import java.util.Map;
 public class Librarian extends BillNumber {
 	
 	private int numberOfBills=0;
-	private static final BillNumber billNumber = new BillNumber();
+	public static BillNumber billNumber = new BillNumber();
 	private int booksSold=0;
 	private double moneyMade=0;
 	final ArrayList<Date> datesSold;
@@ -34,7 +34,7 @@ public class Librarian extends BillNumber {
 		moneyMadeDates = new ArrayList<>();
 	}
 	
-	Librarian(String username,String password){
+	public Librarian(String username, String password){
 		this.username = username;
 		this.password = password;
 		datesSold = new ArrayList<>();

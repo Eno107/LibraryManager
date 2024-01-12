@@ -5,7 +5,7 @@ public class Manager extends Librarian {
 	
 	private static ArrayList<Librarian> librarians = new ArrayList<>();
 
-    private static final BillNumber billNumber = new BillNumber();
+    public static BillNumber billNumber = new BillNumber();
 
 	Manager(String username, String password) {
 		super(username, password);

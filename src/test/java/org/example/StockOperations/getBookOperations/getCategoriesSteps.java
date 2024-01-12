@@ -1,16 +1,11 @@
-package org.example;
+package org.example.StockOperations.getBookOperations;
 
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.After;
+import org.example.SharedSteps;
 import project.librarymanager.BillNumber;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
-import java.io.File;
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

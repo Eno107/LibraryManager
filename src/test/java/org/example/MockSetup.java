@@ -1,9 +1,12 @@
 package org.example;
 
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 import project.librarymanager.BillNumber;
 import project.librarymanager.Book;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,10 +15,15 @@ import static org.mockito.Mockito.*;
 
 public class MockSetup {
 
-    static Date today = new Date();
-    static ArrayList<Book> booksWithDates = new ArrayList<>();
+    public static Date today = new Date();
+    public static ArrayList<Book> booksWithDates = new ArrayList<>();
+    public static ArrayList<Book> booksWithoutDates = new ArrayList<>();
 
-    private static ArrayList<Book> getBooksWithDates(){
+    public static ArrayList<Book> getBooksWithDates(){
+
+        if (!booksWithDates.isEmpty()){
+            return booksWithDates;
+        }
 
         Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",6);
         book.addDate(today);
@@ -81,7 +89,9 @@ public class MockSetup {
 
     public static ArrayList<Book> getBooksWithoutDates(){
 
-        ArrayList<Book> booksWithoutDates = new ArrayList<>();
+        if (!booksWithoutDates.isEmpty()){
+            return booksWithoutDates;
+        }
 
         Book book = new Book("0096184570112","In Search of Lost Time","Modernist","Ingram Content Group, Inc",65.00,73.96,"Marcel Proust",4);
         booksWithoutDates.add(book);
@@ -92,9 +102,14 @@ public class MockSetup {
         return booksWithoutDates;
     }
 
-    public static BillNumber createMockBillNumberWithDates() {
+    public static BillNumber createMockBillNumberWithDates() throws IOException {
         BillNumber mockBillNumber = Mockito.mock(BillNumber.class, CALLS_REAL_METHODS);
+
         when(mockBillNumber.getStockBooks(Mockito.anyString())).thenReturn(getBooksWithDates());
+        Mockito.doNothing().when(mockBillNumber).updateBooks(Mockito.anyString(), Mockito.any());
+
+        Mockito.doNothing().when(mockBillNumber).updateBooks(Mockito.anyString(), Mockito.any());
+
         return mockBillNumber;
     }
 
