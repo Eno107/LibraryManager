@@ -17,6 +17,10 @@ public class Manager extends Librarian {
 	}
 	
      public static void InstantiateLibrarians() {
+
+        if (!Manager.getLibrarians().isEmpty()){
+            return;
+        }
 		
 		Librarian lib = new Librarian("Alfie123","SSU6aldo","Alfie",500,"(912) 921-2728","aflie@librarian.com") ;
 		librarians.add(lib);

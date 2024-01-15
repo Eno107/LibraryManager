@@ -43,6 +43,10 @@ public class Administrator extends Manager {
 	
 	
     public static void InstantiateManagers() {
+
+		if (!Administrator.getManagers().isEmpty()){
+			return;
+		}
  		
 		Manager mag = new Manager("Calv1n","PQ532Abba","Calvin",900,"(912) 561-2628","calvl@manager.com") ;
 		managers.add(mag);
@@ -57,6 +61,10 @@ public class Administrator extends Manager {
     
     
     public static void InstantiateAdmins() {
+
+		if (!Administrator.getAdmins().isEmpty()){
+			return;
+		}
     	
     	Administrator admin = new Administrator("J0sh","&zsX6QVZ","Josh",1500,"(912) 561-2328","josh@administrator.com") ;
 		admins.add(admin);

@@ -31,7 +31,7 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 	String  FILE_PATH = "Books.txt";
 
 	//shared
-	static BillNumber billNumber = new BillNumber();
+	public static BillNumber billNumber = new BillNumber();
 	String usernamePage;
 	TextField username = new TextField();
 	Text textUsername = new Text("Username");
@@ -104,16 +104,9 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 	Button bttManageLibrarians = new Button("Manage Librarians");
 
 
-	public static void main(String[] args) throws IOException  {
-		
-		billNumber.setInitialStock("Books.txt");
-		Manager.InstantiateLibrarians();
-		Administrator.InstantiateManagers();
-		Administrator.InstantiateAdmins();
-		
-		
-		Application.launch(args);
 
+	public static void main(String[] args) throws IOException  {
+		Application.launch(args);
 	}
 
 
@@ -121,18 +114,25 @@ public class MainFx extends Application implements EventHandler<ActionEvent> {
 	public void start(Stage primaryStage) throws Exception {
 
         primaryStage.setTitle("Library System");
-        
-		
+
 		Scene scene = new Scene(mainPage());
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
 		
-		
 	}
 	
-public BorderPane mainPage() {
-		
+public BorderPane mainPage() throws  IOException {
+
+	billNumber.setInitialStock("Books.txt");
+	Manager.InstantiateLibrarians();
+	Administrator.InstantiateManagers();
+	Administrator.InstantiateAdmins();
+
+	username.setId("mainPageUsername");
+	password.setId("password");
+	bttSubmit.setId("submit");
+
 	BorderPane border = new BorderPane();
 	border.setMinSize(500,300);
 	
@@ -144,6 +144,7 @@ public BorderPane mainPage() {
 	border.setTop(stackText);
 	
 	mainLoginWarning.setEditable(false);
+	mainLoginWarning.setId("mainLoginWarning");
 	GridPane grid = new GridPane();
 	grid.setAlignment(Pos.CENTER);
 	grid.setHgap(5);
@@ -168,8 +169,10 @@ public BorderPane mainPage() {
 		
 	   
 		comboBoxLibrarian = new ComboBox(FXCollections.observableArrayList(billNumber.getISBNName(FILE_PATH)));
+		comboBoxLibrarian.setId("comboBoxLibrarian");
 		
 		Text textHeaderLibrarian = new Text("Welcome "+usernamePage);
+		textHeaderLibrarian.setId("testHeaderLibrarian");
 		StackPane stackHeader = new StackPane();
 		textHeaderLibrarian.setFont(new Font(30));
 		stackHeader.getChildren().add(textHeaderLibrarian);
@@ -186,24 +189,32 @@ public BorderPane mainPage() {
 	    gridLibrarianMain.add(textSystem, 0, 5);
 	    gridLibrarianMain.add(warningsLibrarian, 1, 5);
 	    warningsLibrarian.setEditable(false);
+		warningsLibrarian.setId("warningsLibrarian");
 	    borderLibrarianMain.setCenter(gridLibrarianMain);
-	    
+	    quantity.setId("quantity");
+
 	    HBox hbox = new HBox();
 	    hbox.setAlignment(Pos.CENTER);
 	    hbox.getChildren().addAll(bttBack,bttAdd,bttBill);
 	    hbox.setPadding(new Insets(40));
 	    hbox.setSpacing(30);
 	    borderLibrarianMain.setBottom(hbox);
+		bttAdd.setId("addBooks");
 	    
 	    
 	    bttAdd.setOnAction(this);
 	    bttBill.setOnAction(this);
+		bttBill.setId("bttBill");
         bttBack.setOnAction(event -> {
             if(event.getSource()==bttBack) {
             	quantity.clear();
             	warningsLibrarian.clear();
-            	bttBack.getScene().setRoot(mainPage());
-            }
+				try {
+					bttBack.getScene().setRoot(mainPage());
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
             	
         });
 	    
@@ -215,8 +226,10 @@ public BorderPane mainPage() {
     
     public BorderPane mangaerMainPage() {
     	
-    	BorderPane borderManagerMain = new BorderPane();	
+    	BorderPane borderManagerMain = new BorderPane();
+		borderManagerMain.setId("borderManagerPane");
     	Text textHeaderManager = new Text("Welcome "+usernamePage);
+		textHeaderManager.setId("textHeaderManager");
 		StackPane stackHeader = new StackPane();
 		textHeaderManager.setFont(new Font(30));
 		stackHeader.getChildren().add(textHeaderManager);
@@ -236,10 +249,14 @@ public BorderPane mainPage() {
 	    grid.add(bttbookStatistics, 3, 0);
 	    grid.setPadding(new Insets(30));
 	    borderManagerMain.setCenter(grid);
-	    
+
+		bttSupply.setId("supply");
+		bttCheckLibrarians.setId("checkLibrarians");
+
 	    //--------------------
 	    StackPane pane = new StackPane();
 	    TableView table = new TableView();
+		table.setId("managerTable");
     	TableColumn<Book,String> column1 = new TableColumn<>("ISBN");
     	TableColumn<Book,String> column2 = new TableColumn<>("Title");
     	TableColumn<Book,String> column3 = new TableColumn<>("Category");
@@ -289,8 +306,12 @@ public BorderPane mainPage() {
 	    });
 	    bttBack.setOnAction(event -> {
             if(event.getSource()==bttBack) {
-               bttBack.getScene().setRoot(mainPage());	
-            }
+				try {
+					bttBack.getScene().setRoot(mainPage());
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
 	    });
     	
 	    bttbookStatistics.setOnAction(event ->{
@@ -490,6 +511,7 @@ public BorderPane mainPage() {
 		ArrayList<Librarian> librarians = Manager.getLibrarians();
 		
 		GridPane grid = new GridPane();
+		grid.setId("librariansAllGrid");
 		grid.setHgap(5);
      	grid.setVgap(5);
      	grid.setAlignment(Pos.CENTER);
@@ -687,6 +709,9 @@ public BorderPane mainPage() {
 		supplyPageGrid.add(bttAddStock, 0, 0);
 		supplyPageGrid.add(bttNewCategory, 1, 0);
 		supplyPageGrid.add(bttBack, 2, 0);
+
+		bttNewCategory.setId("bttNewCategory");
+		bttAddStock.setId("bttAddStock");
 		
 		bttAddStock.setOnAction(this);
 		bttNewCategory.setOnAction(this);
@@ -707,6 +732,7 @@ public BorderPane mainPage() {
     	
     	ChoiceBox menuNewCategory = new ChoiceBox(FXCollections.observableArrayList(Manager.getAllCategories()));
     	ArrayList<Book> stockbooks = billNumber.getStockBooks(FILE_PATH);
+		menuNewCategory.setId("categoryChoiceBox");
     
     	BorderPane border = new BorderPane();
     	
@@ -718,9 +744,11 @@ public BorderPane mainPage() {
 		border.setTop(stack);
 		
 		TextField textAddCategoryWarning = new TextField();
+		textAddCategoryWarning.setId("addCategoryWarning");
 		textAddCategoryWarning.setEditable(false);
 		
 		Button bttAddCategory = new Button("Add");
+		bttAddCategory.setId("bttAddCategory");
 		bttBack = new Button("Back");
 		
 		GridPane grid = new GridPane();
@@ -734,7 +762,8 @@ public BorderPane mainPage() {
      	grid.add(textAddCategoryWarning, 1, 4);
      	grid.add(bttAddCategory, 2, 5);
      	border.setCenter(grid);
-     	
+
+
      	bttBack.setOnAction(event -> {
             if(event.getSource()==bttBack) {
             	bttBack.getScene().setRoot( ManagerSupplyCickPage()  );	
@@ -807,6 +836,7 @@ public BorderPane mainPage() {
 		
         
         GridPane grid = new GridPane();
+		grid.setId("categoryGrid");
      	grid.setHgap(5);
      	grid.setVgap(5);
      	int j=0;
@@ -820,7 +850,9 @@ public BorderPane mainPage() {
     			
     		
     		Button button = createButton(categ.get(i));
-    		
+			if (i==categ.size()-1)
+				button.setId("bttAddBookToCategory");
+
 			grid.add(button,k++,j);
 			
     	}
@@ -882,6 +914,7 @@ public BorderPane mainPage() {
 		GridPane grid = new GridPane();
      	grid.setHgap(5);
      	grid.setVgap(5);
+		 grid.setId("categoryStockBooksGrid");
      	int j=0;
      	int k=-1;
 		
@@ -892,19 +925,23 @@ public BorderPane mainPage() {
         			j++;
         		}
         		Button button = createButton2(books.get(i));
+				if (i==books.size()-1)
+					button.setId("bttStockBook");
         		
     			grid.add(button,++k,j);
     			
         	}
      	}
-		
-		grid.add(bttNewBook, ++k, j);
+
+		Button bttAddNewBook = new Button("New Book");
+		grid.add(bttAddNewBook, ++k, j);
+		bttAddNewBook.setId("bttAddNewBook");
         grid.setAlignment(Pos.CENTER);
     	border.setCenter(grid);
-    	
-    	bttNewBook.setOnAction(event -> {
+
+		bttAddNewBook.setOnAction(event -> {
 			
-            if(event.getSource()==bttNewBook) {
+            if(event.getSource()==bttAddNewBook) {
             	bookISBN.clear();
      		    title.clear();
      		    supplier.clear();
@@ -912,9 +949,9 @@ public BorderPane mainPage() {
      		    sellingPrice.clear();
      		    author.clear();
      		    quantity.clear();
-            	
-            	
-            	bttNewBook.getScene().setRoot( stockCategoryNewBookPage(category) );
+
+
+				bttAddNewBook.getScene().setRoot( stockCategoryNewBookPage(category) );
             }
    
             
@@ -968,7 +1005,9 @@ public BorderPane mainPage() {
 		stack.getChildren().add(text);
 		stack.setPadding(new Insets(20));
 		border.setTop(stack);
-		
+
+		TextField quantityStockBook = new TextField();
+		TextField stockBookAddedOrNot =  new TextField();
 		
 		
 		GridPane grid = new GridPane();
@@ -976,25 +1015,27 @@ public BorderPane mainPage() {
      	grid.setVgap(5);
      	grid.setAlignment(Pos.CENTER);
      	grid.add(textQuantity, 0, 0);
-     	grid.add(quantity, 1, 0);
+     	grid.add(quantityStockBook, 1, 0);
      	grid.add(bttAddBookToStock,2, 4);
-     	grid.add(addedOrNot, 1, 3);
+     	grid.add(stockBookAddedOrNot, 1, 3);
      	grid.add(textSystem, 0, 3);
     	border.setCenter(grid);
-    	
-		
-    	addedOrNot.setEditable(false);
+    	quantityStockBook.setId("bttQuantityStock");
+		stockBookAddedOrNot.setId("bttStockBookAdded");
+		bttAddBookToStock.setId("bttAddBookToStock");
+
+		stockBookAddedOrNot.setEditable(false);
 		bttAddBookToStock.setOnAction(event -> {
 			
             if(event.getSource()==bttAddBookToStock) {
             	
-            	if(!quantity.getCharacters().toString().matches("\\d+")){
-    				addedOrNot.setText("Failed, Invalid Quantity");
+            	if(!quantityStockBook.getCharacters().toString().matches("\\d+")){
+					stockBookAddedOrNot.setText("Failed, Invalid Quantity");
     				return;
     			}
     			
-    			if (quantity.getCharacters().toString().isEmpty()) {
-    				addedOrNot.setText("Failed, Empty Quantity");
+    			if (quantityStockBook.getCharacters().toString().isEmpty()) {
+					stockBookAddedOrNot.setText("Failed, Empty Quantity");
     				return;
     			}
     			
@@ -1003,9 +1044,9 @@ public BorderPane mainPage() {
     		    for (int i=0;i<stockbooks.size();i++) {
     		    	if (stockbooks.get(i).getISBN().equals(book.getISBN())) {
     		    		
-    		    		stockbooks.get(i).AddStock(Integer.parseInt(quantity.getCharacters().toString()));
+    		    		stockbooks.get(i).AddStock(Integer.parseInt(quantityStockBook.getCharacters().toString()));
     		    		stockbooks.get(i).addPurchasedDate(new Date());
-    		    		stockbooks.get(i).addQuantitiesPurchased(Integer.parseInt(quantity.getCharacters().toString()));
+    		    		stockbooks.get(i).addQuantitiesPurchased(Integer.parseInt(quantityStockBook.getCharacters().toString()));
     		    	}    		    	   
     		    }
     		    
@@ -1014,9 +1055,9 @@ public BorderPane mainPage() {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-    		    
-    		    quantity.clear();
-    		    addedOrNot.setText("Added");
+
+				quantityStockBook.clear();
+				stockBookAddedOrNot.setText("Added");
              }
             
  	    });
@@ -1041,6 +1082,7 @@ public BorderPane mainPage() {
 		border.setTop(stack);
 		
 		GridPane gridSupplier = new GridPane();
+		gridSupplier.setId("bookSupplier");
 		ToggleGroup Supplier = new ToggleGroup();
 		RadioButton r1 = new RadioButton("Ingram Content Group, Inc");
 	    RadioButton r2 = new RadioButton("Baker & Taylor");
@@ -1064,7 +1106,7 @@ public BorderPane mainPage() {
 	    gridSupplier.setVgap(5);
 	  
 	       
-	 
+
 		
 		GridPane grid = new GridPane();
 		grid.setHgap(5);
@@ -1072,23 +1114,30 @@ public BorderPane mainPage() {
      	grid.setAlignment(Pos.CENTER);
      	grid.add(textBookISBN, 0, 0);
      	grid.add(bookISBN, 1, 0);
+		 bookISBN.setId("bookISBN");
      	grid.add(textTitle,0, 1);
      	grid.add(title, 1, 1);
+		 title.setId("bookTitle");
      	grid.add(textSupplier, 0, 2);
      	grid.add(gridSupplier, 1, 2);
      	grid.add(textOriginalPrice, 0, 3);
      	grid.add(originalPrice, 1, 3);
+		 originalPrice.setId("bookOGPrice");
      	grid.add(textSellingPrice,0,4);
      	grid.add(sellingPrice, 1, 4);
+		 sellingPrice.setId("bookSellPrice");
      	grid.add(textAuthor, 0, 5);
      	grid.add(author, 1, 5);
+		 author.setId("bookAuthor");
      	grid.add(textQuantity, 0, 6);
      	grid.add(quantity, 1, 6);
+		 quantity.setId("bookQuantity");
      	grid.add(textSystem, 0, 9);
      	grid.add(addedOrNotStockCategory, 1, 9);
      	grid.add(stockCategoryAddBook, 2, 10);
      	grid.add(bttBack, 0, 10);
-     	
+     	stockCategoryAddBook.setId("bttAddBook");
+		addedOrNotStockCategory.setId("addBookWarning");
      	
      	addedOrNotStockCategory.setEditable(false);
      	bttBack.setOnAction(event -> {
@@ -1199,7 +1248,8 @@ public BorderPane mainPage() {
 	    grid.add(bttStats, 2, 0);
 	    grid.add(bttBack, 3, 0);
 	    border.setCenter(grid);
-	    
+	    bttManageLibrarians.setId("bttManageLibrarians");
+		bttManageManager.setId("bttManageManagers");
 	    
 	    bttManageLibrarians.setOnAction(event ->{
 	    	if (event.getSource() == bttManageLibrarians) {
@@ -1219,8 +1269,12 @@ public BorderPane mainPage() {
 	    	if (event.getSource() == bttBack) {
 	    		username.clear();
 	    		password.clear();
-	    		bttBack.getScene().setRoot(mainPage());
-	    	}
+				try {
+					bttBack.getScene().setRoot(mainPage());
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
 	    });
 		
     	
@@ -1249,9 +1303,11 @@ public BorderPane mainPage() {
 		border.setBottom(stackBackButton);
 		
 		Button bttAddNew = new Button("Add New");
+		bttAddNew.setId("bttAddNewLibrarian");
 		ArrayList<Librarian> librarians = Manager.getLibrarians();
 		
 		GridPane grid = new GridPane();
+		grid.setId("administratorLibrariansGrid");
 		grid.setHgap(5);
      	grid.setVgap(5);
      	grid.setAlignment(Pos.CENTER);
@@ -1334,19 +1390,33 @@ public BorderPane mainPage() {
 		
 		TextField name = new TextField();
 		Text textName = new Text("Name");
+		name.setId("librarianName");
+
 		TextField salary = new TextField();
 		Text textSalary = new Text("Salary");
+		salary.setId("librarianSalary");
+
 		TextField phone = new TextField();
 		Text textPhone = new Text("Phone");
+		phone.setId("librarianPhone");
+
 		TextField email = new TextField();
 		Text textEmail = new Text("Email");
+		email.setId("librarianEmail");
+
 		TextField username = new TextField();
 		Text textUsername = new Text("Username");
+		username.setId("librarianUsername");
+
 		TextField password = new TextField();
 		Text textPassword = new Text("Password");
+		password.setId("librarianPassword");
+
 		Button bttAdd = new Button("Submit");
+		bttAdd.setId("bttAddLibrarian");
 		Button bttBack = new Button("Back");
 		TextField libWarningNew = new TextField();
+		libWarningNew.setId("addLibWarning");
 		
 		GridPane grid = new GridPane();
 		grid.setHgap(5);
@@ -1644,11 +1714,13 @@ public BorderPane mainPage() {
 		border.setBottom(stackBackButton);
 		
 		Button bttAddNew = new Button("Add New");
+		bttAddNew.setId("bttAddNewManager");
 		ArrayList<Manager> managers = Administrator.getManagers();
 		
 		GridPane grid = new GridPane();
 		grid.setHgap(5);
      	grid.setVgap(5);
+		 grid.setId("administratorManagersGrid");
      	grid.setAlignment(Pos.CENTER);
      	int k=0;
      	int j=0;
@@ -1730,19 +1802,33 @@ public BorderPane mainPage() {
 		
 		TextField name = new TextField();
 		Text textName = new Text("Name");
+		name.setId("managerName");
+
 		TextField salary = new TextField();
 		Text textSalary = new Text("Salary");
+		salary.setId("managerSalary");
+
 		TextField phone = new TextField();
 		Text textPhone = new Text("Phone");
+		phone.setId("managerPhone");
+
 		TextField email = new TextField();
 		Text textEmail = new Text("Email");
+		email.setId("managerEmail");
+
 		TextField username = new TextField();
 		Text textUsername = new Text("Username");
+		username.setId("managerUsername");
+
 		TextField password = new TextField();
 		Text textPassword = new Text("Password");
+		password.setId("managerPassword");
+
 		Button bttAdd = new Button("Submit");
+		bttAdd.setId("bttAddManager");
 		Button bttBack = new Button("Back");
 		TextField magWarningNew = new TextField();
+		magWarningNew.setId("addMagWarning");
 		
 		GridPane grid = new GridPane();
 		grid.setHgap(5);
@@ -2384,7 +2470,11 @@ public BorderPane mainPage() {
 		if (e.getSource()==bttBack) {
 			username.clear();
 			password.clear();
-			bttBack.getScene().setRoot(mainPage());
+			try {
+				bttBack.getScene().setRoot(mainPage());
+			} catch (IOException ex) {
+				throw new RuntimeException(ex);
+			}
 			mainLoginWarning.clear();
 		}
 		if (e.getSource()==bttAdd) {

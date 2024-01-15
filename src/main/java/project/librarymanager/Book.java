@@ -75,6 +75,7 @@ public class Book implements Serializable{
 	public void setOriginalPrice(double originalPrice) {
 		this.originalPrice = originalPrice;
 	}
+	public String getAuthor() {return author;}
 	public void setAuthor(String author) {
 		this.author = author;
 	}
