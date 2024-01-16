@@ -1,6 +1,7 @@
 package testFx.Manager;
 
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
@@ -20,7 +21,8 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
 public class ManagerAddCategoryTest extends ApplicationTest {
 
     FxRobot robot = new FxRobot();
-    private void logToMag_Supply_Category(){
+
+    private void logToMag_Supply_Category() {
         robot.clickOn("#mainPageUsername").write("1");
         robot.clickOn("#password").write("2");
         robot.clickOn("#submit");
@@ -46,24 +48,20 @@ public class ManagerAddCategoryTest extends ApplicationTest {
     @Test
     public void test_manager_add_same_category() {
         logToMag_Supply_Category();
-        robot.clickOn("#categoryChoiceBox")
-                .type(KeyCode.UP)
-                .type(KeyCode.UP)
-                .type(KeyCode.UP)
-                .type(KeyCode.ENTER);
+        ChoiceBox menuNewCategory = lookup("#categoryChoiceBox").query();
+        robot.interact(() -> menuNewCategory.getSelectionModel().select("Epic"));
         robot.clickOn("#bttAddCategory");
-        assertEquals("Failed, Not New",((TextField) lookup("#addCategoryWarning").query()).getText());
+        assertEquals("Failed, Not New", ((TextField) lookup("#addCategoryWarning").query()).getText());
     }
 
 
     @Test
     public void test_manager_add_new_category() {
         logToMag_Supply_Category();
-        robot.clickOn("#categoryChoiceBox")
-                .type(KeyCode.DOWN)
-                .type(KeyCode.ENTER);
+        ChoiceBox menuNewCategory = lookup("#categoryChoiceBox").query();
+        robot.interact(() -> menuNewCategory.getSelectionModel().select("Autobiography and memoir"));
         robot.clickOn("#bttAddCategory");
-        assertEquals("Added!",((TextField) lookup("#addCategoryWarning").query()).getText());
+        assertEquals("Added!", ((TextField) lookup("#addCategoryWarning").query()).getText());
     }
 
 }

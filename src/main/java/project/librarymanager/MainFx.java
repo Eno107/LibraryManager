@@ -252,6 +252,7 @@ public BorderPane mainPage() throws  IOException {
 
 		bttSupply.setId("supply");
 		bttCheckLibrarians.setId("checkLibrarians");
+		bttCheckStock.setId("bttCheckStock");
 
 	    //--------------------
 	    StackPane pane = new StackPane();
@@ -638,6 +639,7 @@ public BorderPane mainPage() throws  IOException {
     	
     	BorderPane border = new BorderPane();
     	TableView table = new TableView();
+		table.setId("tableBooks");
     	TableColumn<Book,String> column1 = new TableColumn<>("ISBN");
     	TableColumn<Book,String> column2 = new TableColumn<>("Title");
     	TableColumn<Book,String> column3 = new TableColumn<>("Category");

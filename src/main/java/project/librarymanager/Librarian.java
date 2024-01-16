@@ -264,6 +264,8 @@ public class Librarian extends BillNumber {
 		this.email = email;
 	}
 
+	public double getMoneyMade() { return moneyMade; }
+
 	
 	public void setPassword(String password) {
 		this.password = password;

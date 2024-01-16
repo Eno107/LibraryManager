@@ -822,6 +822,8 @@ class BookFileOperationsTest {
         ArrayList<Integer> quantities = new ArrayList<>();
         books.add(new Book("0096184570112", "In Search of Lost Time", "Modernist", "Ingram Content Group, Inc", 65.00, 73.96, "Marcel Proust", 5));
         quantities.add(2);
+        books.add(new Book("0096184570112", "In Search of Lost Time", "Modernist", "Ingram Content Group, Inc", 65.00, 73.96, "Marcel Proust", 5));
+        quantities.add(4);
         try {
             librarian.checkOutBooks(TEST_FILE_PATH, books, quantities);
         } catch (IOException e) {
@@ -833,12 +835,13 @@ class BookFileOperationsTest {
         File file = new File(billPath);
 
         assertTrue(file.exists());
+        assertEquals(BillNumber.billNumber, 1);
 
         Path path = Paths.get(billPath);
         ArrayList<String> expected = new ArrayList<>();
-        expected.add("Title: \"In Search of Lost Time\", Quantities: 2, OriginalPrice 73.96, Price: 147.92");
+        expected.add("Title: \"In Search of Lost Time\", Quantities: 6, OriginalPrice 73.96, Price: 443.76");
         expected.add("");
-        expected.add("Total price: 147.92 Date: " + new Date());
+        expected.add("Total price: 443.76 Date: " + new Date());
         expected.add("");
 
         try {
@@ -855,6 +858,12 @@ class BookFileOperationsTest {
 
         Files.delete(path);
         BillNumber.billNumber = 0;
+
+
+        assertEquals(6, Librarian.billNumber.totalBooksSold);
+        assertEquals(443.76, Librarian.billNumber.totalIncome);
+        assertEquals(6, librarian.getBooksSold());
+        assertEquals(443.76, librarian.getMoneyMade());
     }
     // } end of "Librarian.checkOutBooks()" testing
 
@@ -881,6 +890,10 @@ class BookFileOperationsTest {
         assertFalse(Librarian.EnoughStock(TEST_FILE_PATH, "0096184570112", 20));
     }
 
+    @Test
+    public void test_enoughStock_exact_Stock() {
+        assertTrue(Librarian.EnoughStock(TEST_FILE_PATH, "0096184570112", 6));
+    }
     @Test
     public void testEnoughStock_BookNotPresent() {
         assertFalse(Librarian.EnoughStock(TEST_FILE_PATH, "NonExistentISBN", 5));
