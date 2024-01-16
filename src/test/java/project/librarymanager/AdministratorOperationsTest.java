@@ -37,6 +37,14 @@ public class AdministratorOperationsTest {
             assertEquals(expectedAdministratorArrayList.get(i).getEmail(), administratorArrayList.get(i).getEmail());
         }
     }
+
+    @Test
+    public void test_instantiateAdmins_notEmptyList() {
+        Administrator.InstantiateAdmins();
+        Administrator.InstantiateAdmins();
+
+        assertEquals(2, Administrator.getAdmins().size(), "Admin list should not be modified when not empty");
+    }
     // end of "Administrator.InstantiateAdmins()" testing
 
 
