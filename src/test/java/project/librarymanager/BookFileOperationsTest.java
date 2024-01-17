@@ -161,33 +161,32 @@ class BookFileOperationsTest {
         try {
             billNumber.setInitialStock(TEST_FILE_PATH);
 
-            FileInputStream in = new FileInputStream(TEST_FILE_PATH);
-            ObjectInputStream objIn = new ObjectInputStream(in);
+            try (FileInputStream in = new FileInputStream(TEST_FILE_PATH);
+                 ObjectInputStream objIn = new ObjectInputStream(in)) {
 
-            ArrayList<Book> bookArrayList = new ArrayList<>();
-            ArrayList<Book> expected_list = billNumber.getInitialStock();
+                ArrayList<Book> bookArrayList = new ArrayList<>();
+                ArrayList<Book> expected_list = billNumber.getInitialStock();
 
-            while (true) {
-                try {
-                    bookArrayList.add((Book) objIn.readObject());
-                } catch (EOFException e) {
-                    break;
+                while (true) {
+                    try {
+                        bookArrayList.add((Book) objIn.readObject());
+                    } catch (EOFException e) {
+                        break;
+                    }
                 }
-            }
 
-            for (int i = 0; i < bookArrayList.size(); i++) {
-                assertEquals(bookArrayList.get(i).getISBN(), expected_list.get(i).getISBN(), "ISBN mismatch at book with index " + i);
-                assertEquals(bookArrayList.get(i).getStock(), expected_list.get(i).getStock(), "Stock mismatch at book with index " + i);
+                for (int i = 0; i < bookArrayList.size(); i++) {
+                    assertEquals(bookArrayList.get(i).getISBN(), expected_list.get(i).getISBN(), "ISBN mismatch at book with index " + i);
+                    assertEquals(bookArrayList.get(i).getStock(), expected_list.get(i).getStock(), "Stock mismatch at book with index " + i);
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                fail("Exception: " + e.getMessage());
             }
-
-            in.close();
-            objIn.close();
-        } catch (IOException | ClassNotFoundException e) {
-            fail("Exception: " + e.getMessage());
+        } catch (IOException e) {
+            fail(e.getMessage());
         }
     }
     // } end of "BillNumber.setInitialStock()" testing
-
 
     @Test
     void test_getCategories() {
@@ -894,6 +893,7 @@ class BookFileOperationsTest {
     public void test_enoughStock_exact_Stock() {
         assertTrue(Librarian.EnoughStock(TEST_FILE_PATH, "0096184570112", 6));
     }
+
     @Test
     public void testEnoughStock_BookNotPresent() {
         assertFalse(Librarian.EnoughStock(TEST_FILE_PATH, "NonExistentISBN", 5));

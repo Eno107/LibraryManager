@@ -54,14 +54,11 @@ public class checkOutBooksSteps {
 
         Librarian.billNumber = mockBillNumber;
         librarian.checkOutBooks(path, books, quantities);
-
-
-        Manager.getLibrarians().clear();
-        Manager.InstantiateLibrarians();
     }
 
     @Then("the bill file number should be incremented to {int}")
     public void the_bill_file_number_should_be_incremented_to(Integer int1) {
+        assertEquals(int1,  BillNumber.billNumber);
         billPath = "Bill" + 1 + ".txt";
     }
 

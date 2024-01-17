@@ -1,32 +1,22 @@
 package testFx.Administrator;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationTest;
-import org.testfx.util.WaitForAsyncUtils;
-import project.librarymanager.Administrator;
 import project.librarymanager.MainFx;
-import project.librarymanager.Manager;
-
-import java.io.File;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
-import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 
 public class AdministratorManageLibrariansTest extends ApplicationTest {
 
     FxRobot robot = new FxRobot();
-    private void logToAdm_Manage_Managers(){
+    private void logToAdm_Manage_Librarians(){
         robot.clickOn("#mainPageUsername").write("1");
         robot.clickOn("#password").write("3");
         robot.clickOn("#submit");
@@ -45,8 +35,8 @@ public class AdministratorManageLibrariansTest extends ApplicationTest {
     }
 
     @Test
-    public void test_administrator_librarian_list_add_manager_wrong_credentials() {
-        logToAdm_Manage_Managers();
+    public void test_administrator_librarian_list_add_librarian_wrong_credentials() {
+        logToAdm_Manage_Librarians();
         robot.clickOn("#bttAddNewLibrarian");
 
         TextField name = lookup("#librarianName").query();
@@ -70,8 +60,8 @@ public class AdministratorManageLibrariansTest extends ApplicationTest {
 
 
     @Test
-    public void test_administrator_librarian_list_add_manager_empty_credentials() {
-        logToAdm_Manage_Managers();
+    public void test_administrator_librarian_list_add_librarian_empty_credentials() {
+        logToAdm_Manage_Librarians();
         robot.clickOn("#bttAddNewLibrarian");
 
         TextField name = lookup("#librarianName").query();
@@ -92,8 +82,8 @@ public class AdministratorManageLibrariansTest extends ApplicationTest {
     }
 
     @Test
-    public void test_administrator_librarian_list_add_manager_correct_credentials() {
-        logToAdm_Manage_Managers();
+    public void test_administrator_librarian_list_add_librarian_correct_credentials() {
+        logToAdm_Manage_Librarians();
         robot.clickOn("#bttAddNewLibrarian");
 
         TextField name = lookup("#librarianName").query();

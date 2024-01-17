@@ -106,7 +106,6 @@ public class MockSetup {
         BillNumber mockBillNumber = Mockito.mock(BillNumber.class, CALLS_REAL_METHODS);
 
         when(mockBillNumber.getStockBooks(Mockito.anyString())).thenReturn(getBooksWithDates());
-        Mockito.doNothing().when(mockBillNumber).updateBooks(Mockito.anyString(), Mockito.any());
 
         Mockito.doNothing().when(mockBillNumber).updateBooks(Mockito.anyString(), Mockito.any());
 
